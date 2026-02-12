@@ -59,6 +59,17 @@ const skills = [
 
 const TechScroll = () => {
     const containerRef = useRef<HTMLDivElement>(null);
+    const [isMobile, setIsMobile] = React.useState(false);
+
+    React.useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start start", "end end"]
@@ -71,10 +82,10 @@ const TechScroll = () => {
                 {/* Title Overlay */}
                 <motion.div
                     style={{ opacity: useTransform(scrollYProgress, [0, 0.1], [1, 0]) }}
-                    className="absolute z-50 text-center pointer-events-none"
+                    className="absolute z-50 text-center pointer-events-none w-full px-4"
                 >
-                    <h2 className="text-sm font-bold text-accent-highlight tracking-[0.2em] uppercase mb-4">SKILLS GALLERY</h2>
-                    <h3 className="text-4xl md:text-6xl font-black font-display text-foreground">
+                    <h2 className="text-xs md:text-sm font-bold text-accent-highlight tracking-[0.2em] uppercase mb-2 md:mb-4">SKILLS GALLERY</h2>
+                    <h3 className="text-3xl md:text-6xl font-black font-display text-foreground">
                         The Tech <br /> <span className="text-accent-action"> Arsenal</span>
                     </h3>
                 </motion.div>
@@ -98,6 +109,7 @@ const TechScroll = () => {
                                 total={skills.length}
                                 scrollYProgress={scrollYProgress}
                                 skill={skill}
+                                isMobile={isMobile}
                             />
                         );
                     })}
@@ -108,7 +120,7 @@ const TechScroll = () => {
     );
 };
 
-const TunnelItem = ({ index, total, scrollYProgress, skill }: { index: number, total: number, scrollYProgress: MotionValue<number>, skill: { name: string, icon: React.ReactNode } }) => {
+const TunnelItem = ({ index, total, scrollYProgress, skill, isMobile }: { index: number, total: number, scrollYProgress: MotionValue<number>, skill: { name: string, icon: React.ReactNode }, isMobile: boolean }) => {
     // Distribute items along the Z-axis (scroll progress)
     // We want them to start far away and move towards camera (z=0) and then behind (z>0)
 
@@ -137,16 +149,19 @@ const TunnelItem = ({ index, total, scrollYProgress, skill }: { index: number, t
     const scale = useTransform(scrollYProgress, [safeStart, safeEnd], [0.5, 1.5]);
 
     // X/Y Offset: Spiral distribution for a better tunnel effect
-    const radius = 350; // Distance from center
+    // Responsive radius: 350 for desktop, 120 for mobile
+    const radius = isMobile ? 120 : 350;
     const rotations = 6; // More turns for more items
     const angle = (index / total) * Math.PI * 2 * rotations;
 
     const x = Math.cos(angle) * radius;
-    const y = Math.sin(angle) * radius * 0.8; // Elliptical for widescreen feel
+    const y = Math.sin(angle) * (isMobile ? radius * 1.2 : radius * 0.8); // Adjust aspect ratio for mobile
 
     // Add slight random jitter so it's not a perfect line
-    const jitterX = Math.sin(index * 123.45) * 30;
-    const jitterY = Math.cos(index * 678.90) * 30;
+    // Reduce jitter on mobile to prevent off-screen items
+    const jitterAmount = isMobile ? 10 : 30;
+    const jitterX = Math.sin(index * 123.45) * jitterAmount;
+    const jitterY = Math.cos(index * 678.90) * jitterAmount;
 
     const xOffset = x + jitterX;
     const yOffset = y + jitterY;
@@ -163,11 +178,16 @@ const TunnelItem = ({ index, total, scrollYProgress, skill }: { index: number, t
             }}
             className="flex flex-col items-center justify-center gap-4 will-change-transform"
         >
-            <div className="p-6 rounded-2xl bg-secondary-bg/80 backdrop-blur-md border border-border shadow-[0_0_30px_rgba(0,0,0,0.2)] flex flex-col items-center gap-3 min-w-[160px]">
-                <div className="text-5xl mb-1">
+            <div className={`
+                flex flex-col items-center gap-3 backdrop-blur-md border border-border shadow-[0_0_30px_rgba(0,0,0,0.2)]
+                ${isMobile ? 'p-4 rounded-xl min-w-[120px] bg-secondary-bg/90' : 'p-6 rounded-2xl bg-secondary-bg/80 min-w-[160px]'}
+            `}>
+                <div className={`${isMobile ? 'text-3xl' : 'text-5xl'} mb-1`}>
                     {skill.icon}
                 </div>
-                <span className="text-lg font-bold font-mono text-foreground whitespace-nowrap">{skill.name}</span>
+                <span className={`${isMobile ? 'text-sm' : 'text-lg'} font-bold font-mono text-foreground whitespace-nowrap`}>
+                    {skill.name}
+                </span>
             </div>
         </motion.div>
     );
