@@ -3,11 +3,15 @@
 import React, { useEffect, useRef } from 'react';
 import { useInView } from 'framer-motion';
 
+import { Orbitron } from 'next/font/google';
+
+const orbitron = Orbitron({ subsets: ['latin'] });
+
 const ParticleNetwork = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     // Increased amount to 0.6 to delay animation until more of the section is visible
-    const isInView = useInView(containerRef, { amount: 0.65, once: false });
+    const isInView = useInView(containerRef, { amount: 0.55, once: false });
 
     // Ref to track view state without re-triggering the main effect
     const isViewRef = useRef(false);
@@ -17,15 +21,15 @@ const ParticleNetwork = () => {
 
     // specific settings
     const config = {
-        particleCount: 800,
-        text: '<Mohit/>', // As per user request/code
+        particleCount: 50,
+        text: '< Mohit />', // As per user request/code
         fontSize: 160,
-        fontFamily: 'Arial Black, sans-serif',
-        particleSize: 1.5,
+        fontFamily: orbitron.style.fontFamily,
+        particleSize: 1,
         ease: 0.04, // Slower assembly
         friction: 0.9,
         repulsion: 5,
-        colors: ['#00F0FF'] // Single color: Electric Cyan
+        colors: ['#00ffffff'] // Single color: Electric Cyan
     };
 
     useEffect(() => {
@@ -56,12 +60,15 @@ const ParticleNetwork = () => {
             tempCanvas.height = canvas.height;
 
             tempCtx.fillStyle = 'white';
+            tempCtx.strokeStyle = 'white';
+            tempCtx.lineWidth = 3;
             const size = canvas.width < 600 ? config.fontSize * 0.5 : config.fontSize;
             tempCtx.font = `bold ${size}px ${config.fontFamily}`;
             tempCtx.textAlign = 'center';
             tempCtx.textBaseline = 'middle';
 
-            tempCtx.fillText(config.text, tempCanvas.width / 2, tempCanvas.height / 2);
+            // Use strokeText for outline effect
+            tempCtx.strokeText(config.text, tempCanvas.width / 2, tempCanvas.height / 2);
 
             const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
             textPixels = [];

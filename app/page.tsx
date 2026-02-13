@@ -3,6 +3,7 @@ import ParticleNetwork from '@/components/ParticleNetwork';
 import About from '@/components/About';
 import TechScroll from '@/components/TechScroll';
 import ResumePulse from '@/components/ResumePulse';
+import Projects from '@/components/Projects';
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <About />
       <TechScroll />
       <ResumePulse />
+      <Projects />
     </main>
   );
 }

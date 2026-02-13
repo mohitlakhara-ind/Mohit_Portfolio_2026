@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
-import { Calendar, Award, Code, Globe, Zap } from 'lucide-react';
+import { Calendar, Award, Code, Globe, Zap, Briefcase } from 'lucide-react';
 
 const timelineData = [
     {
@@ -37,14 +37,29 @@ const timelineData = [
     },
     {
         id: 3,
+        date: '2025',
+        title: 'Freelance Developer',
+        subtitle: 'Various Clients',
+        description: 'Delivered 4-5 high-impact projects across web and mobile platforms. Specialized in creating custom solutions tailored to client needs, ensuring scalable and performant architecture.',
+        icon: <Briefcase size={16} />,
+        color: 'text-accent-action',
+        borderColor: 'border-accent-action',
+        bgColor: 'bg-accent-action',
+        details: [
+            { label: 'Projects', value: '4-5 Delivered' },
+            { label: 'Stack', value: 'Web & App' }
+        ]
+    },
+    {
+        id: 4,
         date: 'Jan 2026',
         title: 'Full Stack Developer',
         subtitle: 'Fudode',
         description: 'Currently architecting scalable full-stack applications. Responsible for the entire development lifecycle, from database design to frontend implementation and deployment.',
         icon: <Zap size={16} />,
-        color: 'text-accent-action',
-        borderColor: 'border-accent-action',
-        bgColor: 'bg-accent-action',
+        color: 'text-accent-highlight',
+        borderColor: 'border-accent-highlight',
+        bgColor: 'bg-accent-highlight',
         details: [
             { label: 'Role', value: 'Full Stack Dev' },
             { label: 'Stack', value: 'MERN, Next.js, React Native' }
