@@ -57,7 +57,7 @@ export const projects: Project[] = [
     "title": "NotemeNow",
     "year": "2024",
     "category": "Mobile-Apps",
-    "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules....",
+    "description": "A minimal React-based note-taking application powered by Firebase for seamless synchronization and PWA support for offline use. 📝",
     "techStack": [
       "React",
       "Firebase",
@@ -88,7 +88,7 @@ export const projects: Project[] = [
     "title": "SnapNews",
     "year": "2024",
     "category": "Web-Platforms",
-    "description": "This project was bootstrapped with Create React Apphttps://github.com/facebook/create-react-app....",
+    "description": "A dynamic news platform built with Next.js and NewsAPI, featuring real-time updates, infinite scrolling, and advanced category filtering. 📰",
     "techStack": [
       "Next.js",
       "NewsAPI",
@@ -118,7 +118,7 @@ export const projects: Project[] = [
     "title": "TxtXpert",
     "year": "2023",
     "category": "Algorithms",
-    "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules....",
+    "description": "An intelligent text analysis tool utilizing NLP.js for sentiment analysis, readability scoring, and keyword extraction with a regex sandbox. 🔍",
     "techStack": [
       "JavaScript",
       "NLP.js",
@@ -237,7 +237,7 @@ export const projects: Project[] = [
     "title": "Typechecky",
     "year": "2023",
     "category": "Algorithms",
-    "description": "<h1>Typecheckyy: Typing Speed Test</h1>...",
+    "description": "An interactive typing speed test application providing real-time WPM calculation, accuracy tracking, and instant feedback. ⌨️",
     "techStack": [
       "HTML",
       "CSS",
@@ -353,7 +353,7 @@ export const projects: Project[] = [
     "title": "Coffee Master",
     "year": "2024",
     "category": "UI-UX",
-    "description": "��\u0000 \u0000c\u0000o\u0000f\u0000f\u0000e\u0000e\u0000-\u0000m\u0000a\u0000s\u0000t\u0000e\u0000r\u0000\r\u0000...",
+    "description": "A premium coffee shop web template featuring an interactive menu, stunning gallery, and responsive design for a modern café experience. ☕",
     "techStack": [
       "HTML",
       "CSS",
@@ -382,7 +382,7 @@ export const projects: Project[] = [
     "title": "Famms Ecommerce",
     "year": "2024",
     "category": "Web-Platforms",
-    "description": "��\u0000 \u0000F\u0000a\u0000m\u0000m\u0000s\u0000-\u0000t\u0000e\u0000m\u0000p\u0000\r\u0000...",
+    "description": "A stylish fashion e-commerce platform with high-performance SCSS styling, product carousels, and an intuitive shopping cart UI. 🛍️",
     "techStack": [
       "HTML",
       "CSS",
@@ -441,7 +441,7 @@ export const projects: Project[] = [
     "title": "Coder School",
     "year": "2024",
     "category": "Web-Platforms",
-    "description": "��\u0000 \u0000g\u0000r\u0000a\u0000d\u0000-\u0000s\u0000c\u0000h\u0000o\u0000o\u0000l\u0000-\u0000t\u0000e\u0000m\u0000p\u0000\r\u0000...",
+    "description": "A comprehensive educational landing page for coding schools, featuring course catalogs, virtual classroom UI, and responsive Bootstrap layouts. 🎓",
     "techStack": [
       "HTML",
       "CSS",
@@ -470,7 +470,7 @@ export const projects: Project[] = [
     "title": "Growing Finance",
     "year": "2025",
     "category": "UI-UX",
-    "description": "��\u0000 \u0000g\u0000r\u0000o\u0000w\u0000i\u0000n\u0000g\u0000-\u0000t\u0000e\u0000m\u0000p\u0000\r\u0000...",
+    "description": "A sophisticated financial services website designed to showcase professional consulting, investment calculators, and client testimonials. 📈",
     "techStack": [
       "HTML",
       "CSS"
@@ -498,7 +498,7 @@ export const projects: Project[] = [
     "title": "Hightech Agency",
     "year": "2024",
     "category": "UI-UX",
-    "description": "��\u0000 \u0000H\u0000i\u0000g\u0000h\u0000t\u0000e\u0000c\u0000h\u0000-\u0000t\u0000e\u0000m\u0000p\u0000l\u0000a\u0000t\u0000e\u0000\r\u0000...",
+    "description": "A clean and modern high-tech agency portfolio template featuring a filterable project grid and professional team showcase. 💻",
     "techStack": [
       "HTML",
       "CSS"
@@ -700,7 +700,7 @@ export const projects: Project[] = [
     "title": "Podcast Pro",
     "year": "2024",
     "category": "Web-Platforms",
-    "description": "��\u0000 \u0000p\u0000o\u0000d\u0000c\u0000a\u0000s\u0000t\u0000-\u0000t\u0000e\u0000m\u0000p\u0000l\u0000a\u0000t\u0000e\u0000\r\u0000...",
+    "description": "A feature-rich podcasting platform template with integrated audio player UI, episode management, and streamlined subscription forms. 🎙️",
     "techStack": [
       "HTML",
       "CSS",
@@ -753,5 +753,37 @@ export const projects: Project[] = [
       "Cart Dropdown"
     ],
     "codeSnippet": "// Quick View Modal"
+  },
+  {
+    "id": "feat-6",
+    "title": "Nexus",
+    "year": "2026",
+    "category": "Web-Platforms",
+    "description": "Nexus is a premium collaborative platform designed to transform complex thoughts into structured visual intelligence. It features an infinite canvas powered by React Flow, real-time sync with Socket.io, and intelligent node generation using Gemini AI.",
+    "techStack": [
+      "React 19",
+      "React Flow",
+      "Tailwind v4",
+      "Socket.io",
+      "Gemini AI"
+    ],
+    "accentColor": "#8B5CF6",
+    "githubLink": "https://github.com/mohitlakhara-ind/nexus",
+    "liveLink": "https://nexus-visual.vercel.app/",
+    "coverImage": "https://raw.githubusercontent.com/mohitlakhara-ind/nexus/master/frontend/public/og-image.png",
+    "type": "web",
+    "stats": {
+      "commits": 28,
+      "stars": 5,
+      "topLanguage": "JavaScript",
+      "issues": 0
+    },
+    "features": [
+      "Infinite Visual Canvas",
+      "Real-time Collaboration",
+      "AI Idea Expansion",
+      "Command Palette Control"
+    ],
+    "codeSnippet": "// AI Collaborative Brainstorming Core\nconst handleAiChat = async (prompt) => {\n  setIsAiThinking(true);\n  try {\n    const res = await axios.post(`${API_BASE_URL}/ai/chat`, {\n      prompt,\n      mapContext: { nodes, edges },\n      graphId: id\n    });\n    const aiResponse = { role: 'model', content: res.data.text };\n    setAiMessages(prev => [...prev, aiResponse]);\n    if (res.data.suggestions) applyAiSuggestions(res.data.suggestions);\n  } finally {\n    setIsAiThinking(false);\n  }\n};"
   }
 ];

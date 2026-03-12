@@ -3,165 +3,89 @@
 import { useEffect, useState } from 'react';
 
 export default function Loading() {
-    const [progress, setProgress] = useState(0);
+    const [glitch, setGlitch] = useState(false);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setProgress(prev => {
-                if (prev >= 100) {
-                    clearInterval(interval);
-                    return 100;
-                }
-                return prev + Math.random() * 12;
-            });
-        }, 120);
+            if (Math.random() > 0.85) {
+                setGlitch(true);
+                setTimeout(() => setGlitch(false), 150);
+            }
+        }, 300);
         return () => clearInterval(interval);
     }, []);
 
     return (
-        <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden"
-            style={{ background: '#0A0A0B' }}>
+        <div className="fixed inset-0 z-[9999] bg-[#f3e600] text-black flex flex-col items-center justify-center overflow-hidden uppercase select-none">
 
-            {/* Ambient glow orbs */}
-            <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full pointer-events-none"
+            {/* Background Grid Lines representing circuitry/city infrastructure */}
+            <div className="absolute inset-0 opacity-10 pointer-events-none"
                 style={{
-                    background: 'radial-gradient(circle, rgba(0,240,255,0.06) 0%, transparent 70%)',
-                    filter: 'blur(40px)',
-                    animation: 'pulse-glow 4s ease-in-out infinite',
-                }} />
-            <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full pointer-events-none"
-                style={{
-                    background: 'radial-gradient(circle, rgba(112,0,255,0.08) 0%, transparent 70%)',
-                    filter: 'blur(60px)',
-                    animation: 'pulse-glow 4s ease-in-out infinite 2s',
-                }} />
+                    backgroundImage: 'linear-gradient(90deg, #000 1px, transparent 1px), linear-gradient(#000 1px, transparent 1px)',
+                    backgroundSize: '40px 40px'
+                }}
+            />
 
-            {/* Starfield */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                {Array.from({ length: 60 }).map((_, i) => (
-                    <div
-                        key={i}
-                        className="absolute rounded-full"
-                        style={{
-                            width: Math.random() > 0.8 ? '2px' : '1px',
-                            height: Math.random() > 0.8 ? '2px' : '1px',
-                            background: i % 3 === 0 ? '#00F0FF' : i % 3 === 1 ? '#7000FF' : '#ffffff',
-                            left: `${Math.random() * 100}%`,
-                            top: `${Math.random() * 100}%`,
-                            opacity: Math.random() * 0.7 + 0.1,
-                            animation: `twinkle ${2 + Math.random() * 3}s ease-in-out infinite ${Math.random() * 2}s`,
-                        }}
-                    />
-                ))}
-            </div>
+            <div className="relative z-10 flex flex-col items-start px-4 md:px-12 w-full max-w-7xl">
 
-            {/* Central spinner + emblem */}
-            <div className="relative flex items-center justify-center mb-10">
-                {/* Outer orbit ring */}
-                <svg
-                    width="160" height="160"
-                    className="absolute"
-                    style={{ animation: 'spin-slow 4s linear infinite' }}>
-                    <circle
-                        cx="80" cy="80" r="70"
-                        fill="none"
-                        stroke="url(#orbitGrad)"
-                        strokeWidth="1"
-                        strokeDasharray="12 8"
-                    />
-                    <defs>
-                        <linearGradient id="orbitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stopColor="#00F0FF" stopOpacity="0.8" />
-                            <stop offset="100%" stopColor="#7000FF" stopOpacity="0.2" />
-                        </linearGradient>
-                    </defs>
-                </svg>
-
-                {/* Inner orbit ring */}
-                <svg
-                    width="110" height="110"
-                    className="absolute"
-                    style={{ animation: 'spin-slow 3s linear infinite reverse' }}>
-                    <circle
-                        cx="55" cy="55" r="48"
-                        fill="none"
-                        stroke="#7000FF"
-                        strokeWidth="1"
-                        strokeDasharray="6 10"
-                        strokeOpacity="0.5"
-                    />
-                </svg>
-
-                {/* Orbiting dot — outer */}
-                <div className="absolute"
-                    style={{
-                        width: '160px', height: '160px',
-                        animation: 'spin-slow 4s linear infinite',
-                    }}>
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full shadow-[0_0_10px_2px_rgba(0,240,255,0.8)]"
-                        style={{ background: '#00F0FF' }} />
+                {/* Aggressive Glitching Title */}
+                <div className="relative group">
+                    <h1 className={`text-[12vw] leading-none font-black tracking-tighter ${glitch ? 'translate-x-2' : ''}`}
+                        style={{ fontFamily: 'var(--font-space-grotesk)' }}>
+                        AWAKENING
+                    </h1>
+                    {glitch && (
+                        <h1 className="absolute top-0 left-[-10px] text-[12vw] leading-none font-black tracking-tighter text-[#0ff] mix-blend-multiply"
+                            style={{ fontFamily: 'var(--font-space-grotesk)' }}>
+                            AWAKENING
+                        </h1>
+                    )}
+                    {glitch && (
+                        <h1 className="absolute top-0 right-[-10px] text-[12vw] leading-none font-black tracking-tighter text-[#f00] mix-blend-multiply"
+                            style={{ fontFamily: 'var(--font-space-grotesk)' }}>
+                            AWAKENING
+                        </h1>
+                    )}
                 </div>
 
-                {/* ML monogram */}
-                <div className="relative flex items-center justify-center w-20 h-20 rounded-2xl"
+                <h1 className="text-[12vw] leading-none font-black tracking-tighter text-transparent"
                     style={{
-                        background: 'linear-gradient(135deg, rgba(0,240,255,0.08), rgba(112,0,255,0.08))',
-                        border: '1px solid rgba(0,240,255,0.2)',
-                        boxShadow: '0 0 30px rgba(0,240,255,0.1), inset 0 0 20px rgba(112,0,255,0.05)',
+                        fontFamily: 'var(--font-space-grotesk)',
+                        WebkitTextStroke: '3px #000'
                     }}>
-                    <span
-                        className="text-2xl font-bold tracking-wider select-none"
-                        style={{
-                            fontFamily: 'var(--font-orbitron)',
-                            background: 'linear-gradient(135deg, #00F0FF, #7000FF)',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent',
-                        }}>
-                        ML
-                    </span>
+                    SAMURAI
+                </h1>
+
+                {/* Cyberpunk Progress Bar */}
+                <div className="w-full mt-12 bg-black h-8 md:h-12 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 h-full bg-[#0ff] animate-[load_5s_ease-out_forwards]"
+                        style={{ boxShadow: '0 0 20px #0ff' }} />
+                    <div className="absolute inset-0 flex items-center px-4 font-mono text-xs md:text-sm text-white font-bold tracking-widest mix-blend-difference">
+                        ESTABLISHING NEURAL LINK // SYSTEM BOOT
+                    </div>
+                </div>
+
+                <div className="flex w-full justify-between items-end mt-4 font-mono text-sm font-bold tracking-[0.2em]">
+                    <span className="bg-black text-[#f3e600] px-3 py-1">V: 2.0.77</span>
+                    <span className="animate-pulse">WARNING: BREACH DETECTED</span>
                 </div>
             </div>
 
-            {/* Loading label */}
-            <p className="text-xs tracking-[0.4em] uppercase mb-6 select-none"
-                style={{
-                    fontFamily: 'var(--font-jetbrains-mono)',
-                    color: '#00F0FF',
-                    opacity: 0.7,
-                    animation: 'fade-pulse 2s ease-in-out infinite',
-                }}>
-                Initializing...
-            </p>
-
-            {/* Progress bar */}
-            <div className="relative w-64 h-[2px] rounded-full overflow-hidden"
-                style={{ background: 'rgba(255,255,255,0.05)' }}>
-                <div
-                    className="absolute left-0 top-0 h-full rounded-full transition-all duration-150"
-                    style={{
-                        width: `${Math.min(progress, 100)}%`,
-                        background: 'linear-gradient(90deg, #7000FF, #00F0FF)',
-                        boxShadow: '0 0 8px rgba(0,240,255,0.6)',
-                    }}
-                />
+            {/* Random HUD Elements */}
+            <div className="absolute top-8 right-8 flex flex-col items-end gap-1 font-mono text-xs font-bold tracking-widest text-black/50">
+                <span>RAM // OK</span>
+                <span>CPU // OK</span>
+                <span className="text-black bg-[#0ff] px-2 py-0.5 animate-pulse">OPTICS // CALIBRATING</span>
             </div>
 
             <style>{`
-                @keyframes spin-slow {
-                    from { transform: rotate(0deg); }
-                    to   { transform: rotate(360deg); }
-                }
-                @keyframes pulse-glow {
-                    0%, 100% { transform: scale(1); opacity: 1; }
-                    50% { transform: scale(1.1); opacity: 0.7; }
-                }
-                @keyframes twinkle {
-                    0%, 100% { opacity: 0.1; transform: scale(1); }
-                    50% { opacity: 0.9; transform: scale(1.5); }
-                }
-                @keyframes fade-pulse {
-                    0%, 100% { opacity: 0.4; }
-                    50% { opacity: 0.9; }
+                @keyframes load {
+                    0% { width: 0%; }
+                    20% { width: 30%; }
+                    40% { width: 45%; }
+                    60% { width: 80%; }
+                    80% { width: 95%; }
+                    100% { width: 100%; }
                 }
             `}</style>
         </div>

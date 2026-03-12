@@ -1,221 +1,129 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 export default function NotFound() {
-    const glitchRef = useRef<HTMLSpanElement>(null);
+    const [glitchFactor, setGlitchFactor] = useState(0);
 
     useEffect(() => {
-        const el = glitchRef.current;
-        if (!el) return;
-
-        let frame: number;
-        const chars = '!<>-_\\/[]{}—=+*^?#@$%&~';
-
-        function scramble() {
-            const text = '404';
-            let output = '';
-            const scrambleChance = 0.2;
-            for (let i = 0; i < text.length; i++) {
-                if (Math.random() < scrambleChance) {
-                    output += chars[Math.floor(Math.random() * chars.length)];
-                } else {
-                    output += text[i];
-                }
-            }
-            if (el) el.textContent = output;
-            frame = requestAnimationFrame(scramble);
-        }
-
-        const timeout = setTimeout(() => {
-            scramble();
-            setTimeout(() => {
-                cancelAnimationFrame(frame);
-                if (el) el.textContent = '404';
-            }, 1000);
-        }, 600);
-
-        return () => {
-            clearTimeout(timeout);
-            cancelAnimationFrame(frame);
+        const handleMouseMove = (e: MouseEvent) => {
+            // Glitch gets more intense as you move the mouse faster
+            setGlitchFactor(Math.min(Math.abs(e.movementX) + Math.abs(e.movementY), 50));
+            setTimeout(() => setGlitchFactor(0), 100);
         };
+        window.addEventListener('mousemove', handleMouseMove);
+        return () => window.removeEventListener('mousemove', handleMouseMove);
+    }, []);
+
+    // Random auto-glitches
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (Math.random() > 0.7) {
+                setGlitchFactor(Math.random() * 40);
+                setTimeout(() => setGlitchFactor(0), 150);
+            }
+        }, 800);
+        return () => clearInterval(interval);
     }, []);
 
     return (
-        <main
-            className="fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden select-none"
-            style={{ background: '#0A0A0B' }}
-        >
-            {/* Ambient glow */}
-            <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute top-[-10%] right-[-5%] w-[700px] h-[700px] rounded-full"
-                    style={{
-                        background: 'radial-gradient(circle, rgba(112,0,255,0.1) 0%, transparent 70%)',
-                        filter: 'blur(60px)',
-                    }} />
-                <div className="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] rounded-full"
-                    style={{
-                        background: 'radial-gradient(circle, rgba(0,240,255,0.07) 0%, transparent 70%)',
-                        filter: 'blur(80px)',
-                    }} />
+        <main className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-[#f3e600] text-black select-none uppercase">
+
+            {/* Background Texture/Grid */}
+            <div className="absolute inset-0 opacity-[0.15] mix-blend-multiply pointer-events-none z-0"
+                style={{
+                    backgroundImage: `
+                        linear-gradient(#000 2px, transparent 2px),
+                        linear-gradient(90deg, #000 2px, transparent 2px)
+                    `,
+                    backgroundSize: '100px 100px',
+                    transform: `perspective(500px) rotateX(60deg) translateY(${Date.now() % 100}px)`,
+                    transformOrigin: 'bottom'
+                }}
+            />
+
+            {/* Warning Tape Borders */}
+            <div className="absolute top-0 inset-x-0 h-4 bg-black pointer-events-none z-50 flex items-center overflow-hidden">
+                <div className="w-[200%] h-full bg-[repeating-linear-gradient(45deg,#f3e600,#f3e600_20px,#000_20px,#000_40px)] animate-[pan-left_10s_linear_infinite]" />
+            </div>
+            <div className="absolute bottom-0 inset-x-0 h-4 bg-black pointer-events-none z-50 flex items-center overflow-hidden">
+                <div className="w-[200%] h-full bg-[repeating-linear-gradient(-45deg,#f3e600,#f3e600_20px,#000_20px,#000_40px)] animate-[pan-right_10s_linear_infinite]" />
             </div>
 
-            {/* Starfield */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                {Array.from({ length: 80 }).map((_, i) => (
-                    <div key={i}
-                        className="absolute rounded-full"
-                        style={{
-                            width: Math.random() > 0.85 ? '2px' : '1px',
-                            height: Math.random() > 0.85 ? '2px' : '1px',
-                            background: i % 4 === 0 ? '#00F0FF' : i % 4 === 1 ? '#7000FF' : '#ffffff',
-                            left: `${Math.random() * 100}%`,
-                            top: `${Math.random() * 100}%`,
-                            opacity: Math.random() * 0.6 + 0.1,
-                            animation: `twinkle-404 ${2 + Math.random() * 4}s ease-in-out infinite ${Math.random() * 4}s`,
-                        }} />
-                ))}
-            </div>
+            <div className="relative z-10 w-full max-w-[800px] flex flex-col items-start px-6 md:px-12">
 
-            {/* Horizontal scan line */}
-            <div className="absolute inset-x-0 pointer-events-none"
-                style={{ animation: 'scan 6s linear infinite' }}>
-                <div className="w-full h-px"
-                    style={{ background: 'linear-gradient(90deg, transparent, rgba(0,240,255,0.3), transparent)' }} />
-            </div>
-
-            {/* Content */}
-            <div className="relative z-10 flex flex-col items-center text-center px-6">
-
-                {/* 404 glitch number */}
-                <div className="relative mb-6">
-                    <span
-                        ref={glitchRef}
-                        className="block font-bold leading-none"
-                        style={{
-                            fontFamily: 'var(--font-orbitron)',
-                            fontSize: 'clamp(120px, 22vw, 240px)',
-                            background: 'linear-gradient(135deg, #00F0FF 0%, #7000FF 100%)',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent',
-                            filter: 'drop-shadow(0 0 30px rgba(0,240,255,0.3))',
-                            animation: 'glitch-shadow 4s ease-in-out infinite',
-                        }}>
-                        404
-                    </span>
-
-                    {/* Glitch duplicate layers */}
-                    <span
-                        aria-hidden="true"
-                        className="absolute inset-0 block font-bold leading-none pointer-events-none"
-                        style={{
-                            fontFamily: 'var(--font-orbitron)',
-                            fontSize: 'clamp(120px, 22vw, 240px)',
-                            color: '#00F0FF',
-                            opacity: 0.08,
-                            transform: 'translate(-4px, 2px)',
-                            animation: 'glitch-left 4s ease-in-out infinite',
-                        }}>
-                        404
-                    </span>
-                    <span
-                        aria-hidden="true"
-                        className="absolute inset-0 block font-bold leading-none pointer-events-none"
-                        style={{
-                            fontFamily: 'var(--font-orbitron)',
-                            fontSize: 'clamp(120px, 22vw, 240px)',
-                            color: '#7000FF',
-                            opacity: 0.08,
-                            transform: 'translate(4px, -2px)',
-                            animation: 'glitch-right 4s ease-in-out infinite 0.5s',
-                        }}>
-                        404
-                    </span>
+                <div className="bg-black text-[#f3e600] px-4 py-2 font-mono text-xl md:text-2xl font-black tracking-widest mb-8 inline-block"
+                    style={{ transform: `translateX(${glitchFactor > 20 ? 10 : 0}px)` }}>
+                    FATAL_ERROR
                 </div>
 
-                {/* Eyebrow tag */}
-                <p className="text-xs tracking-[0.5em] uppercase mb-4"
-                    style={{
-                        fontFamily: 'var(--font-jetbrains-mono)',
-                        color: '#00F0FF',
-                        opacity: 0.6,
-                    }}>
-                    // Error: Signal_Lost
+                {/* Glitched 404 */}
+                <div className="relative group w-full border-b-[8px] border-black pb-4 mb-8">
+                    <h1 className="text-[150px] md:text-[220px] leading-none font-black tracking-tighter"
+                        style={{
+                            fontFamily: 'var(--font-space-grotesk)',
+                            transform: `translate(${Math.random() * glitchFactor - glitchFactor / 2}px, ${Math.random() * glitchFactor - glitchFactor / 2}px)`
+                        }}>
+                        404
+                    </h1>
+                    {/* Red Split */}
+                    <h1 className="absolute top-0 left-0 text-[150px] md:text-[220px] leading-none font-black tracking-tighter text-[#f00] mix-blend-multiply opacity-80 pointer-events-none"
+                        style={{
+                            fontFamily: 'var(--font-space-grotesk)',
+                            transform: `translate(${glitchFactor * 0.5}px, 0)`
+                        }}>
+                        404
+                    </h1>
+                    {/* Cyan Split */}
+                    <h1 className="absolute top-0 left-0 text-[150px] md:text-[220px] leading-none font-black tracking-tighter text-[#0ff] mix-blend-multiply opacity-80 pointer-events-none"
+                        style={{
+                            fontFamily: 'var(--font-space-grotesk)',
+                            transform: `translate(${-glitchFactor * 0.5}px, 0)`
+                        }}>
+                        404
+                    </h1>
+                </div>
+
+                <h2 className="text-2xl md:text-4xl font-black tracking-tight mb-4"
+                    style={{ fontFamily: 'var(--font-outfit)' }}>
+                    PAGE NOT FOUND
+                </h2>
+
+                <p className="font-mono text-sm md:text-base text-black/80 max-w-lg mb-12 font-bold leading-relaxed tracking-wider">
+                    TARGET DIRECTORY IS UNREACHABLE. CORRUPTION DETECTED IN THE SECTOR MAP. RECOMMEND IMMEDIATE JACK-OUT.
                 </p>
 
-                {/* Main heading */}
-                <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight"
-                    style={{
-                        fontFamily: 'var(--font-space-grotesk)',
-                        color: '#F9F9F9',
-                        letterSpacing: '-0.02em',
-                    }}>
-                    Lost in the Cosmos
-                </h1>
+                <div className="flex flex-col sm:flex-row gap-6 w-full max-w-md">
+                    <Link href="/"
+                        className="group relative flex-1 bg-black text-[#f3e600] text-center font-bold tracking-widest py-4 md:py-6 overflow-hidden"
+                    >
+                        <span className="relative z-10 group-hover:text-black transition-colors duration-200">RETURN TO BASE</span>
+                        {/* Hover Fill */}
+                        <div className="absolute inset-0 bg-[#0ff] -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out z-0" />
 
-                {/* Sub text */}
-                <p className="text-base md:text-lg max-w-md mb-12 leading-relaxed"
-                    style={{ color: '#888888', fontFamily: 'var(--font-outfit)' }}>
-                    The page you're looking for has drifted beyond the event horizon.
-                    Let's navigate you back to familiar coordinates.
-                </p>
+                        {/* Cyber Deco Corners */}
+                        <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#0ff] opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#0ff] opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </Link>
+                </div>
 
-                {/* CTA Button */}
-                <Link href="/"
-                    className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold text-sm tracking-wider uppercase overflow-hidden transition-all duration-300"
-                    style={{
-                        fontFamily: 'var(--font-orbitron)',
-                        color: '#0A0A0B',
-                        background: 'linear-gradient(135deg, #00F0FF, #7000FF)',
-                        boxShadow: '0 0 30px rgba(0,240,255,0.3)',
-                        letterSpacing: '0.12em',
-                    }}>
-                    {/* Hover shimmer */}
-                    <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                        style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.15), transparent)' }} />
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                        <polyline points="9 22 9 12 15 12 15 22" />
-                    </svg>
-                    Return to Base
-                </Link>
-
-                {/* Coordinates */}
-                <p className="mt-8 text-xs"
-                    style={{
-                        fontFamily: 'var(--font-jetbrains-mono)',
-                        color: '#888888',
-                        opacity: 0.4,
-                    }}>
-                    mohitlakhara.vercel.app / 0x404
-                </p>
             </div>
 
+            {/* Dynamic Glitch Scanline overlapping everything */}
+            <div
+                className="absolute inset-0 bg-black/10 mix-blend-overlay pointer-events-none z-50 h-[10px] w-full"
+                style={{
+                    top: `${Math.random() * 100}%`,
+                    display: glitchFactor > 30 ? 'block' : 'none',
+                    transform: `scaleY(${Math.random() * 5 + 1})`
+                }}
+            />
+
             <style>{`
-                @keyframes twinkle-404 {
-                    0%, 100% { opacity: 0.1; transform: scale(1); }
-                    50% { opacity: 0.8; transform: scale(1.4); }
-                }
-                @keyframes scan {
-                    0% { top: -5%; }
-                    100% { top: 105%; }
-                }
-                @keyframes glitch-shadow {
-                    0%, 90%, 100% { filter: drop-shadow(0 0 30px rgba(0,240,255,0.3)); }
-                    92% { filter: drop-shadow(-5px 0 rgba(0,240,255,0.8)) drop-shadow(5px 0 rgba(112,0,255,0.8)); }
-                    94% { filter: drop-shadow(0 0 30px rgba(0,240,255,0.3)); }
-                }
-                @keyframes glitch-left {
-                    0%, 90%, 100% { transform: translate(-4px, 2px); opacity: 0.06; }
-                    92% { transform: translate(-8px, -2px); opacity: 0.3; }
-                    94% { transform: translate(-4px, 2px); opacity: 0.06; }
-                }
-                @keyframes glitch-right {
-                    0%, 90%, 100% { transform: translate(4px, -2px); opacity: 0.06; }
-                    92% { transform: translate(8px, 3px); opacity: 0.3; }
-                    94% { transform: translate(4px, -2px); opacity: 0.06; }
-                }
+                @keyframes pan-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+                @keyframes pan-right { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
+                ::selection { background: #0ff; color: #000; }
             `}</style>
         </main>
     );

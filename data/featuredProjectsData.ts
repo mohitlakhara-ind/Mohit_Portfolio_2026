@@ -90,5 +90,20 @@ export const featuredProjects: FeaturedProject[] = [
         "liveLink": "https://mohitlakhara-ind.github.io/CarBook/",
         "coverImage": "https://raw.githubusercontent.com/mohitlakhara-ind/CarBook/refs/heads/main/images/CarSS%20(5).jpeg",
         "mockupType": "Desktop"
+    },
+    {
+        "id": "feat-6",
+        "title": "Nexus",
+        "subtitle": "Intelligent Visual Mapping",
+        "description": "A premium collaborative platform for transforming complex thoughts into structured visual intelligence. Features an infinite canvas, real-time sync, and AI-powered node generation.",
+        "techStack": ["React 19", "React Flow", "Tailwind CSS v4", "Socket.io"],
+        "category": "Visual Intelligence",
+        "status": "Active",
+        "accentColor": "#8B5CF6",
+        "parallaxStrength": 0.2,
+        "githubLink": "https://github.com/mohitlakhara-ind/nexus",
+        "liveLink": "https://nexus-visual.vercel.app/",
+        "coverImage": "https://raw.githubusercontent.com/mohitlakhara-ind/nexus/master/frontend/public/og-image.png",
+        "mockupType": "Desktop"
     }
 ];
