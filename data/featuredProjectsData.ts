@@ -102,7 +102,7 @@ export const featuredProjects: FeaturedProject[] = [
         "accentColor": "#8B5CF6",
         "parallaxStrength": 0.2,
         "githubLink": "https://github.com/mohitlakhara-ind/nexus",
-        "liveLink": "https://nexus-visual.vercel.app/",
+        "liveLink": "https://nexus-visuals.vercel.app/",
         "coverImage": "https://raw.githubusercontent.com/mohitlakhara-ind/nexus/master/frontend/public/og-image.png",
         "mockupType": "Desktop"
     }
