@@ -3,10 +3,11 @@ import { OpenNewWindow, Cpu, MultiplePages, Flash, Play, Home, UserCircle, Termi
 
 
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import NextImage from 'next/image';
+import ReactMarkdown from 'react-markdown';
 
 import { Project } from '@/data/projectData';
 import EditorTabs from './EditorTabs';
@@ -21,7 +22,16 @@ interface MainDisplayProps {
 
 export default function MainDisplay({ activeProject, onSelectProject, onSelectTheme }: MainDisplayProps) {
     const [isTerminalOpen, setIsTerminalOpen] = useState(false);
+    
     const terminalRef = useRef<TerminalRef>(null);
+    const contentAreaRef = useRef<HTMLDivElement>(null);
+
+    // Scroll to top on project change
+    useEffect(() => {
+        if (contentAreaRef.current) {
+            contentAreaRef.current.scrollTop = 0;
+        }
+    }, [activeProject?.id]);
 
     const handleRunProject = () => {
         if (!activeProject) return;
@@ -131,25 +141,34 @@ export default function MainDisplay({ activeProject, onSelectProject, onSelectTh
                     </div>
 
                     {/* Content Scrollable Area */}
-                    <div className="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-8 pb-32" data-lenis-prevent>
-                        <div className="max-w-4xl mx-auto space-y-8 md:space-y-10">
+                    <div
+                        ref={contentAreaRef}
+                        className="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-8 pb-32"
+                        data-lenis-prevent
+                    >
+                        <div className="max-w-4xl mx-auto space-y-12 md:space-y-16">
 
                             {/* Header Section */}
-                            <div className="space-y-4">
+                            <div className="space-y-6">
                                 <div className="flex items-center gap-3">
                                     <span className="px-2 py-0.5 md:px-2.5 md:py-1 rounded-md border border-[var(--ide-border)] bg-[var(--ide-bg-panel)] text-[10px] md:text-[11px] font-mono text-[var(--ide-fg-secondary)] tracking-wider uppercase font-medium">
                                         {activeProject.year}
                                     </span>
-                                    <span className="px-2 py-0.5 md:px-2.5 md:py-1 rounded-md border border-[var(--ide-accent)]/20 bg-[var(--ide-accent)]/10 text-[10px] md:text-[11px] font-mono text-[var(--ide-accent)] tracking-wider uppercase font-medium">
+                                    <span className="px-3 py-1 rounded-md border border-[var(--ide-accent)]/20 bg-[var(--ide-accent)]/10 text-[10px] md:text-[11px] font-mono text-[var(--ide-accent)] tracking-wider uppercase font-bold">
                                         {activeProject.type}
                                     </span>
                                 </div>
 
                                 <div>
-                                    <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-[var(--ide-fg-primary)] mb-3 md:mb-4 leading-tight">{activeProject.title}</h1>
-                                    <p className="text-base md:text-xl text-[var(--ide-fg-secondary)] leading-relaxed max-w-2xl">{activeProject.description}</p>
+                                    <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-[var(--ide-fg-primary)] mb-4 leading-[1.1]">{activeProject.title}</h1>
+                                    <p className="text-lg md:text-xl text-[var(--ide-fg-primary)] opacity-90 max-w-3xl leading-relaxed font-medium">
+                                        {activeProject.summary}
+                                    </p>
                                 </div>
+                            </div>
 
+                            {/* Live Preview / Screenshot */}
+                            <div className="space-y-4">
                                 {(() => {
                                     const isCodePen = activeProject.liveLink.includes('codepen.io');
                                     if (isCodePen) {
@@ -158,21 +177,21 @@ export default function MainDisplay({ activeProject, onSelectProject, onSelectTh
 
                                         return (
                                             <motion.div
-                                                initial={{ opacity: 0, y: 20 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                transition={{ delay: 0.2 }}
-                                                className="relative w-full rounded-2xl overflow-hidden border border-[var(--ide-border)] bg-[var(--ide-bg-panel)] shadow-2xl"
+                                                initial={{ opacity: 0, y: 30 }}
+                                                whileInView={{ opacity: 1, y: 0 }}
+                                                viewport={{ once: true }}
+                                                className="relative w-full rounded-3xl overflow-hidden border border-[var(--ide-border)] bg-[var(--ide-bg-panel)] shadow-[0_20px_50px_rgba(0,0,0,0.3)]"
                                             >
                                                 <iframe
                                                     src={embedUrl}
                                                     title={activeProject.title}
-                                                    className="w-full h-[300px] md:h-[450px] border-none"
+                                                    className="w-full h-[350px] md:h-[500px] border-none"
                                                     loading="lazy"
                                                     allowFullScreen
                                                     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
                                                 />
-                                                <div className="absolute top-3 right-3 z-10">
-                                                    <div className="text-[9px] md:text-[10px] font-mono backdrop-blur-md bg-black/60 px-2 py-1 rounded border border-white/10 text-white/50">
+                                                <div className="absolute top-4 right-4 z-10">
+                                                    <div className="text-[10px] font-mono backdrop-blur-xl bg-black/40 px-3 py-1.5 rounded-full border border-white/10 text-white shadow-xl">
                                                         Live Interactive Preview
                                                     </div>
                                                 </div>
@@ -182,38 +201,40 @@ export default function MainDisplay({ activeProject, onSelectProject, onSelectTh
 
                                     return (
                                         <motion.div
-                                            initial={{ opacity: 0, y: 20 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            transition={{ delay: 0.2 }}
-                                            className="relative aspect-video w-full rounded-2xl overflow-hidden border border-[var(--ide-border)] bg-[var(--ide-bg-panel)] group shadow-2xl"
+                                            initial={{ opacity: 0, y: 30 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            viewport={{ once: true }}
+                                            className="relative aspect-video w-full rounded-3xl overflow-hidden border border-[var(--ide-border)] bg-[var(--ide-bg-panel)] group shadow-[0_20px_50px_rgba(0,0,0,0.3)]"
                                         >
                                             <NextImage
                                                 src={activeProject.coverImage}
                                                 alt={activeProject.title}
                                                 fill
-                                                className="object-cover group-hover:scale-105 transition-transform duration-700"
+                                                className="object-cover object-top transition-transform duration-1000 group-hover:scale-[1.02]"
                                                 priority
+                                                onError={() => console.warn(`[IDE Display Image 404] "${activeProject.title}" → ${activeProject.coverImage}`)}
                                             />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
-                                                <div className="text-white text-xs font-mono backdrop-blur-md bg-black/40 px-3 py-1.5 rounded-full border border-white/10">
-                                                    Screenshot: {activeProject.title}
-                                                </div>
-                                            </div>
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
                                         </motion.div>
                                     );
                                 })()}
                             </div>
 
                             {/* Tech Stack */}
-                            <div className="space-y-4">
-                                <h3 className="text-xs font-bold uppercase tracking-widest text-[var(--ide-fg-secondary)] opacity-70 flex items-center gap-2">
-                                    <MultiplePages width={14} height={14} /> Technologies
-                                </h3>
-                                <div className="flex flex-wrap gap-2">
+                            <div className="space-y-6">
+                                <div className="flex items-center gap-3">
+                                    <div className="h-px flex-1 bg-[var(--ide-border)] opacity-30"></div>
+                                    <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--ide-fg-secondary)] opacity-50 flex items-center gap-2 px-4 whitespace-nowrap">
+                                        <Cpu width={14} height={14} className="text-[var(--ide-accent)]" /> 
+                                        Tech Stack & Tools
+                                    </h3>
+                                    <div className="h-px flex-1 bg-[var(--ide-border)] opacity-30"></div>
+                                </div>
+                                <div className="flex flex-wrap justify-center gap-3">
                                     {activeProject.techStack.map(tech => (
                                         <span
                                             key={tech}
-                                            className="px-3 py-1.5 bg-[var(--ide-bg-panel)] border border-[var(--ide-border)] rounded-full text-xs text-[var(--ide-fg-primary)] font-medium hover:border-[var(--ide-accent)]/50 transition-colors"
+                                            className="px-4 py-2 bg-[var(--ide-bg-panel)] border border-[var(--ide-border)] rounded-xl text-xs text-[var(--ide-fg-primary)] font-semibold hover:border-[var(--ide-accent)] hover:text-[var(--ide-accent)] transition-all duration-300 hover:shadow-[0_0_20px_rgba(var(--ide-accent-rgb),0.1)] cursor-default"
                                         >
                                             {tech}
                                         </span>
@@ -221,47 +242,30 @@ export default function MainDisplay({ activeProject, onSelectProject, onSelectTh
                                 </div>
                             </div>
 
-                            {/* Key Features & Snippet Grid */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                {/* Features */}
-                                <div className="p-6 rounded-xl bg-[var(--ide-bg-panel)]/50 border border-[var(--ide-border)] hover:border-[var(--ide-accent)]/30 transition-colors">
-                                    <h3 className="text-xs font-bold uppercase tracking-widest text-[var(--ide-accent)] mb-5 flex items-center gap-2">
-                                        <Flash width={14} height={14} /> Key Features
-                                    </h3>
-                                    <ul className="space-y-4">
-                                        {activeProject.features?.map((feature, i) => (
-                                            <li key={i} className="flex items-start gap-3 text-sm text-[var(--ide-fg-primary)] opacity-90">
-                                                <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[var(--ide-accent)] shrink-0 shadow-[0_0_8px_var(--ide-accent)]" />
-                                                <span className="leading-relaxed">{feature}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-
-                                {/* Code Snippet */}
-                                <div className="flex flex-col">
-                                    <h3 className="text-xs font-bold uppercase tracking-widest text-[var(--ide-fg-secondary)] opacity-70 mb-4 flex items-center gap-2">
-                                        <TerminalIcon width={14} height={14} /> Core Logic
-                                    </h3>
-                                    <div className="flex-1 bg-[#09090b] p-5 rounded-xl border border-[var(--ide-border)] overflow-hidden shadow-2xl relative group">
-                                        <div className="absolute top-3 right-3 flex gap-1.5">
-                                            <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-                                            <div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-                                            <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
-                                        </div>
-                                        <pre className="font-mono text-xs text-[#e4e4e7] leading-relaxed pt-4 overflow-x-auto">
-                                            {activeProject.codeSnippet.split('\n').slice(0, 12).join('\n')}
-                                        </pre>
-                                        <div className="absolute inset-0 bg-gradient-to-t from-[#09090b] via-transparent to-transparent opacity-50" />
-                                        <div className="absolute bottom-4 left-0 right-0 text-center">
-                                            <button
-                                                onClick={handleRunProject}
-                                                className="text-[10px] text-[#a1a1aa] hover:text-white bg-[#18181b] px-3 py-1 rounded-full border border-[#27272a] hover:border-[#3f3f46] transition-all"
-                                            >
-                                                Run to see full code
-                                            </button>
-                                        </div>
-                                    </div>
+                            {/* Markdown Content Section */}
+                            <div className="pt-8 md:pt-12">
+                                <div className="markdown-content prose prose-invert max-w-none prose-p:text-[var(--ide-fg-secondary)] prose-p:leading-relaxed prose-headings:text-[var(--ide-fg-primary)] prose-li:text-[var(--ide-fg-secondary)]">
+                                    <ReactMarkdown 
+                                        components={{
+                                            h1: ({node, ...props}) => <h2 className="text-3xl md:text-4xl font-black text-[var(--ide-fg-primary)] mb-8 mt-12 flex items-center gap-4" {...props} />,
+                                            h2: ({node, ...props}) => <h3 className="text-2xl font-bold text-[var(--ide-fg-primary)] mb-6 mt-10 border-l-4 border-[var(--ide-accent)] pl-4" {...props} />,
+                                            h3: ({node, ...props}) => <h4 className="text-xl font-bold text-[var(--ide-fg-primary)] mb-4 mt-8 opacity-90" {...props} />,
+                                            p: ({node, ...props}) => <p className="text-md md:text-lg text-[var(--ide-fg-secondary)] leading-relaxed mb-8 font-normal" {...props} />,
+                                            ul: ({node, ...props}) => <ul className="list-none space-y-4 mb-10" {...props} />,
+                                            li: ({node, ...props}) => (
+                                                <li className="flex items-start gap-3">
+                                                    <span className="mt-2.5 w-1.5 h-1.5 rounded-full bg-[var(--ide-accent)] shrink-0 shadow-[0_0_10px_var(--ide-accent)]" />
+                                                    <span className="text-[var(--ide-fg-secondary)] leading-relaxed" {...props} />
+                                                </li>
+                                            ),
+                                            code: ({node, ...props}) => <code className="bg-[var(--ide-bg-panel)] text-[var(--ide-accent)] px-2 py-0.5 rounded-lg font-mono text-sm border border-[var(--ide-border)]" {...props} />,
+                                            strong: ({node, ...props}) => <strong className="text-[var(--ide-fg-primary)] font-bold decoration-[var(--ide-accent)] underline decoration-2 underline-offset-4" {...props} />,
+                                            hr: () => <hr className="my-16 border-t border-[var(--ide-border)] opacity-30" />,
+                                            blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-[var(--ide-accent)] italic pl-6 my-8 text-xl text-[var(--ide-fg-primary)] opacity-80" {...props} />,
+                                        }}
+                                    >
+                                        {activeProject?.description || ''}
+                                    </ReactMarkdown>
                                 </div>
                             </div>
                         </div>

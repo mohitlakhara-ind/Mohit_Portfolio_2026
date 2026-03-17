@@ -11,14 +11,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useGlobalData } from '@/context/GlobalContext';
 
+import { featuredProjects } from '@/data/featuredProjectsData';
+
 gsap.registerPlugin(ScrollTrigger);
 
 // --- Project Data ---
 
 
 const Projects = () => {
-    const { projects: allProjects } = useGlobalData();
-    const projects = allProjects.slice(0, 6);
+    const projects = featuredProjects;
     const sectionRef = useRef<HTMLElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = useState<number>(0); // Default to 0 so we always have a color
@@ -325,6 +326,7 @@ const Projects = () => {
                                     fill
                                     className="object-cover opacity-80 hover:opacity-100 transition-opacity duration-700"
                                     sizes="(max-width: 768px) 100vw, 60vw"
+                                    onError={() => console.warn(`[Cover Image 404] "${project.title}" → ${project.coverImage}`)}
                                 />
                                 {/* Fixed darker overlay for better text visibility */}
                                 <div className="absolute inset-0 bg-black/50" />
@@ -342,13 +344,13 @@ const Projects = () => {
                                     className="px-3 py-1 rounded-full backdrop-blur-md border border-white/10 text-xs font-medium text-black transition-colors duration-300"
                                     style={{ backgroundColor: project.accentColor }}
                                 >
-                                    {project.type === 'web' ? 'Web Platform' : 'Mobile App'}
+                                    {project.mockupType}
                                 </span>
                             </div>
 
                             <div className="transform transition-transform duration-500 group-hover:translate-y-0">
                                 <h3 className="text-4xl md:text-5xl font-bold text-white mb-2 drop-shadow-lg">{project.title}</h3>
-                                <p className="text-xl text-white/80 font-mono mb-6 drop-shadow-md">[{project.year}] {project.features?.slice(0, 2).join(' • ')}</p>
+                                <p className="text-xl text-white/80 font-mono mb-6 drop-shadow-md">[{project.status}] {project.subtitle}</p>
 
                                 <p className="text-base text-white/70 max-w-lg mb-8 line-clamp-3 md:line-clamp-none">
                                     {project.description}
