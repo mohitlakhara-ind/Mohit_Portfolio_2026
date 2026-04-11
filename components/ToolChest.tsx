@@ -18,7 +18,7 @@ const SI = ({ slug, color, size = 32 }: { slug: string; color: string; size?: nu
 
 // Inline SVGs for icons not reliably on Simple Icons CDN
 const VSCodeIcon = ({ size = 32 }: { size?: number }) => (
-    <Image src="/images/vscode.svg" alt="VS Code" width={size} height={size} style={{ width: size, height: size, objectFit: 'contain' }} />
+    <Image src="https://res.cloudinary.com/dhjkbcdfm/image/upload/v1775661889/portfolio_assets/vscode.svg" alt="VS Code" width={size} height={size} style={{ width: size, height: size, objectFit: 'contain' }} />
 );
 
 const WinTerminalIcon = ({ size = 32 }: { size?: number }) => (
@@ -36,7 +36,7 @@ const Win11Icon = ({ size = 32 }: { size?: number }) => (
 );
 
 const CanvaIcon = ({ size = 32 }: { size?: number }) => (
-    <Image src="/images/canva.svg" alt="Canva" width={size} height={size} style={{ width: size, height: size, objectFit: 'contain' }} />
+    <Image src="https://res.cloudinary.com/dhjkbcdfm/image/upload/v1775661903/portfolio_assets/canva.svg" alt="Canva" width={size} height={size} style={{ width: size, height: size, objectFit: 'contain' }} />
 );
 
 interface GearItem {
@@ -48,9 +48,9 @@ interface GearItem {
 }
 
 const gear: GearItem[] = [
-    { category: 'AI IDE', name: 'Cursor', detail: 'AI-first code editor', icon: <Image src="/images/cursor.svg" alt="Cursor" width={32} height={32} className="dark:invert object-contain" />, accent: '#ffffff' },
-    { category: 'AI Builder', name: 'Lovable', detail: 'full-stack natural language dev', icon: <Image src="/images/lovable.svg" alt="Lovable" width={32} height={32} className="object-contain" />, accent: '#F59E0B' },
-    { category: 'AI Agent', name: 'Antigravity', detail: 'autonomous coding assistant', icon: <Image src="/images/Google_Antigravity.svg" alt="Antigravity" width={32} height={32} className="object-contain" />, accent: '#60A5FA' },
+    { category: 'AI IDE', name: 'Cursor', detail: 'AI-first code editor', icon: <Image src="https://res.cloudinary.com/dhjkbcdfm/image/upload/v1775661875/portfolio_assets/cursor.svg" alt="Cursor" width={32} height={32} className="dark:invert object-contain" />, accent: '#ffffff' },
+    { category: 'AI Builder', name: 'Lovable', detail: 'full-stack natural language dev', icon: <Image src="https://res.cloudinary.com/dhjkbcdfm/image/upload/v1775661877/portfolio_assets/lovable.svg" alt="Lovable" width={32} height={32} className="object-contain" />, accent: '#F59E0B' },
+    { category: 'AI Agent', name: 'Antigravity', detail: 'autonomous coding assistant', icon: <Image src="https://res.cloudinary.com/dhjkbcdfm/image/upload/v1775661880/portfolio_assets/Google_Antigravity.svg" alt="Antigravity" width={32} height={32} className="object-contain" />, accent: '#60A5FA' },
     { category: 'Editor', name: 'VS Code', detail: 'with Vim motions + custom theme', icon: <VSCodeIcon size={32} />, accent: '#007ACC' },
     { category: 'Terminal', name: 'Windows Terminal', detail: 'Oh My Zsh + Starship prompt', icon: <WinTerminalIcon size={32} />, accent: '#A855F7' },
     { category: 'OS', name: 'macOS', detail: 'daily driver for development', icon: <SI slug="apple" color="#A2AAAD" />, accent: '#A2AAAD' },

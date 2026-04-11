@@ -43,7 +43,7 @@ export const projects: Project[] = [
     "accentColor": "#14B8A6",
     "githubLink": "",
     "liveLink": "https://gudgig.com",
-    "coverImage": "/projects/Gudgig-home.webp",
+    "coverImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1775661870/portfolio_assets/Gudgig-home.webp",
     "type": "web",
     "stats": {
       "commits": 120,
@@ -58,9 +58,9 @@ export const projects: Project[] = [
       "Hostinger Frontend with VPS Backend Deployment"
     ],
     "screenshots": [
-      "/projects/Gudgig-home.webp",
-      "/projects/Gudgig-mid.webp",
-      "/projects/Gudgig-deep.webp"
+      "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1775661870/portfolio_assets/Gudgig-home.webp",
+      "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1775661872/portfolio_assets/Gudgig-mid.webp",
+      "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1775661873/portfolio_assets/Gudgig-deep.webp"
     ],
     "codeSnippet": "// Authenticated notification bootstrap\nconst socket = io(API_BASE_URL, {\n  auth: { token: accessToken }\n});\n\nsocket.on('notification:new', (payload) => {\n  setNotifications(prev => [payload, ...prev]);\n});"
   },

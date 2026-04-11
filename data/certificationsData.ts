@@ -48,7 +48,7 @@ export const certifications: Certification[] = [
         issuer: "Complete Coding",
         date: "Oct 2024",
         credential: "Credential ID: OFDCU7MU",
-        logo: "/images/completecoding.webp",
+        logo: "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1775661869/portfolio_assets/completecoding.webp",
         skills: ["HTML", "HTML 5"],
         link: "https://learn.completecoding.in/verify-certificate?serialno=OFDCU7MU",
     },

@@ -96,7 +96,7 @@ export default function Navbar() {
                 {/* Left side cosmetic icon / Logo */}
                 <div className="px-3 pl-4 flex items-center justify-center border-r border-white/10 opacity-90 group-hover:opacity-100 transition-opacity">
                     <Link href="/">
-                        <img src="/images/logo.png" alt="Logo" className="w-8 h-8 object-contain drop-shadow-[0_0_8px_rgba(0,240,255,0.6)]" />
+                        <img src="https://res.cloudinary.com/dhjkbcdfm/image/upload/v1775661918/portfolio_assets/logo.png" alt="Logo" className="w-8 h-8 object-contain drop-shadow-[0_0_8px_rgba(0,240,255,0.6)]" />
                     </Link>
                 </div>
 
@@ -205,7 +205,7 @@ export default function Navbar() {
                             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-purple-500/30 to-transparent" />
 
                             <div className="flex items-center gap-2 mb-2 px-2 opacity-90">
-                                <img src="/images/logo.png" alt="Logo" className="w-6 h-6 object-contain drop-shadow-[0_0_8px_rgba(0,240,255,0.6)]" />
+                                <img src="https://res.cloudinary.com/dhjkbcdfm/image/upload/v1775661918/portfolio_assets/logo.png" alt="Logo" className="w-6 h-6 object-contain drop-shadow-[0_0_8px_rgba(0,240,255,0.6)]" />
                                 <span className="text-xs font-mono font-medium tracking-widest text-white uppercase">Navigation</span>
                             </div>
 

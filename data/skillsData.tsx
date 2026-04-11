@@ -87,9 +87,9 @@ export const skillCategories: SkillCategory[] = [
             { name: "Figma", icon: <SiFigma className="text-[#F24E1E]" />, level: 80, angle: 164, radius: { mobile: 15, tablet: 17, desktop: 18 } },
             { name: "Linux", icon: <FaLinux className="text-foreground" />, level: 72, angle: 196, radius: { mobile: 13, tablet: 14, desktop: 15 } },
             { name: "Postman", icon: <SiPostman className="text-[#FF6C37]" />, level: 88, angle: 229, radius: { mobile: 19, tablet: 21, desktop: 22 } },
-            { name: "Cursor", icon: <Image src="/images/cursor.svg" alt="Cursor" width={20} height={20} className="w-5 h-5 dark:invert" />, level: 95, angle: 262, radius: { mobile: 16, tablet: 18, desktop: 19 } },
-            { name: "Lovable", icon: <Image src="/images/lovable.svg" alt="Lovable" width={20} height={20} className="w-5 h-5" />, level: 90, angle: 295, radius: { mobile: 15, tablet: 17, desktop: 18 } },
-            { name: "Antigravity", icon: <Image src="/images/Google_Antigravity.svg" alt="Antigravity" width={20} height={20} className="w-5 h-5" />, level: 92, angle: 327, radius: { mobile: 17, tablet: 19, desktop: 20 } },
+            { name: "Cursor", icon: <Image src="https://res.cloudinary.com/dhjkbcdfm/image/upload/v1775661875/portfolio_assets/cursor.svg" alt="Cursor" width={20} height={20} className="w-5 h-5 dark:invert" />, level: 95, angle: 262, radius: { mobile: 16, tablet: 18, desktop: 19 } },
+            { name: "Lovable", icon: <Image src="https://res.cloudinary.com/dhjkbcdfm/image/upload/v1775661877/portfolio_assets/lovable.svg" alt="Lovable" width={20} height={20} className="w-5 h-5" />, level: 90, angle: 295, radius: { mobile: 15, tablet: 17, desktop: 18 } },
+            { name: "Antigravity", icon: <Image src="https://res.cloudinary.com/dhjkbcdfm/image/upload/v1775661880/portfolio_assets/Google_Antigravity.svg" alt="Antigravity" width={20} height={20} className="w-5 h-5" />, level: 92, angle: 327, radius: { mobile: 17, tablet: 19, desktop: 20 } },
         ]
     },
     {
