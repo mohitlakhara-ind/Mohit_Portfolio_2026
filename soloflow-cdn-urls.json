@@ -1,0 +1,14 @@
+{
+  "landing_dark": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1781679009/portfolio_projects/soloflow/landing_dark.png",
+  "landing_light": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1781679011/portfolio_projects/soloflow/landing_light.png",
+  "dashboard_dark": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1781679012/portfolio_projects/soloflow/dashboard_dark.png",
+  "dashboard_light": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1781679012/portfolio_projects/soloflow/dashboard_light.png",
+  "invoices_dark": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1781679014/portfolio_projects/soloflow/invoices_dark.png",
+  "invoices_light": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1781679014/portfolio_projects/soloflow/invoices_light.png",
+  "clients_dark": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1781679015/portfolio_projects/soloflow/clients_dark.png",
+  "clients_light": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1781679016/portfolio_projects/soloflow/clients_light.png",
+  "projects_dark": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1781679017/portfolio_projects/soloflow/projects_dark.png",
+  "projects_light": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1781679018/portfolio_projects/soloflow/projects_light.png",
+  "time_logs_dark": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1781679018/portfolio_projects/soloflow/time_logs_dark.png",
+  "ai_dark": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1781679019/portfolio_projects/soloflow/ai_dark.png"
+}

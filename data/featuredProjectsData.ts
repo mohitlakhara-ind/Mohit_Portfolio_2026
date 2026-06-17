@@ -105,5 +105,50 @@ export const featuredProjects: FeaturedProject[] = [
         "liveLink": "https://mohitlakhara-ind.github.io/CarBook/",
         "coverImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1771612402/portfolio_projects/cover_feat-5.png",
         "mockupType": "Desktop"
+    },
+    {
+        "id": "feat-8",
+        "title": "Soloflow",
+        "subtitle": "The Ultimate AI-Powered Freelancer OS",
+        "description": "An enterprise-grade SaaS application for freelancers to manage clients, projects, time logs, and automated invoicing. Features secure Razorpay payment integration and an advanced GPT-4o AI proposal writer.",
+        "techStack": ["Next.js", "PostgreSQL", "Prisma", "NextAuth v5", "Razorpay", "OpenAI GPT-4o", "Tailwind CSS"],
+        "category": "Fullstack",
+        "status": "Active",
+        "accentColor": "#3B82F6",
+        "parallaxStrength": 0.2,
+        "githubLink": "https://github.com/mohitlakhara-ind/soloflow",
+        "liveLink": "https://soloflow-invoice.vercel.app/",
+        "coverImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1781679012/portfolio_projects/soloflow/dashboard_dark.png",
+        "mockupType": "Desktop"
+    },
+    {
+        "id": "feat-9",
+        "title": "WealthTrack",
+        "subtitle": "AI Expense Splitter Mobile App",
+        "description": "A modern, dark-themed expense splitting mobile app with AI-powered bill scanning, expense analytics, and one-tap settlement reminders.",
+        "techStack": ["React Native", "Expo SDK", "TypeScript", "FastAPI", "MongoDB", "OCR.space API"],
+        "category": "Fullstack",
+        "status": "Active",
+        "accentColor": "#7C3AED",
+        "parallaxStrength": 0.25,
+        "githubLink": "https://github.com/mohitlakhara-ind/wealthtrack",
+        "liveLink": "",
+        "coverImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1771612374/portfolio_projects/cover_feat-2.png",
+        "mockupType": "Mobile Focused"
+    },
+    {
+        "id": "feat-10",
+        "title": "Storvana",
+        "subtitle": "Premium Mobile Commerce",
+        "description": "A luxury-dark e-commerce mobile app built on the Medusa.js open-commerce engine with an offline-first wishlist and debounced search.",
+        "techStack": ["React Native", "TypeScript", "Medusa.js v2", "React Query", "AsyncStorage", "Reanimated"],
+        "category": "Fullstack",
+        "status": "Active",
+        "accentColor": "#F59E0B",
+        "parallaxStrength": 0.3,
+        "githubLink": "https://github.com/mohitlakhara-ind/storvana",
+        "liveLink": "",
+        "coverImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1771612402/portfolio_projects/cover_feat-5.png",
+        "mockupType": "Mobile Focused"
     }
 ];

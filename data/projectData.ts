@@ -854,5 +854,114 @@ export const projects: Project[] = [
       "Command Palette Control"
     ],
     "codeSnippet": "// AI Collaborative Brainstorming Core\nconst handleAiChat = async (prompt) => {\n  setIsAiThinking(true);\n  try {\n    const res = await axios.post(`${API_BASE_URL}/ai/chat`, {\n      prompt,\n      mapContext: { nodes, edges },\n      graphId: id\n    });\n    const aiResponse = { role: 'model', content: res.data.text };\n    setAiMessages(prev => [...prev, aiResponse]);\n    if (res.data.suggestions) applyAiSuggestions(res.data.suggestions);\n  } finally {\n    setIsAiThinking(false);\n  }\n};"
+  },
+  {
+    "id": "feat-8",
+    "title": "Soloflow",
+    "year": "2026",
+    "category": "Fullstack",
+    "summary": "AI-Powered Freelancer Client Portal & Billing SaaS with Razorpay integration and GPT-4o proposal writer.",
+    "description": "# Soloflow: The Ultimate AI-Powered Freelancer OS\\n\\n## Executive Summary\\nSoloflow is an enterprise-grade billing, invoicing, and client management SaaS application meticulously engineered for modern freelancers and independent contractors. It elegantly solves the persistent pain points of administrative overhead and delayed payments by delivering a unified dashboard for time tracking, project management, and automated invoicing. With integrated Razorpay payment gateways and an advanced AI-powered proposal writer, Soloflow transforms freelance operations into a streamlined, professional business engine.\\n\\n## Core Capabilities & Technical Depth\\n- **Frictionless Client Portal**: Provides clients with secure, passwordless magic-link access to a dedicated portal where they can seamlessly review project progress, approve milestones, and settle invoices with zero onboarding friction.\\n- **OpenAI GPT-4o Proposal Generation**: Integrates real-time, context-aware proposal drafting utilizing Server-Sent Events (SSE). This streams AI-generated content directly to the client interface with a dynamic, typewriter-style feedback loop, significantly reducing time-to-pitch.\\n- **Enterprise-Grade Razorpay Integration**: Features robust payment links secured by resilient webhooks. The system employs HMAC-SHA256 cryptographic signatures and strict idempotency mechanisms to guarantee transaction integrity, prevent duplicate charges, and ensure reliable financial synchronization.\\n- **Fullstack Next.js 15 Architecture**: Leverages the latest Next.js App Router for optimal Server-Side Rendering (SSR) and SEO, paired with a type-safe Prisma ORM over a PostgreSQL database, ensuring high performance, scalability, and developer ergonomics.",
+    "techStack": [
+      "Next.js 15",
+      "PostgreSQL",
+      "Prisma",
+      "NextAuth v5",
+      "Razorpay",
+      "OpenAI GPT-4o",
+      "Tailwind CSS"
+    ],
+    "accentColor": "#3B82F6",
+    "githubLink": "https://github.com/mohitlakhara-ind/soloflow",
+    "liveLink": "https://soloflow-invoice.vercel.app/",
+    "coverImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1781679012/portfolio_projects/soloflow/dashboard_dark.png",
+    "screenshots": [
+      "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1781679009/portfolio_projects/soloflow/landing_dark.png",
+      "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1781679012/portfolio_projects/soloflow/dashboard_dark.png",
+      "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1781679014/portfolio_projects/soloflow/invoices_dark.png",
+      "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1781679019/portfolio_projects/soloflow/ai_dark.png"
+    ],
+    "type": "web",
+    "stats": {
+      "commits": 84,
+      "stars": 12,
+      "topLanguage": "TypeScript",
+      "issues": 0
+    },
+    "features": [
+      "AI Proposal Writer",
+      "Razorpay Webhooks",
+      "Prisma Transactions",
+      "NextAuth v5 Auth"
+    ],
+    "codeSnippet": "// OpenAI SSE streaming API endpoint\nexport async function POST(req: Request) {\n  const { prompt } = await req.json();\n  const stream = await openai.chat.completions.create({\n    model: 'gpt-4o',\n    messages: [{ role: 'user', content: prompt }],\n    stream: true,\n  });\n  return new Response(stream.toReadableStream(), {\n    headers: { 'Content-Type': 'text/event-stream' },\n  });\n}"
+  },
+  {
+    "id": "feat-9",
+    "title": "WealthTrack",
+    "year": "2026",
+    "category": "Fullstack",
+    "summary": "AI-powered expense splitter mobile application with bill scanner OCR and WhatsApp payment nudges.",
+    "description": "# WealthTrack: AI Expense Splitter & Personal Finance Mobile App\n\n## Executive Summary\nWealthTrack is a dark-themed personal finance and expense splitting mobile application built with React Native and FastAPI. It integrates an AI-powered OCR bill scanner to instantly parse receipt details, reducing manual entry errors. It features expense analytics with animated dashboards and a graph-based debt simplification algorithm to settle group debts in the minimum possible transactions.\n\n## Core Capabilities\n- **OCR Bill Scanner**: Real-time receipt parsing powered by OCR.space API to extract merchant, line items, and totals.\n- **Debt Simplification**: Implementation of transactional graph minimization to reduce the total transfers required to settle debts.\n- **WhatsApp Settlement Nudge**: Custom native share sheet integration to draft and format payment summaries with direct UPI links.",
+    "techStack": [
+      "React Native",
+      "Expo SDK",
+      "TypeScript",
+      "FastAPI",
+      "MongoDB",
+      "OCR.space API"
+    ],
+    "accentColor": "#7C3AED",
+    "githubLink": "https://github.com/mohitlakhara-ind/wealthtrack",
+    "liveLink": "",
+    "coverImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1771612374/portfolio_projects/cover_feat-2.png",
+    "type": "mobile",
+    "stats": {
+      "commits": 62,
+      "stars": 8,
+      "topLanguage": "TypeScript",
+      "issues": 1
+    },
+    "features": [
+      "OCR Receipt Parser",
+      "Debt Minimization Graph",
+      "WhatsApp Shared Settlements",
+      "Google OAuth"
+    ],
+    "codeSnippet": "// OCR scan receipt API route\n@app.post(\"/api/ocr\")\ndef scan_receipt(file: UploadFile = File(...)):\n    result = ocr_service.parse_receipt(file.file.read())\n    return {\"merchant\": result.merchant, \"total\": result.total, \"items\": result.items}"
+  },
+  {
+    "id": "feat-10",
+    "title": "Storvana",
+    "year": "2026",
+    "category": "Fullstack",
+    "summary": "Premium Medusa.js-powered mobile commerce app with offline wishlists and debounced search cache.",
+    "description": "# Storvana: Premium Mobile Commerce App with Medusa.js\n\n## Executive Summary\nStorvana is a luxury-themed mobile commerce application built on the Medusa.js v2 open-commerce engine. The app features a warm-amber dark mode layout with fluid physics-based animations. It integrates offline-first support including AsyncStorage-persisted wishlists and debounced search with query history.\n\n## Core Capabilities\n- **Medusa.js v2 Integration**: Complete mobile client interface for products, categorization, checkout workflows, and user orders.\n- **Offline Wishlist**: Local storage persistence featuring spring-animated actions and automatic price-drop indicators (🔥 -37%).\n- **Smart Search Caching**: Caches search query histories locally and generates trending product tags automatically from user actions.",
+    "techStack": [
+      "React Native",
+      "TypeScript",
+      "Medusa.js v2",
+      "React Query",
+      "AsyncStorage",
+      "Reanimated"
+    ],
+    "accentColor": "#F59E0B",
+    "githubLink": "https://github.com/mohitlakhara-ind/storvana",
+    "liveLink": "",
+    "coverImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1771612402/portfolio_projects/cover_feat-5.png",
+    "type": "mobile",
+    "stats": {
+      "commits": 48,
+      "stars": 6,
+      "topLanguage": "TypeScript",
+      "issues": 0
+    },
+    "features": [
+      "Medusa.js Checkout",
+      "Offline Wishlist Caching",
+      "Debounced Search Engine",
+      "Smooth Spring Animations"
+    ],
+    "codeSnippet": "// AsyncStorage wish list toggle\nconst toggleWishlist = async (productId) => {\n  const current = await AsyncStorage.getItem('wishlist') || '[]';\n  const list = JSON.parse(current);\n  const next = list.includes(productId) ? list.filter(id => id !== productId) : [...list, productId];\n  await AsyncStorage.setItem('wishlist', JSON.stringify(next));\n};"
   }
 ];
