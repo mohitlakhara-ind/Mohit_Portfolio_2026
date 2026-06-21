@@ -133,7 +133,7 @@ export const featuredProjects: FeaturedProject[] = [
         "parallaxStrength": 0.25,
         "githubLink": "https://github.com/mohitlakhara-ind/splitsmart",
         "liveLink": "https://splitwiser-expense.vercel.app/",
-        "coverImage": "/projects/splitwiser_cover.png",
+        "coverImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1782020893/portfolio_projects/splitwiser_dashboard.png",
         "mockupType": "Mobile Focused"
     },
     {

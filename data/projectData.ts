@@ -917,7 +917,7 @@ export const projects: Project[] = [
     "accentColor": "#7C3AED",
     "githubLink": "https://github.com/mohitlakhara-ind/splitsmart",
     "liveLink": "https://web-gz8lisyvm-mohitlakhara-inds-projects.vercel.app",
-    "coverImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1771612374/portfolio_projects/cover_feat-2.png",
+    "coverImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1782020893/portfolio_projects/splitwiser_dashboard.png",
     "type": "mobile",
     "stats": {
       "commits": 62,
