@@ -74,13 +74,10 @@ export const viewport: Viewport = {
   themeColor: '#0d1117',
 };
 
-
-import LiquidCanvas from "@/components/LiquidCanvas";
 import Navbar from "@/components/Navbar";
 import { GlobalProvider } from "@/context/GlobalContext";
 import SmoothScroll from "@/components/SmoothScroll";
 import Footer from "@/components/Footer";
-
 
 import Script from "next/script";
 
@@ -134,7 +131,6 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <SmoothScroll>
-          <LiquidCanvas />
           <Navbar />
           <GlobalProvider>
             {children}

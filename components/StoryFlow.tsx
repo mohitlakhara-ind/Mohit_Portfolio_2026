@@ -11,19 +11,19 @@ const storyChapters = [
         title: "The Foundation",
         subtitle: "BCA Graduate",
         description: "During my BCA at Lachoo Memorial College, I delved deep into the fundamentals. This is where I built my logical core and embraced the rigor of computer science.",
-        year: "2021-24"
+        year: "2023-26"
     },
     {
         title: "The Real World",
         subtitle: "4 Months at Fudode",
-        description: "Stepping into professional development as a Full-stack Developer at Fudode, I bridged the gap between theory and industry-grade solutions. Transforming complex requirements into fluid user experiences.",
-        year: "2024"
+        description: "Stepping into professional development as a Full-stack Developer at Fudode, I bridged the gap between theory and industry-grade solutions, architecting full-stack applications.",
+        year: "Jan '26 - May '26"
     },
     {
         title: "The Evolution",
         subtitle: "Freelance & MCA",
-        description: "Currently pursuing an MCA in Cloud Computing at JECRC University, Jaipur. As a Freelance Developer, I architect scalable platforms and design digital legacies.",
-        year: "Current"
+        description: "Currently pursuing an MCA in Cloud Computing at JECRC University, Jaipur. I am now engineering high-performance SaaS solutions and cinematic user interfaces as a Freelance Developer.",
+        year: "2026 - Ongoing"
     }
 ];
 

@@ -13,6 +13,7 @@ const filesToProcess = [
   'data/certificationsData.ts',
   'data/projectData.ts',
   'data/skillsData.tsx',
+  'data/featuredProjectsData.ts',
   'components/ToolChest.tsx',
   'components/Navbar.tsx'
 ];

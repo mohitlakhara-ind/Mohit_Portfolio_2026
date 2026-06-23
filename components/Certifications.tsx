@@ -1,121 +1,212 @@
 'use client';
-import { OpenNewWindow, ShieldCheck, NavArrowRight, NavArrowLeft, Star } from 'iconoir-react';
-
-
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-
+import { NavArrowRight, NavArrowLeft, OpenNewWindow } from 'iconoir-react';
 import { useGlobalData } from '@/context/GlobalContext';
 
 const Certifications = () => {
     const { certifications } = useGlobalData();
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 6; // 6 items for a clean 2x3 or 3x2 grid depending on screen
+    const itemsPerPage = 6;
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
         setMounted(true);
     }, []);
 
-    // Pagination Logic
     const totalPages = Math.ceil(certifications.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const currentCertificates = certifications.slice(startIndex, startIndex + itemsPerPage);
 
     const handleNext = () => {
-        if (currentPage < totalPages) setCurrentPage(curr => curr + 1);
+        if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
     };
 
     const handlePrev = () => {
-        if (currentPage > 1) setCurrentPage(curr => curr - 1);
+        if (currentPage > 1) setCurrentPage((prev) => prev - 1);
     };
 
     if (!mounted) return null;
 
+    // Card animation variants
+    const cardVariants = {
+        hidden: { opacity: 0, y: 30, scale: 0.95 },
+        visible: (i: number) => ({
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            transition: { delay: i * 0.08, duration: 0.5, ease: [0.25, 1, 0.5, 1] },
+        }),
+    };
+
+    const pageTransition = {
+        initial: { opacity: 0, filter: 'blur(10px)' },
+        animate: { opacity: 1, filter: 'blur(0px)' },
+        exit: { opacity: 0, filter: 'blur(10px)' },
+        transition: { duration: 0.4 },
+    };
+
     return (
-        <section className="py-32 bg-background relative overflow-hidden" id="certifications">
-            {/* Background Elements */}
-            <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
-                <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
+        <section
+            className="relative w-full overflow-hidden bg-transparent py-24"
+            id="certifications"
+        >
+            {/* Ambient background orbs */}
+            <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                <div className="absolute top-1/4 left-10 h-96 w-96 rounded-full bg-accent-highlight/5 blur-[120px]" />
+                <div className="absolute bottom-1/4 right-10 h-96 w-96 rounded-full bg-accent-action/5 blur-[120px]" />
             </div>
 
-            <div className="container mx-auto px-6 relative z-10">
+            <div className="container relative mx-auto max-w-6xl px-6">
                 {/* Header */}
-                <div className="text-center mb-20">
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-[10px] font-bold text-blue-500 tracking-widest uppercase mb-4"
-                    >
-                        <Star width={12} height={12} />
-                        Professional Credentials
-                    </motion.div>
-                    <h2 className="text-4xl md:text-5xl font-black tracking-tight text-foreground mb-4">
-                        The Verification <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-600">Vault</span>
-                    </h2>
-                    <p className="text-muted-foreground/60 max-w-2xl mx-auto text-sm md:text-base">
-                        A curated archive of technical validations and industry recognitions.
-                    </p>
+                <div className="mb-14 flex flex-wrap items-end justify-between gap-6 border-b border-foreground/5 pb-8">
+                    <div className="max-w-xl">
+                        <motion.div 
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5 }}
+                            className="mb-3 flex items-center gap-2"
+                        >
+                            <span className="h-px w-8 bg-accent-action"></span>
+                            <span className="font-mono text-sm font-semibold tracking-wider text-accent-action uppercase">
+                                Verified Credentials
+                            </span>
+                        </motion.div>
+                        <motion.h2 
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5, delay: 0.1 }}
+                            className="text-4xl font-bold tracking-tight text-foreground md:text-5xl"
+                        >
+                            Certifications <span className="text-foreground/30">& Training</span>
+                        </motion.h2>
+                    </div>
+
+                    {/* Pagination Controls */}
+                    {totalPages > 1 && (
+                        <motion.div 
+                            initial={{ opacity: 0, x: 20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5, delay: 0.2 }}
+                            className="flex items-center gap-2 rounded-2xl border border-foreground/10 bg-foreground/5 p-1.5 backdrop-blur-md"
+                        >
+                            <button
+                                onClick={handlePrev}
+                                disabled={currentPage === 1}
+                                className="flex h-11 w-11 items-center justify-center rounded-xl bg-transparent text-foreground/50 transition-all hover:bg-foreground/10 hover:text-foreground disabled:opacity-30 disabled:hover:bg-transparent disabled:cursor-not-allowed"
+                                aria-label="Previous page"
+                            >
+                                <NavArrowLeft width={22} height={22} strokeWidth={2} />
+                            </button>
+
+                            <div className="flex px-3 items-center gap-2 font-mono text-sm font-medium tracking-widest">
+                                <span className="text-accent-action">{String(currentPage).padStart(2, '0')}</span>
+                                <span className="text-foreground/20">/</span>
+                                <span className="text-foreground/50">{String(totalPages).padStart(2, '0')}</span>
+                            </div>
+
+                            <button
+                                onClick={handleNext}
+                                disabled={currentPage === totalPages}
+                                className="flex h-11 w-11 items-center justify-center rounded-xl bg-transparent text-foreground/50 transition-all hover:bg-foreground/10 hover:text-foreground disabled:opacity-30 disabled:hover:bg-transparent disabled:cursor-not-allowed"
+                                aria-label="Next page"
+                            >
+                                <NavArrowRight width={22} height={22} strokeWidth={2} />
+                            </button>
+                        </motion.div>
+                    )}
                 </div>
 
-                {/* Grid Layout */}
-                <div className="relative min-h-[600px]">
+                {/* Grid */}
+                <div className="relative min-h-[400px]">
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={currentPage}
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            transition={{ duration: 0.3 }}
-                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                            initial={pageTransition.initial}
+                            animate={pageTransition.animate}
+                            exit={pageTransition.exit}
+                            transition={pageTransition.transition}
+                            className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
                         >
                             {currentCertificates.map((cert, index) => (
                                 <motion.a
-                                    key={cert.title + index}
+                                    key={`${cert.title}-${index}`}
                                     href={cert.link}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: index * 0.05 }}
-                                    className="group relative bg-card/40 backdrop-blur-sm border border-white/5 rounded-2xl p-6 hover:bg-card/60 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/10 flex flex-col h-full"
+                                    custom={index}
+                                    variants={cardVariants}
+                                    initial="hidden"
+                                    animate="visible"
+                                    whileHover={{ y: -6, scale: 1.01 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="group relative flex flex-col h-full rounded-[2rem] border border-foreground/10 bg-background/40 p-7 overflow-hidden backdrop-blur-xl transition-all duration-500 hover:border-accent-action/30 hover:bg-foreground/5 hover:shadow-[0_0_40px_-15px_rgba(0,0,0,0.5)]"
                                 >
-                                    {/* Holographic Border Effect */}
-                                    <div className="absolute inset-0 rounded-2xl border border-white/5 group-hover:border-blue-500/30 transition-colors" />
+                                    {/* Verified Seal Glow */}
+                                    <div className="absolute top-0 right-0 -mr-8 -mt-8 h-32 w-32 rounded-full bg-accent-action/20 blur-3xl transition-opacity duration-500 opacity-0 group-hover:opacity-100 pointer-events-none" />
 
-                                    {/* Top Section: Logo & Badge */}
-                                    <div className="flex justify-between items-start mb-6">
-                                        <div className="w-12 h-12 rounded-xl bg-background/50 border border-white/10 p-2 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                                            <img
-                                                src={cert.logo}
-                                                alt={cert.issuer}
-                                                className="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all"
-                                            />
+                                    <div className="relative z-10 flex flex-col h-full gap-6">
+                                        {/* Header: Logo and Link Icon */}
+                                        <div className="flex items-start justify-between">
+                                            <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-foreground/5 to-foreground/10 p-3 shadow-inner ring-1 ring-foreground/10 transition-transform duration-500 group-hover:scale-110 group-hover:ring-accent-action/30">
+                                                <img
+                                                    src={cert.logo}
+                                                    alt={cert.issuer}
+                                                    className="h-full w-full object-contain drop-shadow-md transition-all duration-500 group-hover:brightness-125"
+                                                />
+                                            </div>
+                                            
+                                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-foreground/5 text-foreground/40 backdrop-blur-sm transition-all duration-500 group-hover:bg-accent-action/20 group-hover:text-accent-action group-hover:-translate-y-1 group-hover:translate-x-1">
+                                                <OpenNewWindow width={18} height={18} strokeWidth={2.5} />
+                                            </div>
                                         </div>
-                                        {cert.date && (
-                                            <span className="text-[10px] font-mono text-muted-foreground/50 border border-white/5 px-2 py-1 rounded-full">
-                                                {cert.date}
-                                            </span>
+
+                                        {/* Content: Title, Issuer, Date */}
+                                        <div className="space-y-3 flex-grow">
+                                            <h3 className="text-xl font-bold leading-tight text-foreground/90 transition-colors duration-300 group-hover:text-foreground">
+                                                {cert.title}
+                                            </h3>
+                                            <div className="flex items-center gap-2 text-sm font-medium text-foreground/50">
+                                                <span className="text-accent-action">{cert.issuer}</span>
+                                                {cert.date && <span className="h-1 w-1 rounded-full bg-foreground/20" />}
+                                                {cert.date && <span>{cert.date}</span>}
+                                            </div>
+                                        </div>
+
+                                        {/* Skills Pills */}
+                                        {cert.skills && cert.skills.length > 0 && (
+                                            <div className="flex flex-wrap gap-2">
+                                                {cert.skills.slice(0, 3).map((skill, sIdx) => (
+                                                    <span 
+                                                        key={sIdx} 
+                                                        className="rounded-lg border border-foreground/10 bg-foreground/5 px-2.5 py-1 text-xs font-medium text-foreground/60 transition-all duration-300 group-hover:border-accent-action/30 group-hover:bg-accent-action/10 group-hover:text-accent-action"
+                                                    >
+                                                        {skill}
+                                                    </span>
+                                                ))}
+                                                {cert.skills.length > 3 && (
+                                                    <span className="rounded-lg border border-foreground/10 bg-foreground/5 px-2.5 py-1 text-xs font-medium text-foreground/50 transition-colors duration-300 group-hover:border-foreground/20 group-hover:text-foreground/70">
+                                                        +{cert.skills.length - 3}
+                                                    </span>
+                                                )}
+                                            </div>
                                         )}
-                                    </div>
 
-                                    {/* Content */}
-                                    <div className="mb-4 flex-grow">
-                                        <h3 className="text-lg font-bold text-foreground mb-1 group-hover:text-blue-400 transition-colors line-clamp-2">
-                                            {cert.title}
-                                        </h3>
-                                        <p className="text-sm text-muted-foreground">{cert.issuer}</p>
-                                    </div>
-
-                                    {/* Verification Status */}
-                                    <div className="pt-4 border-t border-white/5 flex items-center justify-between mt-auto">
-                                        <div className="flex items-center gap-2 text-xs text-muted-foreground/60 group-hover:text-blue-400/80 transition-colors">
-                                            <ShieldCheck width={14} height={14} />
-                                            <span>Verified Credential</span>
-                                        </div>
-                                        <OpenNewWindow width={14} height={14} className="text-muted-foreground/40 group-hover:text-foreground transition-colors opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300" />
+                                        {/* Credential ID Terminal Panel */}
+                                        {cert.credential && (
+                                            <div className="mt-2 w-full rounded-xl bg-black/60 px-3.5 py-2.5 border border-foreground/5 shadow-inner transition-colors duration-500 group-hover:border-accent-action/20">
+                                                <p className="font-mono text-[11px] sm:text-xs text-foreground/40 truncate transition-colors duration-500 group-hover:text-foreground/70">
+                                                    {cert.credential}
+                                                </p>
+                                            </div>
+                                        )}
+                                        
+                                        {/* Animated Bottom Line */}
+                                        <div className="absolute inset-x-8 bottom-0 h-0.5 scale-x-0 rounded-full bg-gradient-to-r from-transparent via-accent-action to-transparent opacity-50 transition-transform duration-500 group-hover:scale-x-100" />
                                     </div>
                                 </motion.a>
                             ))}
@@ -123,37 +214,10 @@ const Certifications = () => {
                     </AnimatePresence>
                 </div>
 
-                {/* Pagination Controls */}
-                {totalPages > 1 && (
-                    <div className="flex items-center justify-center gap-6 mt-16">
-                        <button
-                            onClick={handlePrev}
-                            disabled={currentPage === 1}
-                            className="p-3 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-all hover:scale-110 active:scale-95"
-                        >
-                            <NavArrowLeft width={20} height={20} />
-                        </button>
-
-                        <div className="flex items-center gap-2">
-                            {Array.from({ length: totalPages }).map((_, i) => (
-                                <button
-                                    key={i}
-                                    onClick={() => setCurrentPage(i + 1)}
-                                    className={`w-2 h-2 rounded-full transition-all duration-500 ${currentPage === i + 1
-                                        ? 'bg-blue-500 w-8'
-                                        : 'bg-white/20 hover:bg-white/40'
-                                        }`}
-                                />
-                            ))}
-                        </div>
-
-                        <button
-                            onClick={handleNext}
-                            disabled={currentPage === totalPages}
-                            className="p-3 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-all hover:scale-110 active:scale-95"
-                        >
-                            <NavArrowRight width={20} height={20} />
-                        </button>
+                {/* Empty state (if no certifications) */}
+                {certifications.length === 0 && (
+                    <div className="py-24 text-center text-foreground/30 font-mono">
+                        System.out.println("No certifications to display");
                     </div>
                 )}
             </div>

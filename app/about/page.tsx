@@ -5,6 +5,7 @@ import CodePhilosophy from '@/components/CodePhilosophy';
 import EthosTunnel from '@/components/EthosTunnel';
 import ResumePulse from '@/components/ResumePulse';
 import SkillsShowcase from '@/components/SkillsShowcase';
+import Certifications from '@/components/Certifications';
 import BuildProcess from '@/components/BuildProcess';
 import ToolChest from '@/components/ToolChest';
 import BeyondTheCode from '@/components/BeyondTheCode';
@@ -47,6 +48,7 @@ export default function AboutPage() {
                 <BuildProcess />
                 <EthosTunnel />
                 <ResumePulse />
+                <Certifications />
                 <BeyondTheCode />
                 <ToolChest />
             </div>

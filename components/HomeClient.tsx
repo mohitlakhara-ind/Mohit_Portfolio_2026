@@ -4,7 +4,6 @@ import Hero from '@/components/Hero';
 import About from '@/components/About';
 import TechScroll from '@/components/TechScroll';
 import Projects from '@/components/Projects';
-import Certifications from '@/components/Certifications';
 import ContactCTA from '@/components/ContactCTA';
 
 export default function HomeClient() {
@@ -15,7 +14,6 @@ export default function HomeClient() {
                 <section className="snap-section"><About /></section>
                 <section className="snap-section"><TechScroll /></section>
                 <section className="snap-section"><Projects /></section>
-                <section className="snap-section"><Certifications /></section>
                 <section className="snap-section"><ContactCTA /></section>
             </div>
         </main>

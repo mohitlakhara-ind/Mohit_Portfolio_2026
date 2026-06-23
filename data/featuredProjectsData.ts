@@ -14,6 +14,7 @@ export interface FeaturedProject {
     coverImage: string;
     mockupType: string;
     apkLink?: string;
+    mobileImage?: string;
 }
 
 export const featuredProjects: FeaturedProject[] = [
@@ -23,13 +24,14 @@ export const featuredProjects: FeaturedProject[] = [
         "subtitle": "AI Billing SaaS",
         "description": "A production-ready SaaS application for freelancers to manage clients, projects, time logs, and invoices — with Razorpay payment integration and GPT-4o AI proposal generation.",
         "techStack": ["Next.js", "Prisma", "NextAuth", "Razorpay"],
-        "category": "Mobile Apps",
+        "category": "Web Platforms",
         "status": "Active",
         "accentColor": "#000000",
         "parallaxStrength": 0.2,
         "githubLink": "https://github.com/mohitlakhara-ind/soloflow",
         "liveLink": "https://soloflow-invoice.vercel.app",
         "coverImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1781679012/portfolio_projects/soloflow/dashboard_dark.png",
+        "mobileImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1782228407/portfolio_assets/mockup-soloflow-mobile.webp",
         "mockupType": "Desktop",
         "apkLink": "#"
     },
@@ -45,7 +47,8 @@ export const featuredProjects: FeaturedProject[] = [
         "parallaxStrength": 0.2,
         "githubLink": "https://github.com/mohitlakhara-ind/splitsmart",
         "liveLink": "https://web-gz8lisyvm-mohitlakhara-inds-projects.vercel.app",
-        "coverImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1771612374/portfolio_projects/cover_feat-2.png",
+        "coverImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1782228409/portfolio_assets/mockup-splitwiser-desktop.png",
+        "mobileImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1782228409/portfolio_assets/mockup-splitwiser-app.png",
         "mockupType": "Desktop",
         "apkLink": "#"
     },
@@ -62,6 +65,7 @@ export const featuredProjects: FeaturedProject[] = [
         "githubLink": "https://github.com/mohitlakhara-ind/nexus",
         "liveLink": "https://nexus-visuals.vercel.app/",
         "coverImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1773763966/portfolio_projects/Nexus.png",
+        "mobileImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1782228410/portfolio_assets/mockup-nexus-mobile.webp",
         "mockupType": "Desktop"
     },
     {
@@ -75,8 +79,9 @@ export const featuredProjects: FeaturedProject[] = [
         "accentColor": "#8A2BE2",
         "parallaxStrength": 0.15,
         "githubLink": "https://github.com/mohitlakhara-ind/ekovym",
-        "liveLink": "",
-        "coverImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1771612364/portfolio_projects/cover_feat-1.png",
+        "liveLink": "https://ekovym.vercel.app/",
+        "coverImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1782228682/portfolio_assets/mockup-ekovym-desktop.png",
+        "mobileImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1782228683/portfolio_assets/mockup-ekovym-mobile.png",
         "mockupType": "Desktop"
     },
     {
@@ -92,6 +97,7 @@ export const featuredProjects: FeaturedProject[] = [
         "githubLink": "https://github.com/mohitlakhara-ind/notes-app",
         "liveLink": "https://notemenow.vercel.app",
         "coverImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1771612374/portfolio_projects/cover_feat-2.png",
+        "mobileImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1782228413/portfolio_assets/mockup-notenow-mobile.webp",
         "mockupType": "Mobile Focused"
     },
     {
@@ -137,6 +143,7 @@ export const featuredProjects: FeaturedProject[] = [
         "githubLink": "https://github.com/mohitlakhara-ind/CarBook",
         "liveLink": "https://mohitlakhara-ind.github.io/CarBook/",
         "coverImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1771612402/portfolio_projects/cover_feat-5.png",
+        "mobileImage": "https://res.cloudinary.com/dhjkbcdfm/image/upload/v1782228414/portfolio_assets/mockup-carbook-mobile.webp",
         "mockupType": "Desktop"
     }
 ];
