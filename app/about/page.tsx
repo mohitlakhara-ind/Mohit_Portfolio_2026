@@ -8,7 +8,6 @@ import SkillsShowcase from '@/components/SkillsShowcase';
 import BuildProcess from '@/components/BuildProcess';
 import ToolChest from '@/components/ToolChest';
 import BeyondTheCode from '@/components/BeyondTheCode';
-
 export const metadata: Metadata = {
     title: 'About Mohit Lakhara | Full-Stack Developer Story & Skills',
     description: 'Learn about Mohit Lakhara — a MERN Stack Developer with a passion for crafting cinematic digital experiences. Explore his skills, philosophy, toolset, and development process.',

@@ -61,13 +61,13 @@ export const skillCategories: SkillCategory[] = [
         },
         skills: [
             { name: "Node.js", icon: <FaNodeJs className="text-[#339933]" />, level: 90, angle: 0, radius: { mobile: 18, tablet: 20, desktop: 21 } },
-            { name: "Express", icon: <FaServer className="text-foreground" />, level: 85, angle: 60, radius: { mobile: 15, tablet: 17, desktop: 18 } },
-            { name: "MongoDB", icon: <SiMongodb className="text-[#47A248]" />, level: 85, angle: 120, radius: { mobile: 16, tablet: 18, desktop: 19 } },
-            { name: "PostgreSQL", icon: <SiPostgresql className="text-[#4169E1]" />, level: 80, angle: 180, radius: { mobile: 15, tablet: 16, desktop: 17 } },
-            { name: "MySQL", icon: <FaDatabase className="text-[#4479A1]" />, level: 80, angle: 240, radius: { mobile: 14, tablet: 15, desktop: 16 } },
-            { name: "REST APIs", icon: <FaNetworkWired className="text-foreground" />, level: 90, angle: 300, radius: { mobile: 17, tablet: 19, desktop: 20 } },
-            { name: "Auth", icon: <FaKey className="text-[#FFD700]" />, level: 82, angle: 360, radius: { mobile: 13, tablet: 14, desktop: 15 } },
-            { name: "WebSockets", icon: <FaWifi className="text-foreground" />, level: 75, angle: 30, radius: { mobile: 19, tablet: 21, desktop: 22 } },
+            { name: "Express", icon: <FaServer className="text-foreground" />, level: 85, angle: 45, radius: { mobile: 15, tablet: 17, desktop: 18 } },
+            { name: "MongoDB", icon: <SiMongodb className="text-[#47A248]" />, level: 85, angle: 90, radius: { mobile: 16, tablet: 18, desktop: 19 } },
+            { name: "PostgreSQL", icon: <SiPostgresql className="text-[#4169E1]" />, level: 80, angle: 135, radius: { mobile: 15, tablet: 16, desktop: 17 } },
+            { name: "MySQL", icon: <FaDatabase className="text-[#4479A1]" />, level: 80, angle: 180, radius: { mobile: 14, tablet: 15, desktop: 16 } },
+            { name: "REST APIs", icon: <FaNetworkWired className="text-foreground" />, level: 90, angle: 225, radius: { mobile: 17, tablet: 19, desktop: 20 } },
+            { name: "Auth", icon: <FaKey className="text-[#FFD700]" />, level: 82, angle: 270, radius: { mobile: 13, tablet: 14, desktop: 15 } },
+            { name: "WebSockets", icon: <FaWifi className="text-foreground" />, level: 75, angle: 315, radius: { mobile: 19, tablet: 21, desktop: 22 } },
         ]
     },
     {
@@ -102,11 +102,11 @@ export const skillCategories: SkillCategory[] = [
         },
         skills: [
             { name: "Python", icon: <FaPython className="text-[#3776AB]" />, level: 85, angle: 0, radius: { mobile: 16, tablet: 18, desktop: 19 } },
-            { name: "Java", icon: <FaJava className="text-[#007396]" />, level: 80, angle: 72, radius: { mobile: 15, tablet: 16, desktop: 17 } },
-            { name: "C/C++", icon: <FaCode className="text-foreground" />, level: 75, angle: 144, radius: { mobile: 14, tablet: 15, desktop: 16 } },
-            { name: "DSA", icon: <FaCogs className="text-foreground" />, level: 85, angle: 216, radius: { mobile: 15, tablet: 17, desktop: 18 } },
-            { name: "AI/ML", icon: <SiTensorflow className="text-[#FF6F00]" />, level: 75, angle: 288, radius: { mobile: 13, tablet: 14, desktop: 15 } },
-            { name: "OpenAI", icon: <SiOpenai className="text-foreground" />, level: 90, angle: 360, radius: { mobile: 17, tablet: 19, desktop: 20 } },
+            { name: "Java", icon: <FaJava className="text-[#007396]" />, level: 80, angle: 60, radius: { mobile: 15, tablet: 16, desktop: 17 } },
+            { name: "C/C++", icon: <FaCode className="text-foreground" />, level: 75, angle: 120, radius: { mobile: 14, tablet: 15, desktop: 16 } },
+            { name: "DSA", icon: <FaCogs className="text-foreground" />, level: 85, angle: 180, radius: { mobile: 15, tablet: 17, desktop: 18 } },
+            { name: "AI/ML", icon: <SiTensorflow className="text-[#FF6F00]" />, level: 75, angle: 240, radius: { mobile: 13, tablet: 14, desktop: 15 } },
+            { name: "OpenAI", icon: <SiOpenai className="text-foreground" />, level: 90, angle: 300, radius: { mobile: 17, tablet: 19, desktop: 20 } },
         ]
     }
 ];

@@ -1,16 +1,8 @@
 'use client';
-import { Html5, Database, Key, Wifi, Github, Npm, Linux, Code, ServerConnection, Figma } from 'iconoir-react';
-
-
 
 import React, { useRef, useState } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-
-
-
+import { motion, useScroll, useSpring } from 'framer-motion';
 import { useGlobalData } from '@/context/GlobalContext';
-
-
 
 const TechScroll = () => {
     const { skills: skillCategories } = useGlobalData();
@@ -32,15 +24,31 @@ const TechScroll = () => {
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
-        offset: ["start end", "end start"]
+        offset: ["start 40%", "end 150%"]
     });
 
-    const y = useTransform(scrollYProgress, [0, 1], [50, -50]);
+    const drawProgress = useSpring(scrollYProgress, {
+        stiffness: 150,
+        damping: 35,
+        restDelta: 0.001
+    });
+
+    const isMobile = screenSize === 'mobile';
+
+    // Layout config for the 4 categories spreading from center (Radial Tree)
+    const getCategoryLayout = (index: number) => {
+        // Angles: 0=Right, 90=Down, 180=Left, 270=Up
+        switch (index) {
+            case 0: return { angle: 225, startAngle: 160, angleRange: 130 }; // Frontend (Top Left)
+            case 1: return { angle: 315, startAngle: 250, angleRange: 130 }; // Backend (Top Right)
+            case 2: return { angle: 135, startAngle: 70, angleRange: 130 };  // Tools (Bottom Left)
+            case 3: return { angle: 45, startAngle: -20, angleRange: 130 };  // Programming (Bottom Right)
+            default: return { angle: 0, startAngle: 0, angleRange: 90 };
+        }
+    };
 
     return (
         <section id="tech" ref={containerRef} className="relative bg-background py-16 md:py-24 lg:py-32 overflow-hidden">
-            {/* Background elements omitted for brevity */}
-
             <div className="container mx-auto px-4 md:px-6 relative z-10">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -48,15 +56,15 @@ const TechScroll = () => {
                     viewport={{ once: true }}
                     className="text-center mb-10 md:mb-16"
                 >
-                    <h2 className="text-3xl md:text-5xl lg:text-6xl font-black mb-4 tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-purple-500 to-orange-500">
-                        Neural Tech Network
+                    <h2 className="text-3xl md:text-5xl lg:text-6xl font-black mb-4 tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-green-500 to-teal-500">
+                        The Tech Tree
                     </h2>
                     <p className="text-muted-foreground text-sm md:text-lg max-w-2xl mx-auto font-medium">
-                        Explore the interconnected nodes of my technical expertise, where creativity meets advanced engineering.
+                        A singular ecosystem of interconnected skills branching out from a core engineering foundation.
                     </p>
                 </motion.div>
 
-                {screenSize === 'mobile' ? (
+                {isMobile ? (
                     <div className="space-y-8 pb-10">
                         {skillCategories.map((category) => (
                             <div key={category.name} className="bg-card/30 backdrop-blur-xl border border-border/50 rounded-2xl p-5 shadow-sm">
@@ -81,177 +89,214 @@ const TechScroll = () => {
                         ))}
                     </div>
                 ) : (
-                    <motion.div
-                        style={{ y }}
-                        className="relative w-full h-[500px] md:h-[650px] lg:h-[700px]"
-                    >
+                    <div className="relative w-full max-w-[1000px] mx-auto aspect-square flex justify-center">
+                        {/* SVG Tree Layer */}
                         <svg
-                            key={screenSize}
                             className="absolute inset-0 w-full h-full pointer-events-none"
+                            viewBox="0 0 1000 1000"
+                            preserveAspectRatio="xMidYMid meet"
                             style={{ zIndex: 1 }}
-                            preserveAspectRatio="none"
                         >
+                            {/* Central Root Connections */}
                             {skillCategories.map((category, catIndex) => {
-                                const centerPos = category.positions[screenSize];
-                                return category.skills.map((skill, skillIndex) => {
-                                    const angleRad = (skill.angle * Math.PI) / 180;
-                                    const radius = skill.radius[screenSize];
+                                const layout = getCategoryLayout(catIndex);
+                                const rootX = 500;
+                                const rootY = 500;
+                                const catRad = (layout.angle * Math.PI) / 180;
+                                const catDist = 220; // Distance from root to category node
 
-                                    // Unified math for both line and node
-                                    const x1 = centerPos.centerX;
-                                    const y1 = centerPos.centerY;
-                                    // Use fixed precision to avoid hydration mismatch
-                                    const x2 = parseFloat((x1 + Math.cos(angleRad) * radius).toFixed(2));
-                                    const y2 = parseFloat((y1 + Math.sin(angleRad) * radius).toFixed(2));
+                                const cx = (rootX + Math.cos(catRad) * catDist).toFixed(4);
+                                const cy = (rootY + Math.sin(catRad) * catDist).toFixed(4);
 
-                                    return (
-                                        <motion.line
-                                            key={`${catIndex}-${skillIndex}`}
-                                            x1={`${x1}%`}
-                                            y1={`${y1}%`}
-                                            x2={`${x2}%`}
-                                            y2={`${y2}%`}
+                                // Smooth curve from center to category
+                                const cp1x = (rootX + (parseFloat(cx) - rootX) * 0.5).toFixed(4);
+                                const cp1y = rootY.toFixed(4);
+                                const cp2x = cx;
+                                const cp2y = (rootY + (parseFloat(cy) - rootY) * 0.5).toFixed(4);
+                                const rootPathD = `M ${rootX} ${rootY} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${cx} ${cy}`;
+
+                                return (
+                                    <React.Fragment key={`root-conn-${category.name}`}>
+                                        <motion.path
+                                            d={rootPathD}
                                             stroke={category.color}
-                                            strokeWidth="3"
-                                            opacity={hoveredSkill === skill.name ? 0.8 : 0.2}
-                                            strokeDasharray="4 4"
-                                            initial={{ pathLength: 0 }}
-                                            whileInView={{ pathLength: 1 }}
-                                            viewport={{ once: true }}
-                                            animate={{ strokeDashoffset: [0, -20] }}
-                                            transition={{
-                                                pathLength: { duration: 1 },
-                                                strokeDashoffset: { duration: 1, repeat: Infinity, ease: "linear" }
-                                            }}
+                                            strokeWidth="5"
+                                            fill="none"
+                                            strokeLinecap="round"
+                                            opacity={0.8}
+                                            style={{ pathLength: drawProgress }}
                                         />
-                                    );
-                                });
+
+                                        {/* Skill Branches */}
+                                        {category.skills.map((skill, skillIndex) => {
+                                            const total = category.skills.length;
+                                            const angle = layout.startAngle + (skillIndex / (total - 1 || 1)) * layout.angleRange;
+                                            const angleRad = (angle * Math.PI) / 180;
+
+                                            // Stagger the distance of skills from category node
+                                            const radius = 130 + (skillIndex % 2) * 80;
+
+                                            const x = (parseFloat(cx) + Math.cos(angleRad) * radius).toFixed(4);
+                                            const y = (parseFloat(cy) + Math.sin(angleRad) * radius).toFixed(4);
+
+                                            // Smooth curve from category to skill
+                                            const scp1x = (parseFloat(cx) + (parseFloat(x) - parseFloat(cx)) * 0.5).toFixed(4);
+                                            const scp1y = cy;
+                                            const scp2x = x;
+                                            const scp2y = (parseFloat(cy) + (parseFloat(y) - parseFloat(cy)) * 0.5).toFixed(4);
+                                            const skillPathD = `M ${cx} ${cy} C ${scp1x} ${scp1y}, ${scp2x} ${scp2y}, ${x} ${y}`;
+
+                                            return (
+                                                <motion.path
+                                                    key={`${category.name}-${skill.name}`}
+                                                    d={skillPathD}
+                                                    stroke={category.color}
+                                                    strokeWidth="2"
+                                                    fill="none"
+                                                    strokeLinecap="round"
+                                                    opacity={hoveredSkill === skill.name ? 1 : 0.3}
+                                                    style={{ pathLength: drawProgress }}
+                                                />
+                                            );
+                                        })}
+                                    </React.Fragment>
+                                );
                             })}
                         </svg>
-                        {/* FIX 1: Keyed SVG
-                        Adding screenSize as a key ensures the SVG internal coordinate 
-                        system resets immediately when the layout state changes.
-                    */}
-                        {skillCategories.map((category, catIndex) => {
-                            const centerPos = category.positions[screenSize];
-                            return (
-                                <React.Fragment key={category.name}>
-                                    {/* Center Node */}
-                                    <motion.div
-                                        className="absolute"
-                                        style={{
-                                            left: `${centerPos.centerX}%`,
-                                            top: `${centerPos.centerY}%`,
-                                            // FIX 2: Using transform instead of translate for smoother calc
-                                            transform: 'translate(-50%, -50%)',
-                                            zIndex: 2,
-                                        }}
-                                    >
-                                        {/* Category Circle Content */}
-                                        <div className="w-12 h-12 md:w-20 md:h-20 rounded-full border-2 flex items-center justify-center bg-background/50 backdrop-blur-md" style={{ borderColor: category.color }}>
-                                            <span className="text-[10px] md:text-xs font-bold text-center">{category.name}</span>
+
+                        {/* HTML Nodes Layer */}
+                        <div className="absolute inset-0 w-full h-full" style={{ zIndex: 2 }}>
+                            {/* Root Node */}
+                            <div
+                                className="absolute top-[50%] left-[50%]"
+                                style={{ transform: 'translate(-50%, -50%)', zIndex: 60 }}
+                            >
+                                <div className="w-24 h-24 md:w-28 md:h-28 rounded-full border-[6px] border-emerald-500/50 flex flex-col items-center justify-center bg-background/95 backdrop-blur-xl shadow-[0_0_50px_rgba(16,185,129,0.4)]">
+                                    <span className="text-sm md:text-base font-black text-center leading-tight px-2 bg-clip-text text-transparent bg-gradient-to-br from-emerald-400 to-teal-600">Core Stack</span>
+                                </div>
+                            </div>
+
+                            {/* Categories and Skills */}
+                            {skillCategories.map((category, catIndex) => {
+                                const layout = getCategoryLayout(catIndex);
+                                const rootX = 500;
+                                const rootY = 500;
+                                const catRad = (layout.angle * Math.PI) / 180;
+                                const catDist = 220;
+
+                                const cx = rootX + Math.cos(catRad) * catDist;
+                                const cy = rootY + Math.sin(catRad) * catDist;
+
+                                const catTopPct = ((cy / 1000) * 100).toFixed(4);
+                                const catLeftPct = ((cx / 1000) * 100).toFixed(4);
+
+                                return (
+                                    <React.Fragment key={category.name}>
+                                        {/* Category Node */}
+                                        <div
+                                            className="absolute"
+                                            style={{
+                                                top: `${catTopPct}%`,
+                                                left: `${catLeftPct}%`,
+                                                transform: 'translate(-50%, -50%)',
+                                                zIndex: 30
+                                            }}
+                                        >
+                                            <div 
+                                                className="w-14 h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-full border-[3px] flex flex-col items-center justify-center bg-background/90 backdrop-blur-md shadow-lg" 
+                                                style={{ borderColor: category.color, boxShadow: `0 0 30px ${category.color}40` }}
+                                            >
+                                                <span className="text-[9px] md:text-[10px] lg:text-xs font-bold text-center leading-tight px-1">{category.name}</span>
+                                            </div>
                                         </div>
-                                    </motion.div>
 
-                                    {category.skills.map((skill, skillIndex) => {
-                                        const angleRad = (skill.angle * Math.PI) / 180;
-                                        const radius = skill.radius[screenSize];
+                                        {/* Skill Nodes (Leaves) */}
+                                        {category.skills.map((skill, skillIndex) => {
+                                            const total = category.skills.length;
+                                            const angle = layout.startAngle + (skillIndex / (total - 1 || 1)) * layout.angleRange;
+                                            const angleRad = (angle * Math.PI) / 180;
 
-                                        // Use EXACT same math as the SVG x2/y2
-                                        const x = parseFloat((centerPos.centerX + Math.cos(angleRad) * radius - 2.2).toFixed(2));
-                                        const y = parseFloat((centerPos.centerY + Math.sin(angleRad) * radius - 5).toFixed(2));
+                                            const radius = 130 + (skillIndex % 2) * 80;
 
-                                        return (
-                                            <SkillNode
-                                                key={skill.name}
-                                                skill={skill}
-                                                x={x}
-                                                y={y}
-                                                categoryColor={category.color}
-                                                delay={catIndex * 0.1}
-                                                onHover={setHoveredSkill}
-                                                isHovered={hoveredSkill === skill.name}
-                                                screenSize={screenSize as 'tablet' | 'desktop'}
-                                            />
-                                        );
-                                    })}
-                                </React.Fragment>
-                            );
-                        })}
-                    </motion.div>
+                                            const x = cx + Math.cos(angleRad) * radius;
+                                            const y = cy + Math.sin(angleRad) * radius;
+
+                                            const sTopPct = ((y / 1000) * 100).toFixed(4);
+                                            const sLeftPct = ((x / 1000) * 100).toFixed(4);
+
+                                            return (
+                                                <SkillNode
+                                                    key={skill.name}
+                                                    skill={skill}
+                                                    top={`${sTopPct}%`}
+                                                    left={`${sLeftPct}%`}
+                                                    categoryColor={category.color}
+                                                    onHover={setHoveredSkill}
+                                                    isHovered={hoveredSkill === skill.name}
+                                                />
+                                            );
+                                        })}
+                                    </React.Fragment>
+                                );
+                            })}
+                        </div>
+                    </div>
                 )}
             </div>
         </section>
     );
 };
 
-const SkillNode = ({ skill, x, y, categoryColor, delay, onHover, isHovered, screenSize }: any) => {
-    const nodeSize = screenSize === 'mobile' ? 'w-10 h-10' : screenSize === 'tablet' ? 'w-12 h-12' : 'w-14 h-14';
-    const iconSize = screenSize === 'mobile' ? 'text-xl' : screenSize === 'tablet' ? 'text-2xl' : 'text-3xl';
-
+const SkillNode = ({ skill, top, left, categoryColor, onHover, isHovered }: any) => {
     return (
-        <motion.div
+        <div
             className="absolute cursor-pointer group"
             style={{
-                left: `${x}%`,
-                top: `${y}%`,
+                top,
+                left,
                 transform: 'translate(-50%, -50%)',
-                zIndex: isHovered ? 10 : 3,
+                zIndex: isHovered ? 50 : 10,
             }}
-            initial={{ scale: 0, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay, duration: 0.5, type: "spring" }}
-            whileHover={{ scale: screenSize === 'mobile' ? 1.2 : 1.3 }}
-            onHoverStart={() => onHover(skill.name)}
-            onHoverEnd={() => onHover(null)}
+            onMouseEnter={() => onHover(skill.name)}
+            onMouseLeave={() => onHover(null)}
         >
             <div className="relative">
-                {/* Skill Icon */}
-                <div
-                    className={`${nodeSize} rounded-full flex items-center justify-center bg-card/60 backdrop-blur-xl border border-border/50 shadow-lg transition-all duration-300 group-hover:border-accent-action group-hover:shadow-2xl`}
+                {/* Leaf Node */}
+                <motion.div
+                    whileHover={{ scale: 1.2 }}
+                    className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-full flex items-center justify-center bg-card/80 backdrop-blur-xl border border-white/10 transition-all duration-300"
                     style={{
-                        boxShadow: isHovered ? `0 0 ${screenSize === 'mobile' ? '20px' : '30px'} ${categoryColor}80` : undefined,
+                        borderColor: isHovered ? categoryColor : undefined,
+                        boxShadow: isHovered ? `0 0 20px ${categoryColor}80` : undefined,
                     }}
                 >
-                    <div className={iconSize}>
+                    <div className="text-lg md:text-2xl lg:text-3xl text-foreground">
                         {skill.icon}
                     </div>
-                </div>
-
-                {/* Glow Effect */}
-                {isHovered && (
-                    <motion.div
-                        className="absolute inset-0 rounded-full"
-                        style={{ background: `radial-gradient(circle, ${categoryColor}40, transparent)` }}
-                        initial={{ scale: 1, opacity: 0 }}
-                        animate={{ scale: 2, opacity: [0, 1, 0] }}
-                        transition={{ duration: 1, repeat: Infinity }}
-                    />
-                )}
+                </motion.div>
 
                 {/* Tooltip */}
-                <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 10 }}
-                    className="absolute top-full mt-2 left-1/2 -translate-x-1/2 whitespace-nowrap bg-card/90 backdrop-blur-xl border border-border/50 rounded-lg px-2 py-1.5 md:px-3 md:py-2 pointer-events-none"
+                <div
+                    className={`absolute top-[calc(100%+8px)] md:top-[calc(100%+12px)] left-1/2 -translate-x-1/2 whitespace-nowrap bg-card/95 backdrop-blur-xl border rounded-lg px-2 py-1 md:px-3 md:py-2 pointer-events-none transition-all duration-300
+                        ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'}`}
+                    style={{ borderColor: `${categoryColor}50` }}
                 >
-                    <p className="text-[10px] md:text-xs font-bold text-foreground">{skill.name}</p>
-                    <div className="flex items-center gap-1.5 md:gap-2 mt-0.5 md:mt-1">
-                        <div className="h-0.5 md:h-1 w-12 md:w-16 bg-border/30 rounded-full overflow-hidden">
+                    <p className="text-[9px] md:text-[10px] lg:text-xs font-bold text-foreground mb-0.5 md:mb-1">{skill.name}</p>
+                    <div className="flex items-center gap-1.5 md:gap-2">
+                        <div className="h-0.5 md:h-1 w-10 md:w-12 lg:w-16 bg-border/30 rounded-full overflow-hidden">
                             <div
-                                className="h-full rounded-full"
+                                className="h-full rounded-full transition-all duration-500 ease-out"
                                 style={{
-                                    width: `${skill.level}%`,
                                     background: categoryColor,
+                                    width: isHovered ? `${skill.level}%` : '0%',
                                 }}
                             />
                         </div>
-                        <span className="text-[9px] md:text-[10px] text-muted-foreground">{skill.level}%</span>
+                        <span className="text-[8px] md:text-[9px] lg:text-[10px] font-mono text-muted-foreground">{skill.level}%</span>
                     </div>
-                </motion.div>
+                </div>
             </div>
-        </motion.div>
+        </div>
     );
 };
 

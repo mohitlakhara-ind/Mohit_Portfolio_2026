@@ -47,10 +47,10 @@
   /* Obsidian Night */
   --secondary-bg: #16161A;
   /* Glass Slate */
-  --accent-action: #00F0FF;
-  --accent-action-rgb: 0, 240, 255;
-  --accent-highlight: #7000FF;
-  --accent-highlight-rgb: 112, 0, 255;
+  --accent-action: #38BDF8;
+  --accent-action-rgb: 56, 189, 248;
+  --accent-highlight: #CBD5E1;
+  --accent-highlight-rgb: 203, 213, 225;
   --text-primary: #F9F9F9;
   /* Pure Snow */
   --text-secondary: #888888;

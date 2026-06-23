@@ -18,10 +18,10 @@ export interface TimelineItem {
 export const timelineData: TimelineItem[] = [
     {
         id: 1,
-        date: 'Jan 2023',
-        title: 'BCA - Computer Science',
+        date: '2021 - 2024',
+        title: 'BCA Graduate',
         subtitle: 'Lachoo Memorial College',
-        description: 'Building a strong foundation in software engineering, algorithms, and system design. My academic journey is fueled by a passion for solving complex problems with code.',
+        description: 'Built a strong foundation in software engineering, algorithms, and system design. My academic journey fueled a deep passion for solving complex problems with code.',
         icon: <Code width={16} height={16} />,
         color: 'text-accent-action',
         borderColor: 'border-accent-action',
@@ -48,32 +48,32 @@ export const timelineData: TimelineItem[] = [
     },
     {
         id: 3,
-        date: '2025',
-        title: 'Freelance Developer',
-        subtitle: 'Various Clients',
-        description: 'Delivered high-impact freelance projects across web platforms, including Gudgig, a full-stack job portal and freelancer marketplace. Specialized in scalable product architecture, real-time features, payment flows, and production deployment across Hostinger and VPS infrastructure.',
-        icon: <Briefcase width={16} height={16} />,
-        color: 'text-accent-action',
-        borderColor: 'border-accent-action',
-        bgColor: 'bg-accent-action',
-        details: [
-            { label: 'Projects', value: '4-5 Delivered' },
-            { label: 'Highlight', value: 'Gudgig' }
-        ]
-    },
-    {
-        id: 4,
-        date: 'Jan 2026',
+        date: 'Late 2024',
         title: 'Full Stack Developer',
         subtitle: 'Fudode',
-        description: 'Currently architecting scalable full-stack applications. Responsible for the entire development lifecycle, from database design to frontend implementation and deployment.',
+        description: 'Architected scalable full-stack applications over an impactful 4-month period. Responsible for the entire development lifecycle, from database design to frontend implementation and deployment.',
         icon: <Zap width={16} height={16} />,
         color: 'text-accent-highlight',
         borderColor: 'border-accent-highlight',
         bgColor: 'bg-accent-highlight',
         details: [
             { label: 'Role', value: 'Full Stack Dev' },
-            { label: 'Stack', value: 'MERN, Next.js, React Native' }
+            { label: 'Duration', value: '4 Months' }
+        ]
+    },
+    {
+        id: 4,
+        date: 'Current',
+        title: 'Freelance Developer & MCA',
+        subtitle: 'JECRC University & Various Clients',
+        description: 'Currently pursuing an MCA in Cloud Computing at JECRC University, Jaipur. Simultaneously delivering high-impact freelance projects across web platforms, specializing in scalable product architecture.',
+        icon: <Briefcase width={16} height={16} />,
+        color: 'text-accent-action',
+        borderColor: 'border-accent-action',
+        bgColor: 'bg-accent-action',
+        details: [
+            { label: 'Education', value: 'MCA Cloud Computing' },
+            { label: 'Role', value: 'Freelance Developer' }
         ]
     }
 ];

@@ -6,7 +6,6 @@ import TechScroll from '@/components/TechScroll';
 import Projects from '@/components/Projects';
 import Certifications from '@/components/Certifications';
 import ContactCTA from '@/components/ContactCTA';
-import Services from '@/components/Services';
 
 export default function HomeClient() {
     return (
@@ -14,7 +13,6 @@ export default function HomeClient() {
             <div className="scroll-container">
                 <section className="snap-section"><Hero /></section>
                 <section className="snap-section"><About /></section>
-                <section className="snap-section"><Services /></section>
                 <section className="snap-section"><TechScroll /></section>
                 <section className="snap-section"><Projects /></section>
                 <section className="snap-section"><Certifications /></section>

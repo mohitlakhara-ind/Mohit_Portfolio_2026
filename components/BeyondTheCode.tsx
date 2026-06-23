@@ -1,5 +1,5 @@
 'use client';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { motion, useInView, Variants } from 'framer-motion';
 
 interface Interest {
@@ -51,78 +51,80 @@ const interests: Interest[] = [
         description: 'Strategy & sandbox games. Minecraft and chess both scratch the same itch — systems thinking.',
         emoji: '🎮',
         accent: '#34D399',
-        size: 'sm',
+        size: 'md',
     },
 ];
 
 const cardVariants: Variants = {
-    hidden: { opacity: 0, y: 32, scale: 0.96 },
+    hidden: { opacity: 0, y: 40, filter: 'blur(10px)' },
     show: (i: number) => ({
-        opacity: 1, y: 0, scale: 1,
-        transition: { duration: 0.55, delay: i * 0.09, ease: [0.22, 1, 0.36, 1] },
+        opacity: 1, 
+        y: 0, 
+        filter: 'blur(0px)',
+        transition: { duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] },
     }),
 };
 
 const BeyondTheCode = () => {
     const ref = useRef<HTMLDivElement>(null);
-    const inView = useInView(ref, { once: true, margin: '-80px' });
+    const inView = useInView(ref, { once: true, margin: '-100px' });
 
     return (
-        <section ref={ref} className="relative w-full bg-background py-24 px-6 sm:px-12 overflow-hidden">
-            <div className="max-w-6xl mx-auto">
+        <section ref={ref} className="relative w-full bg-background py-32 px-6 sm:px-12 overflow-hidden border-t border-white/5">
+            {/* Background Grid Pattern */}
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_20%,transparent_100%)] pointer-events-none" />
+
+            <div className="max-w-6xl mx-auto relative z-10">
                 {/* Header */}
-                <motion.span
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={inView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.5 }}
-                    className="block text-xs font-bold uppercase tracking-[0.5em] text-accent-action mb-3"
-                >
-                    Human Side
-                </motion.span>
-                <motion.h2
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={inView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.6, delay: 0.1 }}
-                    className="text-4xl md:text-6xl font-black font-display tracking-tighter mb-4"
-                >
-                    Beyond <span className="text-accent-action italic">the Code</span>
-                </motion.h2>
-                <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={inView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.6, delay: 0.18 }}
-                    className="text-text-secondary text-lg max-w-xl mb-14"
-                >
-                    The stuff that shapes how I think, create, and build.
-                </motion.p>
+                <div className="flex flex-col items-center text-center mb-20">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={inView ? { opacity: 1, scale: 1 } : {}}
+                        transition={{ duration: 0.5 }}
+                        className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-white/5 border border-white/10 mb-6 backdrop-blur-md"
+                    >
+                        <span className="text-[10px] font-mono tracking-widest uppercase text-text-secondary">05 // The Human Element</span>
+                    </motion.div>
+                    
+                    <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={inView ? { opacity: 1, y: 0 } : {}}
+                        transition={{ duration: 0.6, delay: 0.1 }}
+                        className="text-4xl md:text-6xl font-black font-display tracking-tighter mb-6"
+                    >
+                        Beyond <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-action to-accent-highlight italic">the IDE</span>
+                    </motion.h2>
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={inView ? { opacity: 1, y: 0 } : {}}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        className="text-text-secondary text-lg max-w-2xl font-sans"
+                    >
+                        The rituals, obsessions, and disconnected moments that shape how I think, create, and engineer solutions.
+                    </motion.p>
+                </div>
 
                 {/* Bento Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-[160px] md:auto-rows-[180px]">
                     {interests.map((item, i) => (
-                        <BentoCard key={item.title} item={item} index={i} inView={inView} />
+                        <DataCard key={item.title} item={item} index={i} inView={inView} />
                     ))}
                 </div>
             </div>
 
-            {/* Ambient */}
-            <div className="pointer-events-none absolute bottom-0 right-0 w-[500px] h-[400px] rounded-full bg-accent-action/5 blur-3xl" />
+            {/* Ambient Lighting */}
+            <div className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] rounded-full bg-accent-highlight/5 blur-[120px]" />
         </section>
     );
 };
 
-const BentoCard = ({ item, index, inView }: { item: Interest; index: number; inView: boolean }) => {
-    const [hovered, setHovered] = React.useState(false);
+const DataCard = ({ item, index, inView }: { item: Interest; index: number; inView: boolean }) => {
+    const [hovered, setHovered] = useState(false);
 
     const sizeClasses = {
-        lg: 'lg:col-span-2 lg:row-span-2',
-        md: 'lg:col-span-1 lg:row-span-2',
-        sm: 'lg:col-span-1',
-    };
-
-    const emojiSize = {
-        lg: 'text-7xl',
-        md: 'text-5xl',
-        sm: 'text-4xl',
+        lg: 'col-span-1 sm:col-span-2 lg:col-span-2 row-span-2',
+        md: 'col-span-1 sm:col-span-2 lg:col-span-2 row-span-1',
+        sm: 'col-span-1 sm:col-span-1 lg:col-span-1 row-span-1',
     };
 
     return (
@@ -133,46 +135,51 @@ const BentoCard = ({ item, index, inView }: { item: Interest; index: number; inV
             animate={inView ? 'show' : 'hidden'}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
-            className={`relative rounded-3xl border border-border/10 bg-secondary-bg/40 backdrop-blur-md p-7 overflow-hidden cursor-default transition-all duration-300 hover:border-border/30 flex flex-col ${sizeClasses[item.size]}`}
+            className={`group relative rounded-2xl bg-black/40 border border-white/10 backdrop-blur-md overflow-hidden cursor-default transition-all duration-500 hover:border-white/30 flex flex-col ${sizeClasses[item.size]}`}
             style={{
-                boxShadow: hovered ? `0 0 40px 0 ${item.accent}18` : 'none',
-                minHeight: item.size === 'lg' ? '280px' : item.size === 'md' ? '200px' : '160px',
+                boxShadow: hovered ? `0 0 30px 0 ${item.accent}15, inset 0 0 20px 0 ${item.accent}05` : 'none',
             }}
         >
-            {/* Corner glow */}
-            <motion.div
-                className="pointer-events-none absolute -top-16 -right-16 w-40 h-40 rounded-full blur-2xl"
-                style={{ background: item.accent }}
-                animate={{ opacity: hovered ? 0.12 : 0.04 }}
-                transition={{ duration: 0.4 }}
+            {/* Animated Gradient Background */}
+            <div 
+                className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-700 pointer-events-none"
+                style={{
+                    background: `radial-gradient(circle at 50% 50%, ${item.accent}, transparent 70%)`
+                }}
             />
 
-            {/* Emoji */}
-            <motion.div
-                className={`${emojiSize[item.size]} mb-4 leading-none`}
-                animate={{ scale: hovered ? 1.12 : 1, rotate: hovered ? 5 : 0 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            >
-                {item.emoji}
-            </motion.div>
+            {/* Corner Bracket Decor */}
+            <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-white/20 group-hover:border-white/60 transition-colors rounded-tl-2xl m-4 pointer-events-none" />
+            <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-white/20 group-hover:border-white/60 transition-colors rounded-br-2xl m-4 pointer-events-none" />
 
-            {/* Title */}
-            <h3
-                className="text-xl md:text-2xl font-bold font-display tracking-tight mb-2"
-                style={{ color: hovered ? item.accent : 'var(--foreground)' }}
-            >
-                {item.title}
-            </h3>
+            <div className={`relative z-10 flex flex-col h-full p-6 ${item.size === 'lg' ? 'p-10' : ''}`}>
+                <div className="flex items-start justify-between mb-auto">
+                    <div 
+                        className={`flex items-center justify-center rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 ${item.size === 'lg' ? 'w-16 h-16 text-3xl md:w-20 md:h-20 md:text-4xl' : 'w-12 h-12 text-2xl'}`}
+                    >
+                        {item.emoji}
+                    </div>
+                    {item.size === 'lg' && (
+                        <div className="hidden sm:block px-3 py-1 rounded-full border border-white/10 bg-white/5 text-[10px] font-mono tracking-widest text-text-secondary uppercase">
+                            Primary.Focus
+                        </div>
+                    )}
+                </div>
 
-            {/* Description */}
-            <p className="text-text-secondary text-sm md:text-base leading-relaxed flex-1">{item.description}</p>
-
-            {/* Bottom tag */}
-            <div
-                className="mt-4 self-start text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full"
-                style={{ color: item.accent, background: `${item.accent}15`, border: `1px solid ${item.accent}25` }}
-            >
-                #{item.title.toLowerCase().replace(/\s/g, '-')}
+                <div className={`mt-6 ${item.size === 'sm' ? 'mt-4' : ''}`}>
+                    <h3 
+                        className={`font-bold font-display tracking-tight mb-2 transition-colors duration-300 ${item.size === 'lg' ? 'text-2xl md:text-3xl' : 'text-lg md:text-xl'}`}
+                        style={{ color: hovered ? item.accent : 'var(--foreground)' }}
+                    >
+                        {item.title}
+                    </h3>
+                    
+                    {(item.size === 'lg' || item.size === 'md') && (
+                        <p className={`text-text-secondary font-sans leading-relaxed ${item.size === 'lg' ? 'text-sm md:text-base max-w-md' : 'text-xs md:text-sm'}`}>
+                            {item.description}
+                        </p>
+                    )}
+                </div>
             </div>
         </motion.div>
     );

@@ -1,14 +1,14 @@
 'use client';
-import { Home, User, Mail, Cpu, Menu, Xmark } from 'iconoir-react';
-
-
-
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
+import { Home, User, Folder, ChatBubble, Menu, Xmark } from 'iconoir-react';
 
 import { cn } from '@/lib/utils';
+
+// Wrap Link with Framer Motion to easily pass hover states to children
+const MotionLink = motion(Link as any);
 
 // Magnetic effect for that premium interactive feel
 const MagneticItem = ({ children, className }: { children: React.ReactNode, className?: string }) => {
@@ -44,10 +44,30 @@ const MagneticItem = ({ children, className }: { children: React.ReactNode, clas
 };
 
 const navLinks = [
-    { name: 'Home', href: '/', icon: Home },
-    { name: 'About', href: '/about', icon: User },
-    { name: 'Projects', href: '/projects', icon: Cpu },
-    { name: 'Contact', href: '/contact', icon: Mail },
+    { 
+        name: 'Home', 
+        href: '/', 
+        icon: Home, 
+        animation: { scale: 1.15, y: -3 } 
+    },
+    { 
+        name: 'About', 
+        href: '/about', 
+        icon: User, 
+        animation: { scale: 1.15, y: -2, rotate: -8 } 
+    },
+    { 
+        name: 'Projects', 
+        href: '/projects', 
+        icon: Folder, 
+        animation: { scale: 1.15, y: -2, rotate: 8 } 
+    },
+    { 
+        name: 'Contact', 
+        href: '/contact', 
+        icon: ChatBubble, 
+        animation: { scale: 1.15, y: -3, rotate: -5 } 
+    },
 ];
 
 export default function Navbar() {
@@ -106,8 +126,10 @@ export default function Navbar() {
 
                     return (
                         <MagneticItem key={link.name}>
-                            <Link
+                            <MotionLink
                                 href={link.href}
+                                initial="initial"
+                                whileHover="hover"
                                 className={cn(
                                     "relative px-5 py-2 rounded-full text-sm font-medium transition-all duration-300",
                                     "flex items-center gap-2 group/link",
@@ -136,12 +158,19 @@ export default function Navbar() {
                                     <div className="absolute inset-0 bg-white/5 opacity-0 group-hover/link:opacity-100 rounded-full transition-opacity duration-300 -z-10" />
                                 )}
 
-                                <div className="relative">
+                                <motion.div 
+                                    variants={{
+                                        initial: { scale: 1, y: 0, rotate: 0 },
+                                        hover: link.animation
+                                    }}
+                                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                                    className="relative w-6 h-6 flex items-center justify-center"
+                                >
                                     <Icon className={cn(
-                                        "w-4 h-4 transition-all duration-300 relative z-10",
-                                        isActive ? "text-purple-300" : "group-hover/link:text-purple-300 group-hover/link:-translate-y-0.5"
+                                        "w-5 h-5 transition-colors duration-300",
+                                        isActive ? "text-purple-300" : "text-neutral-400 group-hover/link:text-purple-300"
                                     )} />
-                                </div>
+                                </motion.div>
 
                                 <span className={cn(
                                     "hidden lg:block tracking-wide transition-colors duration-300",
@@ -149,7 +178,7 @@ export default function Navbar() {
                                 )}>
                                     {link.name}
                                 </span>
-                            </Link>
+                            </MotionLink>
                         </MagneticItem>
                     );
                 })}
@@ -174,7 +203,7 @@ export default function Navbar() {
                 {/* Subtle border glow on mobile toggle too */}
                 <div className="absolute w-[250%] h-[250%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,rgba(168,85,247,0.4)_50%,transparent_100%)] animate-[spin_4s_linear_infinite]" />
                 <div className="relative z-10">
-                    {isOpen ? <Xmark className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                    {isOpen ? <Xmark className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
                 </div>
             </motion.button>
 
@@ -221,8 +250,10 @@ export default function Navbar() {
                                             animate={{ opacity: 1, x: 0 }}
                                             transition={{ delay: 0.1 + (index * 0.05), type: "spring", stiffness: 300, damping: 25 }}
                                         >
-                                            <Link
+                                            <MotionLink
                                                 href={link.href}
+                                                initial="initial"
+                                                whileHover="hover"
                                                 onClick={() => setIsOpen(false)}
                                                 className={cn(
                                                     "group flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 relative overflow-hidden",
@@ -237,10 +268,18 @@ export default function Navbar() {
                                                 )}
 
                                                 <div className={cn(
-                                                    "p-2 rounded-xl transition-colors duration-300",
+                                                    "p-2 rounded-xl transition-colors duration-300 flex items-center justify-center w-12 h-12",
                                                     isActive ? "bg-purple-500/20 text-purple-300" : "bg-white/5 group-hover:bg-purple-500/10 group-hover:text-purple-300"
                                                 )}>
-                                                    <Icon className="w-5 h-5" />
+                                                    <motion.div
+                                                        variants={{
+                                                            initial: { scale: 1, y: 0, rotate: 0 },
+                                                            hover: link.animation
+                                                        }}
+                                                        transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                                                    >
+                                                        <Icon className="w-6 h-6" />
+                                                    </motion.div>
                                                 </div>
 
                                                 <span className="text-lg font-medium tracking-wider">
@@ -253,7 +292,7 @@ export default function Navbar() {
                                                         className="absolute right-6 w-2 h-2 rounded-full bg-purple-400 shadow-[0_0_10px_rgba(192,132,252,0.8)]"
                                                     />
                                                 )}
-                                            </Link>
+                                            </MotionLink>
                                         </motion.div>
                                     );
                                 })}

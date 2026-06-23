@@ -8,28 +8,22 @@ gsap.registerPlugin(ScrollTrigger);
 
 const storyChapters = [
     {
-        title: "The Discovery",
-        subtitle: "How it all began",
-        description: "My fascination with technology wasn't just about curiosity—it was about creation. It started with simple lines of code that turned into worlds of possibility.",
-        year: "2020"
-    },
-    {
         title: "The Foundation",
-        subtitle: "Lachoo Memorial College",
-        description: "Pursuing my BCA, I delved deep into the fundamentals. This is where I built my logical core and embraced the rigor of computer science.",
+        subtitle: "BCA Graduate",
+        description: "During my BCA at Lachoo Memorial College, I delved deep into the fundamentals. This is where I built my logical core and embraced the rigor of computer science.",
         year: "2021-24"
     },
     {
         title: "The Real World",
-        subtitle: "Impact at Fudode",
-        description: "Stepping into professional development at Fudode, I bridged the gap between theory and industry-grade solutions. Transforming complex requirements into fluid user experiences.",
-        year: "Current"
+        subtitle: "4 Months at Fudode",
+        description: "Stepping into professional development as a Full-stack Developer at Fudode, I bridged the gap between theory and industry-grade solutions. Transforming complex requirements into fluid user experiences.",
+        year: "2024"
     },
     {
         title: "The Evolution",
-        subtitle: "Beyond the Screen",
-        description: "Now, I focus on the intersection of AI, immersive interfaces, and scalable architectures. I don't just write code; I design digital legacies.",
-        year: "Future"
+        subtitle: "Freelance & MCA",
+        description: "Currently pursuing an MCA in Cloud Computing at JECRC University, Jaipur. As a Freelance Developer, I architect scalable platforms and design digital legacies.",
+        year: "Current"
     }
 ];
 

@@ -1,309 +1,313 @@
 'use client';
-import { ArrowRight, Download } from 'iconoir-react';
-
-
-
-import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { motion } from 'framer-motion';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, shaderMaterial, Stars } from '@react-three/drei';
-
+import { ArrowRight } from 'iconoir-react';
+import React, { useState, useEffect, useRef, Suspense, useMemo } from 'react';
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Stars, Float, MeshDistortMaterial, Environment, TorusKnot, Text, GradientTexture } from '@react-three/drei';
 import * as THREE from 'three';
 
-// --- Custom Warp Shader Material ---
+// ──────────────────────────────────────────────────────────────
+// 1.  3D SCENE – NO SPHERE
+// ──────────────────────────────────────────────────────────────
 
-// --- Custom Warp Shader Material ---
+const BackgroundScene = () => {
+    const ringRef = useRef<THREE.Mesh>(null);
+    const shapesRef = useRef<THREE.Group>(null);
 
-const WarpMaterial = {
-    uniforms: {
-        uTime: { value: 0 },
-        uColorMain: { value: new THREE.Color("#00ffff") }, // Default, will be updated
-        uColorAccent: { value: new THREE.Color("#a855f7") }, // Default, will be updated
-        uIntensity: { value: 0.3 },
-        uMouse: { value: new THREE.Vector2(0, 0) },
-        uScroll: { value: 0 },
-    },
-    vertexShader: `
-    uniform float uTime;
-    uniform float uIntensity;
-    uniform vec2 uMouse;
-    uniform float uScroll;
-    varying vec2 vUv;
-    varying float vDisplacement;
-    varying vec3 vPosition;
-
-    // Simplex noise function
-    vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-    vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-    vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
-    vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
-    float snoise(vec3 v) {
-      const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
-      const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
-      vec3 i  = floor(v + dot(v, C.yyy) );
-      vec3 x0 = v - i + dot(i, C.xxx) ;
-      vec3 g = step(x0.yzx, x0.xyz);
-      vec3 l = 1.0 - g;
-      vec3 i1 = min( g.xyz, l.zxy );
-      vec3 i2 = max( g.xyz, l.zxy );
-      vec3 x1 = x0 - i1 + C.xxx;
-      vec3 x2 = x0 - i2 + C.yyy;
-      vec3 x3 = x0 - D.yyy;
-      i = mod289(i);
-      vec4 p = permute( permute( permute(
-                 i.z + vec4(0.0, i1.z, i2.z, 1.0 ))
-               + i.y + vec4(0.0, i1.y, i2.y, 1.0 ))
-               + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
-      float n_ = 0.142857142857;
-      vec3  ns = n_ * D.wyz - D.xzx;
-      vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
-      vec4 x_ = floor(j * ns.z);
-      vec4 y_ = floor(j - 7.0 * x_ );
-      vec4 x = x_ *ns.x + ns.yyyy;
-      vec4 y = y_ *ns.x + ns.yyyy;
-      vec4 h = 1.0 - abs(x) - abs(y);
-      vec4 b0 = vec4( x.xy, y.xy );
-      vec4 b1 = vec4( x.zw, y.zw );
-      vec4 s0 = floor(b0)*2.0 + 1.0;
-      vec4 s1 = floor(b1)*2.0 + 1.0;
-      vec4 sh = -step(h, vec4(0.0));
-      vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
-      vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;
-      vec3 p0 = vec3(a0.xy,h.x);
-      vec3 p1 = vec3(a0.zw,h.y);
-      vec3 p2 = vec3(a1.xy,h.z);
-      vec3 p3 = vec3(a1.zw,h.w);
-      vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
-      p0 *= norm.x;
-      p1 *= norm.y;
-      p2 *= norm.z;
-      p3 *= norm.w;
-      vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
-      m = m * m;
-      return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1),
-                                    dot(p2,x2), dot(p3,x3) ) );
-    }
-
-    void main() {
-      vUv = uv;
-      vPosition = position;
-      
-      // Interaction influences
-      // Distort noise field based on mouse
-      vec3 noisePos = position * 1.5 + uTime * 0.5;
-      noisePos.xy += uMouse * 2.5;
-      
-      float noiseVal = snoise(noisePos);
-      
-      // Scroll increases intensity
-      float scrollFactor = uScroll * 0.002;
-      float finalIntensity = uIntensity + scrollFactor;
-      
-      vDisplacement = noiseVal;
-      
-      vec3 newPosition = position + normal * (noiseVal * finalIntensity);
-      
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
-    }
-  `,
-    fragmentShader: `
-    uniform vec3 uColorMain;
-    uniform vec3 uColorAccent;
-    varying float vDisplacement;
-    varying vec2 vUv;
-    varying vec3 vPosition;
-
-    void main() {
-      // Color mixing based on displacement
-      float mixFactor = smoothstep(-1.0, 1.0, vDisplacement);
-      vec3 color = mix(uColorMain, uColorAccent, mixFactor);
-      
-      // Fresnel-like rim effect for depth
-      float rim = 1.0 - abs(dot(normalize(vPosition), vec3(0.0, 0.0, 1.0)));
-      color += rim * 0.5;
-
-      gl_FragColor = vec4(color, 0.8);
-    }
-  `
-};
-
-const WarpSphere = () => {
-    const materialRef = useRef<THREE.ShaderMaterial>(null);
-    const meshRef = useRef<THREE.Mesh>(null);
-
-    // Update colors from CSS variables
-    useEffect(() => {
-        const updateColors = () => {
-            if (materialRef.current) {
-                const computedStyle = getComputedStyle(document.documentElement);
-                const accentAction = computedStyle.getPropertyValue('--accent-action').trim();
-                const accentHighlight = computedStyle.getPropertyValue('--accent-highlight').trim();
-
-                // Fallback if variables are missing, but prefers the CSS vars
-                materialRef.current.uniforms.uColorMain.value.set(accentHighlight || "#00ffff");
-                materialRef.current.uniforms.uColorAccent.value.set(accentAction || "#a855f7");
-            }
-        };
-
-        // Initial update
-        updateColors();
-
-        // Observer for theme changes (class attribute on html/body)
-        const observer = new MutationObserver(updateColors);
-        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'style'] });
-
-        return () => observer.disconnect();
-    }, []);
-
+    // Animation loop
     useFrame((state, delta) => {
-        if (materialRef.current) {
-            // Time
-            materialRef.current.uniforms.uTime.value += delta;
+        const t = state.clock.elapsedTime;
 
-            // Mouse (Lerp for smoothness)
-            const targetMouse = new THREE.Vector2(state.pointer.x, state.pointer.y);
-            materialRef.current.uniforms.uMouse.value.lerp(targetMouse, 0.1);
-
-            // Scroll
-            materialRef.current.uniforms.uScroll.value = window.scrollY;
+        // ── Orbiting ring ──
+        if (ringRef.current) {
+            ringRef.current.rotation.x = Math.sin(t * 0.2) * 0.4;
+            ringRef.current.rotation.y += delta * 0.3;
+            ringRef.current.rotation.z = Math.cos(t * 0.15) * 0.2;
         }
-        if (meshRef.current) {
-            // Mouse interaction on rotation
-            const rotateX = state.pointer.y * 0.5; // Look up/down
-            const rotateY = state.pointer.x * 0.5; // Look left/right
 
-            meshRef.current.rotation.x = THREE.MathUtils.lerp(meshRef.current.rotation.x, rotateX, 0.05);
-            meshRef.current.rotation.y += delta * 0.1 + (state.pointer.x * delta * 0.5);
+
+        // ── Floating shapes ──
+        if (shapesRef.current) {
+            shapesRef.current.children.forEach((child, i) => {
+                const offset = i * 0.9;
+                child.position.x = Math.sin(t * 0.4 + offset) * 3.5;
+                child.position.y = Math.cos(t * 0.35 + offset * 0.6) * 2.8;
+                child.position.z = Math.sin(t * 0.25 + offset * 0.7) * 2.5;
+                child.rotation.x += delta * (0.2 + i * 0.05);
+                child.rotation.y += delta * (0.3 + i * 0.04);
+            });
         }
     });
 
     return (
-        <mesh ref={meshRef} scale={[2.2, 2.2, 2.2]}>
-            <icosahedronGeometry args={[1, 64]} />
-            {/* @ts-ignore */}
-            <shaderMaterial
-                ref={materialRef}
-                args={[WarpMaterial]}
-                wireframe={true}
-                transparent={true}
-                side={THREE.DoubleSide}
-            />
-        </mesh>
-    );
-};
-
-const Scene = () => {
-    return (
         <>
-            <WarpSphere />
-            <Stars radius={100} depth={50} count={2000} factor={4} saturation={0} fade speed={1} />
-            <ambientLight intensity={0.5} />
-            <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.2} />
+
+            {/* ─── Glowing Ring ─── */}
+            <Float speed={0.8} rotationIntensity={0.2} floatIntensity={0.3}>
+                <mesh ref={ringRef} scale={[3.0, 3.0, 3.0]}>
+                    <torusGeometry args={[1, 0.04, 32, 64]} />
+                    <meshStandardMaterial
+                        color="var(--accent-highlight, #00ffff)"
+                        emissive="var(--accent-action, #a855f7)"
+                        emissiveIntensity={0.4}
+                        roughness={0.2}
+                        metalness={0.8}
+                        transparent
+                        opacity={0.9}
+                    />
+                </mesh>
+            </Float>
+
+            {/* ─── Floating Low‑Poly Shapes ─── */}
+            <group ref={shapesRef}>
+                {Array.from({ length: 12 }).map((_, i) => {
+                    const isOcta = i % 2 === 0;
+                    const color = i % 3 === 0 ? 'var(--accent-highlight, #00ffff)' : 'var(--accent-action, #a855f7)';
+                    return (
+                        <Float key={i} speed={0.8 + i * 0.1} rotationIntensity={0.6} floatIntensity={0.5}>
+                            <mesh scale={[0.12, 0.12, 0.12]}>
+                                {isOcta ? <octahedronGeometry args={[1, 0]} /> : <tetrahedronGeometry args={[1, 0]} />}
+                                <meshStandardMaterial
+                                    color={color}
+                                    emissive={color}
+                                    emissiveIntensity={0.2}
+                                    roughness={0.2}
+                                    metalness={0.7}
+                                />
+                            </mesh>
+                        </Float>
+                    );
+                })}
+            </group>
+
+            {/* ─── Stars ─── */}
+            <Stars radius={80} depth={50} count={2500} factor={6} saturation={0} fade speed={0.5} />
         </>
     );
 };
 
-// --- Main Hero Component ---
+// ──────────────────────────────────────────────────────────────
+// 2.  3D TITLE COMPONENT
+// ──────────────────────────────────────────────────────────────
+
+const Title3D = () => {
+    const groupRef = useRef<THREE.Group>(null);
+    const { viewport } = useThree();
+
+    useFrame((state) => {
+        if (groupRef.current) {
+            // Parallax effect based on mouse pointer
+            groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, state.pointer.y * 0.15, 0.1);
+            groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, state.pointer.x * 0.15, 0.1);
+        }
+    });
+
+    // Make 3D text responsive based on viewport width
+    const scale = viewport.width < 5 ? 0.55 : viewport.width < 8 ? 0.75 : 1;
+
+    return (
+        <group ref={groupRef} position={[0, 0.1, 0]} scale={[scale, scale, scale]}>
+            <Text
+                position={[0, 0.65, 0]}
+                fontSize={1.6}
+                letterSpacing={-0.05}
+            >
+                PRODUCT
+                <meshBasicMaterial>
+                    <GradientTexture stops={[0, 0.5, 1]} colors={['#00ffff', '#ffffff', '#a855f7']} />
+                </meshBasicMaterial>
+            </Text>
+            <Text
+                position={[0, -0.65, 0]}
+                fontSize={1.6}
+                letterSpacing={-0.05}
+            >
+                BUILDER
+                <meshBasicMaterial>
+                    <GradientTexture stops={[0, 0.5, 1]} colors={['#a855f7', '#ffffff', '#00ffff']} />
+                </meshBasicMaterial>
+            </Text>
+        </group>
+    );
+};
+
+// ──────────────────────────────────────────────────────────────
+// 3.  CORE SKILLS DATA
+// ──────────────────────────────────────────────────────────────
+
+const coreSkills = [
+    'B2B SaaS Architecture', 'End-to-End Development', 'Solving Business Problems',
+    'Scalable Web Applications', 'Cross-Platform Mobile Apps'
+];
+
+// ──────────────────────────────────────────────────────────────
+// 3.  MAIN HERO COMPONENT
+// ──────────────────────────────────────────────────────────────
 
 const Hero = () => {
     const [mounted, setMounted] = useState(false);
+    const [skillIndex, setSkillIndex] = useState(0);
+
+    // Mouse tracking for parallax
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+    const springX = useSpring(mouseX, { stiffness: 150, damping: 20 });
+    const springY = useSpring(mouseY, { stiffness: 150, damping: 20 });
+    const rotateX = useTransform(springY, [-1, 1], [5, -5]);
+    const rotateY = useTransform(springX, [-1, 1], [-5, 5]);
 
     useEffect(() => {
         setMounted(true);
+        const interval = setInterval(() => {
+            setSkillIndex((prev) => (prev + 1) % coreSkills.length);
+        }, 2500); // cycle speed
+        return () => clearInterval(interval);
     }, []);
 
-    return (
-        <section id="home" className="relative h-screen w-full bg-background text-foreground flex items-center justify-center overflow-hidden px-6 pt-20 transition-colors duration-300">
+    useEffect(() => {
+        const handleMouse = (e: MouseEvent) => {
+            const x = (e.clientX / window.innerWidth) * 2 - 1;
+            const y = -(e.clientY / window.innerHeight) * 2 + 1;
+            mouseX.set(x);
+            mouseY.set(y);
+        };
+        window.addEventListener('mousemove', handleMouse);
+        return () => window.removeEventListener('mousemove', handleMouse);
+    }, [mouseX, mouseY]);
 
-            {/* 3D Background Layer */}
-            <div className="absolute inset-0 z-0">
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } }
+    };
+    const itemVariants = {
+        hidden: { opacity: 0, y: 30 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
+    };
+
+    return (
+        <section
+            id="home"
+            className="relative min-h-screen w-full bg-background flex items-center justify-center overflow-hidden"
+        >
+            {/* ─── 3D Canvas ─── */}
+            <div className="absolute inset-0 z-0 pointer-events-none">
                 {mounted && (
-                    <Canvas camera={{ position: [0, 0, 5], fov: 60 }} gl={{ antialias: true, alpha: true }}>
-                        <Scene />
+                    <Canvas camera={{ position: [0, 0, 9], fov: 45 }} gl={{ antialias: true, alpha: true }}>
+                        <Suspense fallback={null}>
+                            <BackgroundScene />
+                            <Title3D />
+                            <Environment preset="city" />
+                        </Suspense>
                     </Canvas>
                 )}
             </div>
 
-            {/* Cinematic Vignette & Gradient */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,var(--background)_120%)] z-0 pointer-events-none" />
-            <div className="absolute inset-0 bg-background/30 z-0 pointer-events-none backdrop-blur-[1px]" />
+            {/* ─── Overlay Gradients ─── */}
+            <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,transparent_40%,var(--background)_95%)] pointer-events-none" />
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.04] z-0 pointer-events-none mix-blend-overlay" />
 
-            {/* Centered Content */}
-            <div className="relative z-10 w-full max-w-5xl flex flex-col items-center text-center gap-8">
-
+            {/* ─── UI Overlay ─── */}
+            <div className="relative z-10 w-full h-full max-w-5xl mx-auto flex flex-col items-center justify-center py-16 px-6 pointer-events-none">
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1, delay: 0.2 }}
-                    className="flex flex-col items-center gap-4"
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="flex flex-col items-center text-center gap-5 w-full"
+                    style={{ perspective: 800 }}
                 >
-                    <div className="px-4 py-1.5 rounded-full border border-border/10 bg-foreground/5 backdrop-blur-md text-xs font-mono tracking-[0.3em] text-accent-highlight uppercase">
-                        Portfolio v4.0 // System Active
-                    </div>
-
-                    <h1 className="text-6xl sm:text-8xl md:text-9xl font-display font-bold tracking-tighter leading-[0.9] text-foreground">
-                        ARCHITECTING<br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-action via-foreground to-accent-highlight animate-gradient-x bg-[length:200%_auto]">
-                            REALITY
-                        </span>
-                    </h1>
-                </motion.div>
-
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 1, delay: 0.8 }}
-                    className="flex items-center gap-4 text-sm md:text-lg font-light tracking-widest uppercase text-text-secondary"
-                >
-                    <span className="hidden md:block w-12 h-px bg-border/20" />
-                    <span>Crafting Immersive Dimensions</span>
-                    <span className="hidden md:block w-12 h-px bg-border/20" />
-                </motion.div>
-
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1, delay: 1.2 }}
-                    className="flex flex-col sm:flex-row gap-6 mt-6"
-                >
-                    <button
-                        onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-                        className="group relative px-8 py-4 bg-foreground text-background font-bold tracking-wider hover:scale-105 transition-transform overflow-hidden"
+                    {/* ─── Top Badge ─── */}
+                    <motion.div
+                        variants={itemVariants}
+                        className="px-5 py-2 rounded-full border border-border/20 bg-background/30 backdrop-blur-md shadow-2xl flex items-center gap-3 pointer-events-auto"
                     >
-                        <span className="relative z-10 flex items-center gap-2">
-                            VIEW WORK <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-action opacity-80" />
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-foreground" />
                         </span>
-                        <div className="absolute inset-0 bg-accent-action translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out" />
-                    </button>
+                        <span className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-foreground/70 font-mono font-semibold">
+                            Mohit Lakhara // Full Stack Developer
+                        </span>
+                    </motion.div>
 
-                    <button
-                        onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                        className="group relative px-8 py-4 bg-transparent border border-border/20 text-foreground font-bold tracking-wider hover:bg-foreground/5 transition-colors"
+                    {/* ─── Parallax Title ─── */}
+                    <motion.div
+                        variants={itemVariants}
+                        className="flex flex-col items-center gap-0 w-full"
+                        style={{
+                            rotateX: rotateX,
+                            rotateY: rotateY,
+                            transformStyle: 'preserve-3d'
+                        }}
                     >
-                        <span className="flex items-center gap-2">
+                        <div className="h-7 md:h-10 overflow-hidden flex justify-center items-center mb-1">
+                            <AnimatePresence mode="wait">
+                                <motion.span
+                                    key={skillIndex}
+                                    initial={{ y: 20, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    exit={{ y: -20, opacity: 0 }}
+                                    transition={{ duration: 0.4, ease: 'easeOut' }}
+                                    className="text-lg sm:text-xl md:text-2xl font-light tracking-[0.3em] text-foreground/60 uppercase"
+                                >
+                                    {coreSkills[skillIndex]}
+                                </motion.span>
+                            </AnimatePresence>
+                        </div>
+                        
+                        {/* ─── Gap for 3D Text ─── */}
+                        <div className="h-[32vh] sm:h-[45vh] min-h-[220px] w-full pointer-events-none" />
+                    </motion.div>
+
+                    {/* ─── Subtitle ─── */}
+                    <motion.p
+                        variants={itemVariants}
+                        className="text-sm sm:text-base md:text-lg font-light tracking-wide text-foreground/60 max-w-xl bg-background/20 backdrop-blur-sm p-3 rounded-xl border border-white/5"
+                    >
+                        I don't just write code—I build scalable, end-to-end products that solve real business problems and drive growth.
+                    </motion.p>
+
+                    {/* ─── Actions ─── */}
+                    <motion.div
+                        variants={itemVariants}
+                        className="flex flex-col sm:flex-row gap-4 mt-3 pointer-events-auto"
+                    >
+                        <button
+                            onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+                            className="group relative px-8 py-3.5 bg-foreground text-background font-bold tracking-widest uppercase text-xs rounded-sm overflow-hidden shadow-[0_0_30px_rgba(168,85,247,0.3)] hover:shadow-[0_0_50px_rgba(168,85,247,0.5)] transition-shadow duration-300"
+                        >
+                            <span className="relative z-10 flex items-center gap-2">
+                                VIEW PROJECTS <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                            </span>
+                            <div className="absolute inset-0 bg-gradient-to-r from-[var(--accent-highlight,#00ffff)] to-[var(--accent-action,#a855f7)] translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out" />
+                        </button>
+
+                        <button
+                            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                            className="group relative px-8 py-3.5 bg-transparent border border-foreground/20 text-foreground font-bold tracking-widest uppercase text-xs rounded-sm hover:bg-foreground/5 transition-colors backdrop-blur-sm flex items-center justify-center gap-2"
+                        >
                             GET IN TOUCH
-                        </span>
-                    </button>
-                </motion.div>
+                            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-action,#a855f7)] group-hover:scale-150 transition-transform" />
+                        </button>
+                    </motion.div>
 
-                {/* Bottom Tech Indicators */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 1, delay: 1.5 }}
-                    className="absolute bottom-10 left-0 right-0 top-[60vh] md:top-[70vh] flex justify-between px-10 pointer-events-none"
-                >
-                    <div className="hidden md:flex flex-col items-start gap-1 text-[10px] uppercase tracking-widest text-text-secondary font-mono">
-                        <span>Input</span>
-                        <span>Mouse / Scroll</span>
-                    </div>
-                    <div className="hidden md:flex flex-col items-end gap-1 text-[10px] uppercase tracking-widest text-text-secondary font-mono">
-                        <span>Simulation</span>
-                        <span>Active</span>
-                    </div>
+                    {/* ─── Scroll Down Indicator ─── */}
+                    <motion.div
+                        variants={itemVariants}
+                        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-foreground/25 pointer-events-auto"
+                    >
+                        <span className="text-[10px] uppercase tracking-[0.3em] font-mono">Scroll</span>
+                        <motion.div
+                            animate={{ y: [0, 10, 0] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                            className="w-[1px] h-10 bg-gradient-to-b from-[var(--accent-highlight,#00ffff)] to-transparent"
+                        />
+                    </motion.div>
                 </motion.div>
-
             </div>
+
+            {/* ─── Overlay Gradients ─── */}
+            <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,transparent_40%,var(--background)_95%)] pointer-events-none" />
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.04] z-0 pointer-events-none mix-blend-overlay" />
         </section>
     );
 };

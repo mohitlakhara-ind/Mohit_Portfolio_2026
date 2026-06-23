@@ -1,12 +1,9 @@
 'use client';
 import { Laptop, SunLight, HalfMoon } from 'iconoir-react';
-
-
-
 import * as React from "react"
-
 import { useTheme } from "@/hooks/use-theme"
 import { usePathname } from "next/navigation"
+import { motion } from "framer-motion"
 
 export function ThemeToggle() {
     const { theme, setTheme } = useTheme()
@@ -31,27 +28,42 @@ export function ThemeToggle() {
         <div className="fixed bottom-8 right-8 z-50 flex gap-2 p-1 rounded-full bg-white/80 dark:bg-black/80 border border-gray-200 dark:border-gray-800 shadow-lg backdrop-blur-sm">
             <button
                 onClick={() => setTheme("light")}
-                className={`p-2 rounded-full transition-all ${theme === "light" ? "bg-gray-200 dark:bg-gray-700" : ""
+                className={`flex items-center justify-center w-10 h-10 rounded-full transition-all ${theme === "light" ? "bg-gray-200 dark:bg-gray-700" : ""
                     }`}
                 aria-label="Light Mode"
             >
-                <SunLight className="w-5 h-5 text-amber-500" />
+                <motion.div
+                    whileHover={{ rotate: 180, scale: 1.2 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 10 }}
+                >
+                    <SunLight className="w-5 h-5 text-amber-500" />
+                </motion.div>
             </button>
             <button
                 onClick={() => setTheme("dark")}
-                className={`p-2 rounded-full transition-all ${theme === "dark" ? "bg-gray-200 dark:bg-gray-700" : ""
+                className={`flex items-center justify-center w-10 h-10 rounded-full transition-all ${theme === "dark" ? "bg-gray-200 dark:bg-gray-700" : ""
                     }`}
                 aria-label="Dark Mode"
             >
-                <HalfMoon className="w-5 h-5 text-purple-500" />
+                <motion.div
+                    whileHover={{ rotate: -15, scale: 1.2 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                >
+                    <HalfMoon className="w-5 h-5 text-purple-500" />
+                </motion.div>
             </button>
             <button
                 onClick={() => setTheme("system")}
-                className={`p-2 rounded-full transition-all ${theme === "system" ? "bg-gray-200 dark:bg-gray-700" : ""
+                className={`flex items-center justify-center w-10 h-10 rounded-full transition-all ${theme === "system" ? "bg-gray-200 dark:bg-gray-700" : ""
                     }`}
                 aria-label="System Mode"
             >
-                <Laptop className="w-5 h-5 text-gray-500" />
+                <motion.div
+                    whileHover={{ scale: 1.2, y: -2 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                >
+                    <Laptop className="w-5 h-5 text-gray-500" />
+                </motion.div>
             </button>
         </div>
     )
