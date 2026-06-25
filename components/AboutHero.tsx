@@ -60,6 +60,7 @@ const AboutHero = () => {
 
     // Handle mouse movement to update MotionValues
     const handleMouseMove = (e: React.MouseEvent) => {
+        if (window.innerWidth < 768) return; // Optimize: disable mouse calculations on mobile
         const { clientX, clientY } = e;
         const { innerWidth, innerHeight } = window;
         // Normalize mouse coordinates from -1 to 1
@@ -139,7 +140,7 @@ const AboutHero = () => {
 
                             <div className="flex flex-col items-center gap-2">
                                 <div className="h-[1px] w-12 bg-gradient-to-r from-transparent via-[var(--gold-primary)]/50 to-transparent group-hover:w-20 transition-all duration-300" />
-                                <span className="text-[10px] md:text-xs font-mono text-text-secondary tracking-[0.2em] uppercase bg-foreground/5 backdrop-blur-sm px-4 py-1.5 rounded-full border border-foreground/10 group-hover:border-[var(--gold-primary)]/30 transition-colors duration-300">
+                                <span className="text-[9px] sm:text-[10px] md:text-xs font-mono text-text-secondary tracking-[0.2em] uppercase bg-foreground/5 backdrop-blur-sm px-4 py-1.5 rounded-full border border-foreground/10 group-hover:border-[var(--gold-primary)]/30 transition-colors duration-300">
                                     {greetings[index].lang}
                                 </span>
                             </div>
@@ -187,9 +188,9 @@ const AboutHero = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                    className="mt-6 md:mt-8 text-sm sm:text-base md:text-xl text-text-secondary max-w-2xl font-light tracking-wide px-4 leading-relaxed z-10 pointer-events-none"
+                    className="mt-6 md:mt-8 text-sm sm:text-base text-text-secondary max-w-2xl font-sans tracking-wide px-4 leading-relaxed z-10 pointer-events-none"
                 >
-                    Crafting <span className="text-foreground font-medium italic">immersive digital experiences</span> through bleeding-edge technology and refined design.
+                    Crafting <span className="text-foreground font-medium italic font-sans">immersive digital experiences</span> through bleeding-edge technology and refined design.
                 </motion.p>
             </div>
 

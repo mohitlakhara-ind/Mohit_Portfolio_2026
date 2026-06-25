@@ -18,7 +18,7 @@ const phases = [
             'Before a single line of code, I map the problem space. User research, competitor analysis, and understanding project limits. Great software starts with crystal-clear requirements.',
         icon: <FiSearch />,
         color: '#60A5FA',
-        tech: ['Notion', 'Figma', 'User Interviews', 'Prioritization'],
+        tech: ['Notion', 'Figma', 'Interviews', 'Scope'],
         output: 'Product Brief + Feature Scope',
     },
     {
@@ -29,7 +29,7 @@ const phases = [
             'System design, database structures, interface planning, and visual layouts — all resolved before coding. Bad structural choices are 10× harder to fix later.',
         icon: <FiLayout />,
         color: '#A78BFA',
-        tech: ['Figma', 'Excalidraw', 'Database Planning', 'API Design'],
+        tech: ['Figma', 'Excalidraw', 'DB Schema', 'API Design'],
         output: 'Hi-Fi Designs + System Diagram',
     },
     {
@@ -40,7 +40,7 @@ const phases = [
             'Organized coding, small reliable updates, and continuous testing. I write reusable front-end pieces and logic built around business needs that are readable by the next engineer.',
         icon: <FiSettings />,
         color: '#34D399',
-        tech: ['React / Next.js', 'Node.js', 'Cursor', 'Lovable', 'Docker'],
+        tech: ['Next.js', 'Node.js', 'Cursor', 'Docker'],
         output: 'Functional Application',
     },
     {
@@ -62,7 +62,7 @@ const phases = [
             'Automated systems publish every update instantly. Updates without going offline, secure handling of passwords, and safety nets ready before launch.',
         icon: <FiSend />,
         color: '#F472B6',
-        tech: ['Vercel / AWS', 'GitHub Actions', 'Docker', 'PM2'],
+        tech: ['Vercel', 'AWS', 'GitHub Actions', 'PM2'],
         output: 'Live Production System',
     },
     {
@@ -73,7 +73,7 @@ const phases = [
             'Post-launch isn\'t the end — it\'s the beginning of the feedback loop. Analytics, user sessions, and error tracking inform the next sprint. Software is never "done".',
         icon: <FiRefreshCw />,
         color: '#FB923C',
-        tech: ['Sentry', 'PostHog', 'Hotjar', 'Agile Sprints'],
+        tech: ['Sentry', 'PostHog', 'Hotjar', 'Sprints'],
         output: 'Continuous Improvement',
     },
 ];
@@ -92,37 +92,63 @@ const BuildProcess = () => {
             const track = trackRef.current;
             if (!track) return;
 
-            const getScrollAmount = () =>
-                -(track.scrollWidth - window.innerWidth + 200);
+            const mm = gsap.matchMedia();
 
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: wrapperRef.current,
-                    start: 'top top',
-                    end: () => `+=${Math.abs(getScrollAmount()) + window.innerHeight * 0.5}`,
-                    scrub: 1.2,
-                    pin: true,
-                    anticipatePin: 1,
-                    invalidateOnRefresh: true,
-                    onUpdate: (self) => {
-                        const pct = self.progress * 100;
-                        if (progressRef.current) {
-                            progressRef.current.style.width = `${pct}%`;
-                        }
-                        // Update active index based on progress
-                        const idx = Math.min(
-                            Math.floor((self.progress * phases.length)),
-                            phases.length - 1
-                        );
-                        setActiveIndex(idx);
+            // Desktop Horizontal Scroll Pinning
+            mm.add("(min-width: 768px)", () => {
+                const getScrollAmount = () =>
+                    -(track.scrollWidth - window.innerWidth + 200);
+
+                const tl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: wrapperRef.current,
+                        start: 'top top',
+                        end: () => `+=${Math.abs(getScrollAmount()) + window.innerHeight * 0.5}`,
+                        scrub: 1.2,
+                        pin: true,
+                        anticipatePin: 1,
+                        invalidateOnRefresh: true,
+                        onUpdate: (self) => {
+                            const pct = self.progress * 100;
+                            if (progressRef.current) {
+                                progressRef.current.style.width = `${pct}%`;
+                            }
+                            const idx = Math.min(
+                                Math.floor((self.progress * phases.length)),
+                                phases.length - 1
+                            );
+                            setActiveIndex(idx);
+                        },
                     },
-                },
+                });
+
+                tl.to(track, {
+                    x: getScrollAmount,
+                    ease: 'none',
+                });
             });
 
-            tl.to(track, {
-                x: getScrollAmount,
-                ease: 'none',
+            // Mobile Vertical Flow Reveals
+            mm.add("(max-width: 767px)", () => {
+                const cards = gsap.utils.toArray('.bp-card') as HTMLElement[];
+                cards.forEach((card, idx) => {
+                    gsap.fromTo(card,
+                        { y: 30, opacity: 0 },
+                        {
+                            y: 0,
+                            opacity: 1,
+                            duration: 0.5,
+                            scrollTrigger: {
+                                trigger: card,
+                                start: "top 85%",
+                                toggleActions: "play none none reverse",
+                                onEnter: () => setActiveIndex(idx)
+                            }
+                        }
+                    );
+                });
             });
+
         }, wrapperRef);
 
         return () => ctx.revert();
@@ -131,7 +157,7 @@ const BuildProcess = () => {
     return (
         <section
             ref={wrapperRef}
-            className="relative h-screen w-full overflow-hidden bg-background flex flex-col transition-colors duration-500"
+            className="relative min-h-screen md:h-screen w-full overflow-y-auto md:overflow-hidden bg-background flex flex-col py-16 md:py-0 transition-colors duration-500"
         >
             {/* ── Subtle background texture ── */}
             <div className="absolute inset-0 pointer-events-none">
@@ -146,7 +172,7 @@ const BuildProcess = () => {
                         initial={{ opacity: 0, y: 10 }}
                         animate={headerInView ? { opacity: 1, y: 0 } : {}}
                         transition={{ duration: 0.5 }}
-                        className="inline-block text-[10px] font-bold uppercase tracking-[0.4em] text-[var(--gold-primary)] mb-2 bg-[var(--gold-primary)]/10 px-3 py-1 rounded-full border border-[var(--border)]/20"
+                        className="inline-block text-[9px] sm:text-[10px] md:text-xs font-mono font-bold uppercase tracking-wider text-[var(--gold-primary)] mb-2 bg-[var(--gold-primary)]/10 px-3 py-1 rounded-full border border-[var(--border)]/20"
                     >
                         ⚡ The Method
                     </motion.span>
@@ -154,7 +180,7 @@ const BuildProcess = () => {
                         initial={{ opacity: 0, y: 16 }}
                         animate={headerInView ? { opacity: 1, y: 0 } : {}}
                         transition={{ duration: 0.6, delay: 0.08 }}
-                        className="text-4xl sm:text-5xl lg:text-7xl font-bold font-display tracking-tight leading-[1.05]"
+                        className="text-3xl md:text-5xl lg:text-6xl font-bold font-display tracking-tight leading-[1.05]"
                     >
                         <span className="text-foreground">Build </span>
                         <span className="bg-gradient-to-r from-[var(--gold-dark)] to-[var(--gold-light)] bg-clip-text text-transparent italic inline-block pr-4 pb-2">
@@ -166,15 +192,15 @@ const BuildProcess = () => {
                     initial={{ opacity: 0 }}
                     animate={headerInView ? { opacity: 1 } : {}}
                     transition={{ duration: 0.6, delay: 0.2 }}
-                    className="text-text-secondary text-sm sm:text-base max-w-xs md:text-right font-light leading-relaxed"
+                    className="text-text-secondary text-sm sm:text-base max-w-xs md:text-right font-sans font-light leading-relaxed"
                 >
                     From raw idea to live product — <br className="hidden sm:block" />
                     every phase, every discipline.
                 </motion.p>
             </div>
 
-            {/* ── Progress bar ── */}
-            <div className="relative z-10 flex-shrink-0 px-6 sm:px-12 lg:px-20 mb-4">
+            {/* ── Progress bar (Desktop Only) ── */}
+            <div className="relative z-10 flex-shrink-0 px-6 sm:px-12 lg:px-20 mb-4 hidden md:block">
                 <div className="w-full h-[3px] bg-border/20 rounded-full overflow-hidden relative">
                     <div
                         ref={progressRef}
@@ -188,7 +214,7 @@ const BuildProcess = () => {
                     {phases.map((p, i) => (
                         <span
                             key={p.id}
-                            className={`text-[9px] font-bold uppercase tracking-[0.15em] transition-colors duration-500 ${i <= activeIndex ? 'text-foreground' : 'text-text-secondary/40'
+                            className={`text-[9px] sm:text-[10px] md:text-xs font-mono font-bold uppercase tracking-wider transition-colors duration-500 ${i <= activeIndex ? 'text-foreground' : 'text-text-secondary/40'
                                 }`}
                         >
                             {p.label}
@@ -197,9 +223,9 @@ const BuildProcess = () => {
                 </div>
             </div>
 
-            {/* ── Horizontal scroll track ── */}
-            <div className="relative z-10 flex-1 flex items-center px-6 sm:px-12 lg:px-20 py-2 overflow-visible">
-                <div ref={trackRef} className="flex gap-5 md:gap-6 will-change-transform">
+            {/* ── Scroll track ── */}
+            <div className="relative z-10 flex-1 flex items-center px-6 sm:px-12 lg:px-20 py-2 overflow-visible md:overflow-hidden w-full">
+                <div ref={trackRef} className="flex flex-col md:flex-row gap-8 md:gap-6 will-change-transform w-full md:w-auto px-4 md:px-0">
                     {phases.map((phase, i) => (
                         <PhaseCard
                             key={phase.id}
@@ -210,24 +236,24 @@ const BuildProcess = () => {
                     ))}
 
                     {/* End cap — refined */}
-                    <div className="flex-shrink-0 w-56 sm:w-72 flex flex-col items-center justify-center text-center px-4">
+                    <div className="flex-shrink-0 w-full md:w-72 flex flex-col items-center justify-center text-center px-4 py-8 md:py-0">
                         <div className="text-5xl sm:text-6xl mb-4 text-[var(--gold-light)] opacity-50">✦</div>
                         <p className="text-xl sm:text-2xl font-bold font-display tracking-tight text-foreground mb-2">
                             That's the loop.
                         </p>
-                        <p className="text-text-secondary text-xs sm:text-sm leading-relaxed max-w-xs">
+                        <p className="text-text-secondary text-sm font-sans leading-relaxed max-w-xs">
                             Repeat, refine, ship better software —<br />every single time.
                         </p>
                     </div>
                 </div>
             </div>
 
-            {/* ── Scroll hint ── */}
+            {/* ── Scroll hint (Desktop Only) ── */}
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={headerInView ? { opacity: 1 } : {}}
                 transition={{ duration: 0.8, delay: 0.7 }}
-                className="relative z-10 flex-shrink-0 flex items-center justify-end gap-3 px-6 sm:px-12 lg:px-20 pb-5 text-[10px] font-medium text-text-secondary/60 uppercase tracking-[0.2em]"
+                className="relative z-10 flex-shrink-0 hidden md:flex items-center justify-end gap-3 px-6 sm:px-12 lg:px-20 pb-5 text-[9px] sm:text-[10px] md:text-xs font-mono font-bold uppercase tracking-wider text-text-secondary/60"
             >
                 <span className="flex items-center gap-2">
                     Scroll to explore
@@ -237,9 +263,9 @@ const BuildProcess = () => {
                 </span>
             </motion.div>
 
-            {/* ── Edge fades ── */}
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-20 sm:w-32 bg-gradient-to-l from-background via-background/80 to-transparent z-10" />
-            <div className="pointer-events-none absolute inset-y-0 left-0 w-12 sm:w-20 bg-gradient-to-r from-background via-background/80 to-transparent z-10" />
+            {/* ── Edge fades (Desktop Only) ── */}
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-20 sm:w-32 bg-gradient-to-l from-background via-background/80 to-transparent z-10 hidden md:block" />
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-12 sm:w-20 bg-gradient-to-r from-background via-background/80 to-transparent z-10 hidden md:block" />
 
             {/* ── Subtle bottom glow ── */}
             <div className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-px bg-gradient-to-r from-transparent via-[var(--gold-primary)]/20 to-transparent" />
@@ -261,7 +287,7 @@ const PhaseCard = ({
 
     return (
         <div
-            className="bp-card group flex-shrink-0 w-[80vw] sm:w-[400px] md:w-[460px] lg:w-[500px] h-full flex flex-col"
+            className="bp-card group flex-shrink-0 w-full md:w-[460px] lg:w-[500px] flex flex-col"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
@@ -297,7 +323,7 @@ const PhaseCard = ({
                 {/* ── Phase number ── */}
                 <div className="flex items-center gap-3 mb-3">
                     <span
-                        className="text-[9px] font-black uppercase tracking-[0.3em] transition-colors duration-300"
+                        className="text-[9px] sm:text-[10px] md:text-xs font-mono font-bold uppercase tracking-wider transition-colors duration-300"
                         style={{ color: phase.color }}
                     >
                         Phase {phase.id}
@@ -322,14 +348,14 @@ const PhaseCard = ({
                         >
                             {phase.label}
                         </h3>
-                        <p className="text-xs sm:text-sm font-medium text-text-secondary leading-tight mt-0.5">
+                        <p className="text-xs sm:text-sm font-medium text-text-secondary leading-tight mt-0.5 font-sans">
                             {phase.title}
                         </p>
                     </div>
                 </div>
 
                 {/* ── Description ── */}
-                <p className="text-text-secondary text-xs sm:text-sm leading-relaxed flex-1 mb-4">
+                <p className="text-text-secondary text-xs sm:text-sm leading-relaxed flex-1 mb-4 font-sans">
                     {phase.description}
                 </p>
 
@@ -338,7 +364,7 @@ const PhaseCard = ({
                     {phase.tech.map((t) => (
                         <span
                             key={t}
-                            className="text-[8px] sm:text-[9px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full transition-all duration-300"
+                            className="text-[9px] sm:text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded transition-all duration-300"
                             style={{
                                 color: phase.color,
                                 background: `${phase.color}15`,
@@ -353,21 +379,21 @@ const PhaseCard = ({
 
                 {/* ── Output ── */}
                 <div className="pt-3.5 border-t border-border/20 flex items-center gap-3">
-                    <span className="text-[8px] font-bold uppercase tracking-[0.2em] text-text-secondary/60">
+                    <span className="text-[9px] sm:text-[10px] font-mono font-bold uppercase tracking-wider text-text-secondary/60">
                         Output
                     </span>
                     <span
-                        className="text-[9px] sm:text-[10px] font-bold transition-colors duration-300"
+                        className="text-[9px] sm:text-[10px] md:text-xs font-mono font-bold transition-colors duration-300"
                         style={{ color: phase.color }}
                     >
                         {phase.output}
                     </span>
                 </div>
 
-                {/* ── Active indicator dot ── */}
+                {/* ── Active indicator dot (Desktop Only) ── */}
                 {isActive && (
                     <div
-                        className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full animate-pulse"
+                        className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full animate-pulse hidden md:block"
                         style={{ background: phase.color }}
                     />
                 )}
@@ -375,7 +401,7 @@ const PhaseCard = ({
                 {/* ── Connector ── */}
                 {index < phases.length - 1 && (
                     <div
-                        className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-px hidden sm:block"
+                        className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-px hidden md:block"
                         style={{
                             background: `linear-gradient(to right, ${phase.color}40, transparent)`,
                             opacity: isHovered || isActive ? 0.6 : 0.2,

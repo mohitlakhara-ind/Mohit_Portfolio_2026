@@ -76,7 +76,7 @@ const ToolChest = () => {
     const inView = useInView(ref, { once: true, margin: '-100px' });
 
     return (
-        <section ref={ref} className="relative w-full bg-background py-32 px-4 sm:px-8 overflow-hidden transition-colors duration-500">
+        <section ref={ref} className="relative w-full bg-background py-16 md:py-32 px-4 sm:px-8 overflow-hidden transition-colors duration-500">
             {/* Ambient Background Glows */}
             <div className="pointer-events-none absolute top-0 right-0 w-[600px] h-[600px] rounded-[100%] bg-[var(--gold-light)]/5 blur-[150px]" />
             <div className="pointer-events-none absolute bottom-0 left-0 w-[800px] h-[800px] rounded-[100%] bg-[var(--gold-primary)]/5 blur-[150px]" />
@@ -89,7 +89,7 @@ const ToolChest = () => {
                             initial={{ opacity: 0, y: 16 }}
                             animate={inView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.5 }}
-                            className="inline-block text-[10px] font-bold uppercase tracking-[0.4em] text-[var(--gold-light)] bg-[var(--gold-light)]/10 px-4 py-1.5 rounded-full border border-[var(--border)]/20 mb-4"
+                            className="inline-block text-[9px] sm:text-[10px] md:text-xs font-mono font-bold uppercase tracking-wider text-[var(--gold-light)] bg-[var(--gold-light)]/10 px-4 py-1.5 rounded-full border border-[var(--border)]/20 mb-4"
                         >
                             System Configuration
                         </motion.span>
@@ -97,7 +97,7 @@ const ToolChest = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={inView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.6, delay: 0.1 }}
-                            className="text-4xl sm:text-5xl md:text-6xl font-black font-display tracking-tight text-foreground"
+                            className="text-3xl md:text-5xl lg:text-6xl font-bold font-display tracking-tight text-foreground"
                         >
                             Tool <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--gold-dark)] to-[var(--gold-light)] italic pr-2">Chest</span>
                         </motion.h2>
@@ -107,7 +107,7 @@ const ToolChest = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={inView ? { opacity: 1, y: 0 } : {}}
                         transition={{ duration: 0.6, delay: 0.18 }}
-                        className="text-text-secondary text-base sm:text-lg max-w-sm"
+                        className="text-text-secondary text-sm sm:text-base leading-relaxed font-sans max-w-sm"
                     >
                         The elite stack of software and hardware I rely on daily to craft high-performance digital experiences.
                     </motion.p>
@@ -127,7 +127,7 @@ const ToolChest = () => {
                                 <div className="p-3 rounded-xl bg-secondary-bg border border-border/20 shadow-inner group-hover:border-[var(--border)]/50 transition-colors duration-500">
                                     {group.icon}
                                 </div>
-                                <h3 className="text-2xl font-bold text-foreground font-display tracking-tight">{group.title}</h3>
+                                <h3 className="text-xl sm:text-2xl font-bold text-foreground font-display tracking-tight">{group.title}</h3>
                                 <div className="flex-1 h-px bg-gradient-to-r from-border/40 to-transparent ml-4" />
                             </div>
 
@@ -138,8 +138,8 @@ const ToolChest = () => {
                                         className="card-metallic p-5 group/card"
                                     >
                                         <div className="absolute top-0 left-0 w-1 h-full bg-[var(--gold-primary)]/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                                        <h4 className="text-lg font-bold text-foreground mb-1 font-mono tracking-tight">{item.name}</h4>
-                                        <p className="text-sm text-text-secondary">{item.detail}</p>
+                                        <h4 className="text-sm sm:text-base font-bold text-foreground mb-1 font-mono tracking-tight">{item.name}</h4>
+                                        <p className="text-xs sm:text-sm text-text-secondary font-sans leading-relaxed">{item.detail}</p>
                                     </div>
                                 ))}
                             </div>

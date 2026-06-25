@@ -4,6 +4,7 @@ import StoryFlow from '@/components/StoryFlow';
 import CodePhilosophy from '@/components/CodePhilosophy';
 
 import ResumePulse from '@/components/ResumePulse';
+import CurrentMission from '@/components/CurrentMission';
 import SkillsShowcase from '@/components/SkillsShowcase';
 import Certifications from '@/components/Certifications';
 import BuildProcess from '@/components/BuildProcess';
@@ -47,6 +48,7 @@ export default function AboutPage() {
                 <BuildProcess />
 
                 <ResumePulse />
+                <CurrentMission />
                 <Certifications />
                 <ToolChest />
             </div>

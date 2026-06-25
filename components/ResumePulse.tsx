@@ -46,7 +46,7 @@ const ResumePulse = () => {
         <section
             id="experience"
             ref={containerRef}
-            className="relative w-full py-32 px-6 bg-background text-foreground overflow-hidden transition-colors duration-500"
+            className="relative w-full py-16 md:py-32 px-6 bg-background text-foreground overflow-hidden transition-colors duration-500"
         >
             {/* Background ambient glow */}
             <div className="absolute inset-0 pointer-events-none">
@@ -63,16 +63,16 @@ const ResumePulse = () => {
                     viewport={{ once: true }}
                     className="text-center mb-20"
                 >
-                    <span className="inline-block text-[10px] font-bold uppercase tracking-[0.4em] text-[var(--gold-light)] bg-[var(--gold-light)]/10 px-4 py-1.5 rounded-full border border-[var(--border)]/20 mb-4">
+                    <span className="inline-block text-[9px] sm:text-[10px] md:text-xs font-mono font-bold uppercase tracking-wider text-[var(--gold-light)] bg-[var(--gold-light)]/10 px-4 py-1.5 rounded-full border border-[var(--border)]/20 mb-4">
                         My Journey
                     </span>
-                    <h2 className="text-4xl md:text-6xl font-bold font-display tracking-tight">
+                    <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold font-display tracking-tight">
                         <span className="text-foreground">Resume </span>
                         <span className="bg-gradient-to-r from-[var(--gold-dark)] to-[var(--gold-light)] bg-clip-text text-transparent">
                             Pulse
                         </span>
                     </h2>
-                    <p className="text-text-secondary text-sm mt-3 max-w-md mx-auto">
+                    <p className="text-text-secondary text-sm sm:text-base leading-relaxed font-sans mt-3 max-w-md mx-auto">
                         Scroll through the milestones that shaped my career.
                     </p>
                 </motion.div>
@@ -176,25 +176,25 @@ const ResumePulse = () => {
                                                     {Icon}
                                                 </span>
                                                 <span
-                                                    className="text-xs font-mono font-bold tracking-wider px-2 py-1 bg-background/30 rounded-md border border-border/10"
+                                                    className="text-[9px] sm:text-[10px] md:text-xs font-mono font-bold uppercase tracking-wider px-2 py-1 bg-background/30 rounded border border-border/10"
                                                     style={{ color: nodeColor }}
                                                 >
                                                     {item.date}
                                                 </span>
                                             </div>
 
-                                            <h4 className="text-xl sm:text-2xl font-bold text-foreground mb-1.5">
+                                            <h4 className="text-xl sm:text-2xl font-bold font-display text-foreground mb-1.5">
                                                 {item.title}
                                             </h4>
                                             
                                             {/* Adding Subtitle for Institution/Company if present in timelineData */}
                                             {item.subtitle && (
-                                                <h5 className="text-sm font-semibold text-text-secondary/80 mb-3">
+                                                <h5 className="text-sm font-semibold font-sans text-text-secondary/80 mb-3">
                                                     {item.subtitle}
                                                 </h5>
                                             )}
 
-                                            <p className="text-text-secondary text-sm leading-relaxed mb-4">
+                                            <p className="text-text-secondary text-sm sm:text-base leading-relaxed font-sans mb-4">
                                                 {item.description}
                                             </p>
 
@@ -203,7 +203,7 @@ const ResumePulse = () => {
                                                 {item.details.map((detail, i) => (
                                                     <span
                                                         key={i}
-                                                        className="px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.1em] rounded-full border border-border/30 bg-background/50 text-text-secondary/80 shadow-sm transition-colors group-hover:text-foreground/80 group-hover:border-border/60"
+                                                        className="px-2.5 py-1 text-[9px] sm:text-[10px] font-mono font-bold uppercase tracking-wider rounded-full border border-border/30 bg-background/50 text-text-secondary/80 shadow-sm transition-colors group-hover:text-foreground/80 group-hover:border-border/60"
                                                     >
                                                         {detail.label}: {detail.value}
                                                     </span>
@@ -221,7 +221,7 @@ const ResumePulse = () => {
 
                     {/* Progress indicator (percentage) */}
                     <motion.div
-                        className="absolute bottom-4 right-4 text-xs font-mono text-text-secondary/40 tracking-widest bg-background/50 backdrop-blur-sm px-2 py-1 rounded-md border border-border/10"
+                        className="absolute bottom-4 right-4 text-[9px] sm:text-[10px] md:text-xs font-mono font-bold uppercase tracking-wider text-text-secondary/40 bg-background/50 backdrop-blur-sm px-2 py-1 rounded border border-border/10"
                         style={{ opacity: useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [0, 1, 1, 0]) }}
                     >
                         {useTransform(scrollYProgress, (v) => `${Math.round(v * 100)}%`)}

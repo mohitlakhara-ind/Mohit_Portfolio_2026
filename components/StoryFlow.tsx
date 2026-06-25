@@ -33,78 +33,116 @@ const storyChapters = [
 const StoryFlow = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const storyRef = useRef<HTMLDivElement>(null);
-    const progressRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
             const chapters = gsap.utils.toArray('.story-chapter') as HTMLElement[];
             const total = chapters.length;
 
-            // Horizontal scroll tween
-            const scrollTween = gsap.to(chapters, {
-                xPercent: -100 * (total - 1),
-                ease: "none",
-                scrollTrigger: {
-                    trigger: containerRef.current,
-                    pin: true,
-                    scrub: 1.2,
-                    snap: 1 / (total - 1),
-                    end: () => "+=" + containerRef.current?.offsetWidth,
-                    onUpdate: (self) => {
-                        // Update progress dots
-                        const progress = self.progress * (total - 1);
-                        const index = Math.round(progress);
-                        const dots = document.querySelectorAll('.progress-dot');
-                        dots.forEach((dot, i) => {
-                            const bar = dot.querySelector('.progress-bar');
-                            if (i < index) {
-                                gsap.to(bar, { width: '100%', duration: 0.3 });
-                            } else if (i === index) {
-                                const fraction = progress - Math.floor(progress);
-                                gsap.to(bar, { width: fraction * 100 + '%', duration: 0.3 });
-                            } else {
-                                gsap.to(bar, { width: '0%', duration: 0.3 });
+            const mm = gsap.matchMedia();
+
+            // Desktop animation (horizontal scroll pinning)
+            mm.add("(min-width: 768px)", () => {
+                const scrollTween = gsap.to(chapters, {
+                    xPercent: -100 * (total - 1),
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: containerRef.current,
+                        pin: true,
+                        scrub: 1.2,
+                        snap: 1 / (total - 1),
+                        end: () => "+=" + containerRef.current?.offsetWidth,
+                        onUpdate: (self) => {
+                            const progress = self.progress * (total - 1);
+                            const index = Math.round(progress);
+                            const dots = document.querySelectorAll('.progress-dot');
+                            dots.forEach((dot, i) => {
+                                const bar = dot.querySelector('.progress-bar');
+                                if (i < index) {
+                                    gsap.to(bar, { width: '100%', duration: 0.3 });
+                                } else if (i === index) {
+                                    const fraction = progress - Math.floor(progress);
+                                    gsap.to(bar, { width: fraction * 100 + '%', duration: 0.3 });
+                                } else {
+                                    gsap.to(bar, { width: '0%', duration: 0.3 });
+                                }
+                            });
+                        }
+                    }
+                });
+
+                // Parallax card reveal on desktop
+                chapters.forEach((chapter) => {
+                    const textBlock = chapter.querySelector('.text-block');
+                    const cardBlock = chapter.querySelector('.card-block');
+                    gsap.fromTo(textBlock,
+                        { x: -50, opacity: 0 },
+                        {
+                            x: 0,
+                            opacity: 1,
+                            scrollTrigger: {
+                                trigger: chapter,
+                                containerAnimation: scrollTween,
+                                start: "left center",
+                                end: "center center",
+                                scrub: 0.5
                             }
-                        });
-                    }
-                }
+                        }
+                    );
+                    gsap.fromTo(cardBlock,
+                        { x: 50, opacity: 0 },
+                        {
+                            x: 0,
+                            opacity: 1,
+                            scrollTrigger: {
+                                trigger: chapter,
+                                containerAnimation: scrollTween,
+                                start: "left center",
+                                end: "center center",
+                                scrub: 0.5
+                            }
+                        }
+                    );
+                });
             });
 
-            // Parallax for each chapter content
-            chapters.forEach((chapter, i) => {
-                const textBlock = chapter.querySelector('.text-block');
-                const cardBlock = chapter.querySelector('.card-block');
-                gsap.fromTo(textBlock,
-                    { x: -50, opacity: 0 },
-                    {
-                        x: 0,
-                        opacity: 1,
-                        scrollTrigger: {
-                            trigger: chapter,
-                            containerAnimation: scrollTween,
-                            start: "left center",
-                            end: "center center",
-                            scrub: 0.5
+            // Mobile animation (fade-in scroll only, vertical layout)
+            mm.add("(max-width: 767px)", () => {
+                chapters.forEach((chapter) => {
+                    const textBlock = chapter.querySelector('.text-block');
+                    const cardBlock = chapter.querySelector('.card-block');
+                    
+                    gsap.fromTo(textBlock,
+                        { y: 30, opacity: 0 },
+                        {
+                            y: 0,
+                            opacity: 1,
+                            duration: 0.6,
+                            scrollTrigger: {
+                                trigger: chapter,
+                                start: "top 85%",
+                                toggleActions: "play none none reverse"
+                            }
                         }
-                    }
-                );
-                gsap.fromTo(cardBlock,
-                    { x: 50, opacity: 0 },
-                    {
-                        x: 0,
-                        opacity: 1,
-                        scrollTrigger: {
-                            trigger: chapter,
-                            containerAnimation: scrollTween,
-                            start: "left center",
-                            end: "center center",
-                            scrub: 0.5
+                    );
+
+                    gsap.fromTo(cardBlock,
+                        { y: 35, opacity: 0 },
+                        {
+                            y: 0,
+                            opacity: 1,
+                            duration: 0.6,
+                            scrollTrigger: {
+                                trigger: chapter,
+                                start: "top 80%",
+                                toggleActions: "play none none reverse"
+                            }
                         }
-                    }
-                );
+                    );
+                });
             });
 
-            // Floating shapes animation
+            // Floating background shapes
             gsap.to('.float-shape', {
                 y: 'random(-20, 20)',
                 x: 'random(-20, 20)',
@@ -124,7 +162,7 @@ const StoryFlow = () => {
     return (
         <section
             ref={containerRef}
-            className="relative overflow-hidden bg-background py-20 px-6 sm:px-12"
+            className="relative overflow-hidden bg-background py-16 md:py-24 px-6 sm:px-12"
         >
             {/* Decorative background elements */}
             <div className="absolute inset-0 pointer-events-none">
@@ -135,11 +173,11 @@ const StoryFlow = () => {
             </div>
 
             {/* Header */}
-            <div className="relative z-10 flex flex-col items-center justify-center mb-16 text-center">
+            <div className="relative z-10 flex flex-col items-center justify-center mb-12 md:mb-16 text-center">
                 <motion.span
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    className="text-xs font-bold uppercase tracking-[0.4em] text-[var(--gold-primary)] mb-4"
+                    className="text-[9px] sm:text-[10px] md:text-xs font-mono font-bold uppercase tracking-wider text-[var(--gold-primary)] mb-4"
                 >
                     The Narrative
                 </motion.span>
@@ -147,7 +185,7 @@ const StoryFlow = () => {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 }}
-                    className="text-4xl md:text-6xl font-bold font-display"
+                    className="text-3xl md:text-5xl lg:text-6xl font-bold font-display"
                 >
                     Developer <span className="text-[var(--gold-primary)] italic">Arc</span>
                 </motion.h2>
@@ -155,25 +193,25 @@ const StoryFlow = () => {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="mt-4 text-foreground/40 max-w-md"
+                    className="mt-4 text-sm sm:text-base text-text-secondary max-w-md font-sans"
                 >
                     A timeline of growth, from student to creator.
                 </motion.p>
             </div>
 
             {/* Scrollable story container */}
-            <div className="relative w-full h-[70vh] flex items-center">
-                <div ref={storyRef} className="flex flex-nowrap h-full">
+            <div className="relative w-full h-auto md:h-[70vh] flex items-center">
+                <div ref={storyRef} className="flex flex-col md:flex-row md:flex-nowrap h-full w-full gap-12 md:gap-0">
                     {storyChapters.map((chapter, index) => (
                         <div
                             key={index}
                             className="story-chapter flex-shrink-0 w-full flex items-center justify-center px-4"
                         >
-                            <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                            <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
                                 {/* Left: Title & year */}
-                                <div className="text-block space-y-6">
+                                <div className="text-block space-y-4 md:space-y-6">
                                     <div
-                                        className="inline-block px-4 py-1.5 border text-sm font-bold tracking-widest uppercase"
+                                        className="inline-block px-3 py-1 border text-[9px] sm:text-[10px] md:text-xs font-mono font-bold tracking-wider uppercase"
                                         style={{
                                             borderColor: chapter.color + '40',
                                             backgroundColor: chapter.color + '10',
@@ -182,10 +220,10 @@ const StoryFlow = () => {
                                     >
                                         {chapter.year}
                                     </div>
-                                    <h3 className="text-4xl md:text-5xl lg:text-6xl font-bold uppercase tracking-tighter">
+                                    <h3 className="text-2xl sm:text-3xl font-bold font-display uppercase tracking-tight">
                                         {chapter.title}
                                     </h3>
-                                    <p className="text-xl text-text-secondary font-light italic">
+                                    <p className="text-sm sm:text-base text-text-secondary italic font-sans font-light">
                                         {chapter.subtitle}
                                     </p>
                                     {/* Timeline connector line */}
@@ -194,12 +232,12 @@ const StoryFlow = () => {
 
                                 {/* Right: Description card with metallic effect */}
                                 <div
-                                    className="card-block card-metallic p-8 md:p-10"
+                                    className="card-block card-metallic p-6 md:p-10"
                                     style={{
                                         borderTopColor: chapter.color
                                     }}
                                 >
-                                    <p className="text-lg md:text-xl text-foreground/80 leading-relaxed font-sans">
+                                    <p className="text-sm sm:text-base text-foreground/80 leading-relaxed font-sans">
                                         {chapter.description}
                                     </p>
                                     {/* Decorative accent line */}
@@ -214,8 +252,8 @@ const StoryFlow = () => {
                 </div>
             </div>
 
-            {/* Progress bars */}
-            <div className="flex justify-center mt-8 gap-3">
+            {/* Progress bars (Desktop only) */}
+            <div className="hidden md:flex justify-center mt-8 gap-3">
                 {storyChapters.map((chapter, i) => (
                     <div key={i} className="progress-dot w-16 h-1 bg-foreground/10 overflow-hidden">
                         <div

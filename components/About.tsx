@@ -48,24 +48,24 @@ const About = () => {
                     >
                         <div className="inline-flex items-center gap-2 px-3 py-1.5 border border-[var(--gold-primary)]/20 bg-background/50 mb-6 backdrop-blur-md">
                             <span className="w-2 h-2 rounded-none bg-[var(--gold-light)] animate-pulse shadow-[0_0_8px_var(--gold-light)]" />
-                            <span className="text-[10px] font-mono tracking-widest uppercase text-text-secondary">System Online</span>
+                            <span className="text-[9px] sm:text-[10px] font-mono tracking-widest uppercase text-text-secondary">System Online</span>
                         </div>
 
-                        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black font-display tracking-tighter mb-4 md:mb-6">
+                        <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold font-display tracking-tight mb-4 md:mb-6">
                             Bridging the gap between <br />
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--gold-dark)] to-[var(--gold-light)] italic pr-2 pb-1">
                                 design & engineering.
                             </span>
                         </h2>
                         
-                        <p className="text-text-secondary text-sm sm:text-base md:text-lg leading-relaxed mb-6 md:mb-8 max-w-xl font-sans">
+                        <p className="text-text-secondary text-sm sm:text-base leading-relaxed mb-6 md:mb-8 max-w-xl font-sans">
                             I am a BCA graduate currently pursuing an MCA in Cloud Computing at JECRC University, Jaipur. 
                             After 4 impactful months at Fudode, I am now engineering high-performance SaaS solutions and cinematic user interfaces as a Freelance Developer.
                         </p>
 
                         <div className="flex flex-wrap gap-2 mb-8 md:mb-10">
                             {['MERN Stack', 'Next.js', 'React Native', 'TypeScript', 'Tailwind'].map((tech) => (
-                                <span key={tech} className="px-3 py-1.5 md:px-4 md:py-2 bg-background border border-[var(--gold-primary)]/20 text-[10px] sm:text-xs font-mono text-text-primary hover:border-[var(--gold-primary)] hover:bg-[var(--gold-primary)]/5 transition-colors cursor-default">
+                                <span key={tech} className="px-3 py-1.5 md:px-4 md:py-2 bg-background border border-[var(--gold-primary)]/20 text-[9px] sm:text-[10px] md:text-xs font-mono text-text-primary hover:border-[var(--gold-primary)] hover:bg-[var(--gold-primary)]/5 transition-colors cursor-default">
                                     {tech}
                                 </span>
                             ))}
@@ -73,7 +73,7 @@ const About = () => {
 
                         <Link
                             href="/about"
-                            className="group btn-metallic inline-flex items-center justify-center gap-3 sm:gap-4 px-6 py-3 sm:px-8 sm:py-4 text-[10px] sm:text-xs"
+                            className="group btn-metallic inline-flex items-center justify-center gap-3 sm:gap-4 px-6 py-3 sm:px-8 sm:py-4 text-[9px] sm:text-[10px] md:text-xs"
                         >
                             <span className="relative z-10 flex items-center gap-3 transition-colors">
                                 READ MY FULL STORY 

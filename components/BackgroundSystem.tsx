@@ -5,9 +5,11 @@ import { useEffect, useState } from "react";
 
 export default function BackgroundSystem() {
   const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    setIsMobile(window.innerWidth < 768);
   }, []);
 
   if (!mounted) return null;
@@ -31,7 +33,7 @@ export default function BackgroundSystem() {
 
       {/* Layer 3: Tiny Animated Particles */}
       <div className="absolute inset-0 opacity-[0.04]">
-        {[...Array(30)].map((_, i) => (
+        {[...Array(isMobile ? 10 : 30)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute rounded-full bg-[var(--gold-primary)]"

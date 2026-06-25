@@ -56,7 +56,7 @@ const CredentialCard = ({ cert, index }: { cert: any, index: number }) => {
                     
                     <div className="flex items-center gap-1.5 rounded-full border border-border/10 bg-background/30 px-3 py-1.5 backdrop-blur-md transition-all duration-500 group-hover:bg-accent-action/10 group-hover:border-accent-action/30">
                         <CheckCircle className="text-accent-highlight w-4 h-4" />
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-text-secondary group-hover:text-foreground">Verified</span>
+                        <span className="text-[9px] sm:text-[10px] font-mono font-bold uppercase tracking-wider text-text-secondary group-hover:text-foreground">Verified</span>
                     </div>
                 </div>
 
@@ -66,9 +66,9 @@ const CredentialCard = ({ cert, index }: { cert: any, index: number }) => {
                         {cert.title}
                     </h3>
                     <div className="flex items-center gap-3 text-sm font-medium">
-                        <span className="text-accent-action font-semibold">{cert.issuer}</span>
+                        <span className="text-accent-action font-semibold font-sans">{cert.issuer}</span>
                         {cert.date && <span className="h-1 w-1 rounded-full bg-border/40" />}
-                        {cert.date && <span className="text-text-secondary/80 font-mono text-xs">{cert.date}</span>}
+                        {cert.date && <span className="text-text-secondary/80 font-mono text-[9px] sm:text-[10px] md:text-xs">{cert.date}</span>}
                     </div>
                 </div>
 
@@ -78,13 +78,13 @@ const CredentialCard = ({ cert, index }: { cert: any, index: number }) => {
                         {cert.skills.slice(0, 3).map((skill: string, sIdx: number) => (
                             <span 
                                 key={sIdx} 
-                                className="rounded-lg border border-border/10 bg-background/50 px-3 py-1.5 text-[11px] font-bold tracking-wide text-text-secondary/80 transition-all duration-300 group-hover:border-accent-action/30 group-hover:bg-accent-action/5 group-hover:text-foreground"
+                                className="rounded border border-border/10 bg-background/50 px-2.5 py-1 text-[9px] sm:text-[10px] font-mono font-bold uppercase tracking-wider text-text-secondary/80 transition-all duration-300 group-hover:border-accent-action/30 group-hover:bg-accent-action/5 group-hover:text-foreground"
                             >
                                 {skill}
                             </span>
                         ))}
                         {cert.skills.length > 3 && (
-                            <span className="rounded-lg border border-border/10 bg-background/30 px-3 py-1.5 text-[11px] font-bold text-text-secondary/50">
+                            <span className="rounded border border-border/10 bg-background/30 px-2.5 py-1 text-[9px] sm:text-[10px] font-mono font-bold text-text-secondary/50">
                                 +{cert.skills.length - 3}
                             </span>
                         )}
@@ -149,7 +149,7 @@ const Certifications = () => {
 
     return (
         <section
-            className="relative w-full overflow-hidden bg-background py-32 transition-colors duration-500"
+            className="relative w-full overflow-hidden bg-background py-16 md:py-32 transition-colors duration-500"
             id="certifications"
         >
             {/* Ambient background orbs */}
@@ -170,7 +170,7 @@ const Certifications = () => {
                             className="mb-4 flex items-center gap-3"
                         >
                             <Trophy className="text-accent-highlight w-5 h-5" />
-                            <span className="font-mono text-sm font-bold tracking-[0.3em] text-accent-highlight uppercase">
+                            <span className="font-mono text-[9px] sm:text-[10px] md:text-xs font-bold uppercase tracking-wider text-accent-highlight">
                                 Verified Mastery
                             </span>
                         </motion.div>
@@ -179,7 +179,7 @@ const Certifications = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: 0.1 }}
-                            className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight font-display text-foreground"
+                            className="text-3xl md:text-5xl lg:text-6xl font-bold font-display tracking-tight text-foreground"
                         >
                             Certifications <span className="text-transparent bg-clip-text bg-gradient-to-r from-text-secondary/50 to-text-secondary/20">& Training</span>
                         </motion.h2>

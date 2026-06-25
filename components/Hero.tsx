@@ -23,6 +23,7 @@ const Hero = () => {
 
     useEffect(() => {
         const handleMouse = (e: MouseEvent) => {
+            if (window.innerWidth < 768) return; // Optimize: disable mouse calculations on mobile
             const x = (e.clientX / window.innerWidth) * 2 - 1;
             const y = -(e.clientY / window.innerHeight) * 2 + 1;
             mouseX.set(x);
@@ -52,7 +53,7 @@ const Hero = () => {
             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] z-0 pointer-events-none mix-blend-overlay" />
 
             {/* ─── UI Overlay (Centered Layout) ─── */}
-            <div className="relative z-10 w-full h-full max-w-7xl mx-auto flex flex-col items-center justify-center py-24 px-6 sm:px-12 pointer-events-none text-center">
+            <div className="relative z-10 w-full h-full max-w-7xl mx-auto flex flex-col items-center justify-center py-16 md:py-24 px-6 sm:px-12 pointer-events-none text-center">
                 <motion.div
                     variants={containerVariants}
                     initial="hidden"
@@ -68,7 +69,7 @@ const Hero = () => {
 
 
                     {/* ─── Small Top Label ─── */}
-                    <motion.div variants={itemVariants} className="flex items-center flex-wrap justify-center gap-2 sm:gap-3 text-[10px] sm:text-xs font-bold tracking-[0.2em] sm:tracking-[0.3em] text-foreground/70 uppercase mt-4 mb-2">
+                    <motion.div variants={itemVariants} className="flex items-center flex-wrap justify-center gap-2 sm:gap-3 text-[9px] sm:text-[10px] md:text-xs font-mono font-bold tracking-[0.2em] sm:tracking-[0.3em] text-foreground/70 uppercase mt-4 mb-2">
                         <span>FULL STACK DEVELOPER</span>
                         <span className="text-[var(--gold-primary)]">•</span>
                         <span>NEXT.JS</span>
@@ -107,31 +108,29 @@ const Hero = () => {
 
                     {/* ─── Subtitles & Credibility ─── */}
                     <motion.div variants={itemVariants} className="flex flex-col items-center gap-5 mt-1 z-10">
-                        <h2 className="text-sm sm:text-base md:text-lg lg:text-xl font-medium tracking-wide text-foreground text-center " >
+                        <h2 className="text-sm sm:text-base text-text-secondary leading-relaxed font-sans text-center max-w-2xl" >
                             Building modern SaaS products, AI-powered tools,<br className="hidden sm:block" /> and high-performance web experiences.
                         </h2>
 
                         {/* Credibility Row */}
-                        <div className="flex items-center flex-wrap justify-center gap-2 sm:gap-3 text-[10px] sm:text-xs md:text-sm font-bold tracking-widest text-foreground/80 uppercase px-6 py-3 card-metallic">
+                        {/* <div className="flex items-center flex-wrap justify-center gap-2 sm:gap-3 text-[9px] sm:text-[10px] md:text-xs font-mono font-bold tracking-wider text-foreground/80 uppercase px-6 py-2.5 card-metallic">
                             <span>Freelance Developer</span>
                             <span className="text-[var(--gold-primary)]">•</span>
                             <span>MCA Student @ JECRC</span>
                             <span className="text-[var(--gold-primary)]">•</span>
                             <span>Ex-Fudode</span>
-                        </div>
+                        </div> */}
                     </motion.div>
 
                     {/* Availability Tag */}
-                    <motion.div variants={itemVariants} className="flex items-center justify-center mt-0 z-10">
+                    {/* <motion.div variants={itemVariants} className="flex items-center justify-center mt-0 z-10">
                         <div className="flex items-center gap-2 px-4 py-2 card-metallic border-[var(--gold-primary)]/50">
                             <span className="w-2 h-2 bg-[var(--gold-primary)] animate-pulse" style={{ boxShadow: '0 0 10px var(--gold-primary)' }} />
-                            <span className="text-[9px] sm:text-[10px] md:text-xs font-bold tracking-widest text-[var(--gold-primary)] uppercase">
+                            <span className="text-[9px] sm:text-[10px] md:text-xs font-mono font-bold tracking-wider text-[var(--gold-primary)] uppercase">
                                 Available for Internships & Freelance Projects
                             </span>
                         </div>
-                    </motion.div>
-
-
+                    </motion.div> */}
 
                     {/* ─── Actions ─── */}
                     <motion.div

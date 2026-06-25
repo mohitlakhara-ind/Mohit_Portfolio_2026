@@ -10,7 +10,7 @@ const SkillsShowcase = () => {
     const inView = useInView(ref, { once: true, margin: '-80px' });
     const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
 
-    // Radii for the 4 orbits
+    // Radii for the 4 orbits (Desktop layout)
     const orbits = [
         { radius: 130, duration: 35, direction: 1 },  // Inner
         { radius: 210, duration: 45, direction: -1 },
@@ -19,7 +19,7 @@ const SkillsShowcase = () => {
     ];
 
     return (
-        <section ref={ref} className="relative w-full bg-background py-24 px-4 overflow-hidden min-h-[700px] md:min-h-[900px] flex flex-col items-center justify-center">
+        <section ref={ref} className="relative w-full bg-background py-16 md:py-24 px-4 overflow-hidden min-h-screen md:min-h-[900px] flex flex-col items-center justify-center">
             <style>{`
                 @keyframes spin-forward {
                     from { transform: rotate(0deg); }
@@ -30,13 +30,14 @@ const SkillsShowcase = () => {
                     to { transform: rotate(-360deg); }
                 }
             `}</style>
+
             {/* Header */}
             <div className="absolute top-12 md:top-24 left-1/2 -translate-x-1/2 text-center z-20 w-full px-4">
                 <motion.span
                     initial={{ opacity: 0, y: 16 }}
                     animate={inView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.5 }}
-                    className="block text-xs font-bold uppercase tracking-[0.5em] text-[var(--gold-primary)] mb-3"
+                    className="block text-[9px] sm:text-[10px] md:text-xs font-mono font-bold uppercase tracking-wider text-[var(--gold-primary)] mb-3"
                 >
                     Full Stack
                 </motion.span>
@@ -44,7 +45,7 @@ const SkillsShowcase = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={inView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.6, delay: 0.1 }}
-                    className="text-4xl md:text-6xl font-black font-display tracking-tighter mb-4"
+                    className="text-3xl md:text-5xl lg:text-6xl font-bold font-display tracking-tight mb-4"
                 >
                     Cosmic <span className="text-[var(--gold-primary)] italic">Core</span>
                 </motion.h2>
@@ -52,18 +53,56 @@ const SkillsShowcase = () => {
                     initial={{ opacity: 0 }}
                     animate={inView ? { opacity: 1 } : {}}
                     transition={{ duration: 0.6, delay: 0.2 }}
-                    className="text-text-secondary text-sm md:text-base max-w-xl mx-auto"
+                    className="text-text-secondary text-sm sm:text-base max-w-xl mx-auto font-sans"
                 >
-                    Hover over nodes to inspect system telemetry.
+                    Inspect system telemetry and engineering focus areas.
                 </motion.p>
             </div>
 
-            {/* Orbital System Container (scaled for responsiveness) */}
+            {/* Mobile Fallback: Grid layout of category blocks with skill progress bars (Visible only on mobile) */}
+            <div className="w-full max-w-2xl mt-32 px-2 space-y-6 md:hidden z-10">
+                {skillCategories.map((category) => (
+                    <div 
+                        key={category.name} 
+                        className="card-metallic p-5 border-t-2" 
+                        style={{ borderTopColor: category.color }}
+                    >
+                        <h3 className="text-base font-bold font-display mb-4 flex items-center gap-2" style={{ color: category.color }}>
+                            <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: category.color }} />
+                            {category.name}
+                        </h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                            {category.skills.map((skill) => (
+                                <div key={skill.name} className="flex flex-col bg-background/30 p-3 border border-border/10">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-lg">{skill.icon}</span>
+                                            <span className="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-foreground">{skill.name}</span>
+                                        </div>
+                                        <span className="text-[9px] font-mono text-text-secondary">{skill.level}%</span>
+                                    </div>
+                                    <div className="h-1 bg-border/20 rounded-full overflow-hidden">
+                                        <div 
+                                            className="h-full rounded-full" 
+                                            style={{ 
+                                                width: `${skill.level}%`, 
+                                                backgroundColor: category.color 
+                                            }} 
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Orbital System Container (Desktop Only, scaled for responsiveness) */}
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={inView ? { opacity: 1 } : {}}
                 transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
-                className="relative flex items-center justify-center w-[800px] h-[800px] mt-32 md:mt-10 origin-center scale-[0.45] sm:scale-[0.6] md:scale-[0.8] lg:scale-100"
+                className="relative hidden md:flex items-center justify-center w-[800px] h-[800px] mt-10 origin-center scale-[0.8] lg:scale-100"
             >
                 {/* Central Core */}
                 <div className="absolute w-32 h-32 rounded-full bg-[var(--gold-primary)]/10 border border-[var(--border)]/30 shadow-[0_0_80px_var(--gold-primary)] flex items-center justify-center z-10 backdrop-blur-sm">

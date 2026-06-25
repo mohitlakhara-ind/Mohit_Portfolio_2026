@@ -250,9 +250,20 @@ const BackgroundScene = () => {
 
 export default function Global3DCanvas() {
     const [mounted, setMounted] = useState(false);
-    useEffect(() => setMounted(true), []);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     if (!mounted) return null;
+    if (isMobile) return null;
 
     return (
         <div className="fixed inset-0 z-0 pointer-events-none">
