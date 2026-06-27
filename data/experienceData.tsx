@@ -17,7 +17,7 @@ export interface TimelineItem {
 export const timelineData: TimelineItem[] = [
     {
         id: 1,
-        date: '2023 - 2026',
+        date: 'Aug 2023 - May 2026',
         title: 'BCA Graduate',
         subtitle: 'Lachoo Memorial College',
         description: 'Built a strong foundation in software engineering, algorithms, and system design. My academic journey fueled a deep passion for solving complex problems with code.',
@@ -47,7 +47,7 @@ export const timelineData: TimelineItem[] = [
     },
     {
         id: 3,
-        date: '2026 - Ongoing',
+        date: 'May 2026 - Present',
         title: 'Freelance Developer & MCA',
         subtitle: 'JECRC University & Various Clients',
         description: 'Currently pursuing an MCA in Cloud Computing at JECRC University, Jaipur. After an impactful stint at Fudode, I am now engineering high-performance SaaS solutions and cinematic UIs as a Freelance Developer.',
