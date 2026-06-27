@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     siteName: 'Mohit Lakhara Portfolio',
     images: [
       {
-        url: 'https://res.cloudinary.com/dhjkbcdfm/image/upload/portfolio/og-home.webp',
+        url: 'https://res.cloudinary.com/dhjkbcdfm/image/upload/v1782579876/portfolio/og-home.webp',
         width: 1200,
         height: 630,
         alt: 'Mohit Lakhara — Full Stack Developer Portfolio',
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Mohit Lakhara | Full Stack Developer Portfolio',
     description: "Explore Mohit Lakhara's full-stack development work — SaaS apps, mobile apps, and cinematic UI/UX built with React, Next.js, and Node.js.",
-    images: ['https://res.cloudinary.com/dhjkbcdfm/image/upload/portfolio/og-home.webp'],
+    images: ['https://res.cloudinary.com/dhjkbcdfm/image/upload/v1782579876/portfolio/og-home.webp'],
   },
 
   robots: {

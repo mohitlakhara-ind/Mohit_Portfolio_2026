@@ -12,7 +12,7 @@ export const metadata: Metadata = {
         siteName: 'Mohit Lakhara Portfolio',
         images: [
             {
-                url: 'https://res.cloudinary.com/dhjkbcdfm/image/upload/portfolio/og-contact.webp',
+                url: 'https://res.cloudinary.com/dhjkbcdfm/image/upload/v1782579914/portfolio/og-contact.webp',
                 width: 1200,
                 height: 630,
                 alt: 'Contact Mohit Lakhara — Full Stack Developer',
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
         card: 'summary_large_image',
         title: 'Contact Mohit Lakhara | Hire a Full Stack Developer',
         description: 'Reach out to Mohit Lakhara for full-stack development projects, collaborations, and opportunities.',
-        images: ['https://res.cloudinary.com/dhjkbcdfm/image/upload/portfolio/og-contact.webp'],
+        images: ['https://res.cloudinary.com/dhjkbcdfm/image/upload/v1782579914/portfolio/og-contact.webp'],
     },
 };
 

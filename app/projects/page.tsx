@@ -13,7 +13,7 @@ export const metadata: Metadata = {
         siteName: 'Mohit Lakhara Portfolio',
         images: [
             {
-                url: 'https://res.cloudinary.com/dhjkbcdfm/image/upload/portfolio/og-projects.webp',
+                url: 'https://res.cloudinary.com/dhjkbcdfm/image/upload/v1782579903/portfolio/og-projects.webp',
                 width: 1200,
                 height: 630,
                 alt: 'Projects by Mohit Lakhara — Full Stack Developer',
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
         card: 'summary_large_image',
         title: 'Projects | Mohit Lakhara — Full Stack Developer',
         description: 'Live demos and source code for Mohit Lakhara\'s full-stack projects built with React, Next.js, Node.js, and React Native.',
-        images: ['https://res.cloudinary.com/dhjkbcdfm/image/upload/portfolio/og-projects.webp'],
+        images: ['https://res.cloudinary.com/dhjkbcdfm/image/upload/v1782579903/portfolio/og-projects.webp'],
     },
 };
 

@@ -20,7 +20,7 @@ export const metadata: Metadata = {
         siteName: 'Mohit Lakhara Portfolio',
         images: [
             {
-                url: 'https://res.cloudinary.com/dhjkbcdfm/image/upload/portfolio/og-about.webp',
+                url: 'https://res.cloudinary.com/dhjkbcdfm/image/upload/v1782579890/portfolio/og-about.webp',
                 width: 1200,
                 height: 630,
                 alt: 'About Mohit Lakhara — Full Stack Developer',
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
         card: 'summary_large_image',
         title: 'About Mohit Lakhara | Full-Stack Developer',
         description: 'Explore the background, skillset, and engineering philosophy of Mohit Lakhara — Full Stack Developer & UI/UX Engineer.',
-        images: ['https://res.cloudinary.com/dhjkbcdfm/image/upload/portfolio/og-about.webp'],
+        images: ['https://res.cloudinary.com/dhjkbcdfm/image/upload/v1782579890/portfolio/og-about.webp'],
     },
 };
 

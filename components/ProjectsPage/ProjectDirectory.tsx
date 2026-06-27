@@ -34,7 +34,7 @@ const getTechIcon = (tech: string) => {
 
 const getThemeAccentColor = (accentColor: string, isDarkMode: boolean) => {
     if (!accentColor) return 'var(--gold-primary)';
-    
+
     // Normalize black/white
     if (accentColor.toLowerCase() === '#ffffff' || accentColor.toLowerCase() === '#fff') {
         return isDarkMode ? '#ffffff' : 'var(--gold-primary)';
@@ -42,20 +42,20 @@ const getThemeAccentColor = (accentColor: string, isDarkMode: boolean) => {
     if (accentColor.toLowerCase() === '#000000' || accentColor.toLowerCase() === '#000') {
         return isDarkMode ? 'var(--gold-primary)' : 'var(--foreground)';
     }
-    
+
     // If it's a CSS variable, return it
     if (accentColor.startsWith('var(')) return accentColor;
-    
+
     // Parse hex color
     const hex = accentColor.replace('#', '');
     if (hex.length === 6 || hex.length === 3) {
         const r = parseInt(hex.length === 3 ? hex[0] + hex[0] : hex.substring(0, 2), 16);
         const g = parseInt(hex.length === 3 ? hex[1] + hex[1] : hex.substring(2, 4), 16);
         const b = parseInt(hex.length === 3 ? hex[2] + hex[2] : hex.substring(4, 6), 16);
-        
+
         // Calculate YIQ brightness
         const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-        
+
         if (isDarkMode) {
             // In dark mode, if the color is too dark, make it lighter/brighter
             if (brightness < 60) {
@@ -79,7 +79,7 @@ const getThemeAccentColor = (accentColor: string, isDarkMode: boolean) => {
             return accentColor;
         }
     }
-    
+
     return accentColor;
 };
 
@@ -105,19 +105,19 @@ const getProjectScopeBadge = (id: string) => {
 
 const getCleanCaseStudyText = (project: Project) => {
     const desc = project.description || '';
-    
+
     // If it doesn't contain headers, just return it
     if (!desc.includes('#') && !desc.includes('---')) {
         return desc.trim() || project.summary;
     }
-    
+
     // Split by horizontal rule to remove Highlights and Tech Stack lists
     const parts = desc.split('---');
     const firstPart = parts[0];
-    
+
     // Split into lines
     const lines = firstPart.split('\n');
-    
+
     // Filter out titles, blockquotes, tables, and dividers
     const cleanedLines = lines.filter(line => {
         const trimmed = line.trim();
@@ -126,19 +126,19 @@ const getCleanCaseStudyText = (project: Project) => {
         if (trimmed.startsWith('|')) return false; // Remove tables
         return true;
     });
-    
+
     const text = cleanedLines.join('\n').trim();
-    
+
     // Check if the description contains generic template/boilerplate text
-    const isBoilerplate = 
+    const isBoilerplate =
         text.toLowerCase().includes('this template provides') ||
         text.toLowerCase().includes('this project was bootstrapped') ||
         text.length < 10;
-        
+
     if (isBoilerplate) {
         return project.summary;
     }
-    
+
     return text;
 };
 
@@ -183,7 +183,7 @@ export default function ProjectDirectory() {
             const tooltipWidth = 320;
             const tooltipHeight = 200;
             const offset = 20;
-            
+
             let x = e.clientX + offset;
             let y = e.clientY + offset;
 
@@ -191,7 +191,7 @@ export default function ProjectDirectory() {
             if (x + tooltipWidth > window.innerWidth) {
                 x = e.clientX - tooltipWidth - offset;
             }
-            
+
             // Prevent clipping on the bottom edge
             if (y + tooltipHeight > window.innerHeight) {
                 y = e.clientY - tooltipHeight - offset;
@@ -313,8 +313,8 @@ export default function ProjectDirectory() {
                         >
                             <div className="p-4 sm:p-8 md:p-12 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 relative w-full">
                                 {/* Inner Glow */}
-                                <div 
-                                    className="absolute inset-0 opacity-5 pointer-events-none" 
+                                <div
+                                    className="absolute inset-0 opacity-5 pointer-events-none"
                                     style={{ background: `radial-gradient(circle at 50% 50%, ${accentColor}, transparent 75%)` }}
                                 />
 
@@ -352,11 +352,10 @@ export default function ProjectDirectory() {
                                                             e.stopPropagation();
                                                             setInsightTab(project.id, idx);
                                                         }}
-                                                        className={`py-2 px-1 transition-all duration-300 font-semibold uppercase tracking-wider relative whitespace-nowrap text-sm md:text-[15px] cursor-pointer ${
-                                                            isActive 
-                                                                ? 'text-foreground font-bold' 
+                                                        className={`py-2 px-1 transition-all duration-300 font-semibold uppercase tracking-wider relative whitespace-nowrap text-sm md:text-[15px] cursor-pointer ${isActive
+                                                                ? 'text-foreground font-bold'
                                                                 : 'text-foreground/60 hover:text-foreground/90'
-                                                        }`}
+                                                            }`}
                                                         style={isActive ? { borderBottom: `2px solid ${accentColor}`, color: accentColor } : {}}
                                                     >
                                                         {tab}
@@ -374,7 +373,7 @@ export default function ProjectDirectory() {
                                                             {getCleanCaseStudyText(project)}
                                                         </ReactMarkdown>
                                                     </div>
-                                                    
+
                                                     {project.features && project.features.length > 0 && (
                                                         <div className="border-t border-foreground/10 pt-6">
                                                             <h4 className="text-sm font-mono text-foreground/50 uppercase tracking-widest mb-4 font-semibold">Key Capabilities & Features</h4>
@@ -527,7 +526,7 @@ export default function ProjectDirectory() {
                         </p>
                     </motion.div>
 
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
@@ -539,19 +538,19 @@ export default function ProjectDirectory() {
                         </div>
                         <div className="hidden sm:block w-[1px] h-8 bg-foreground/10" />
                         <div className="flex flex-col text-center sm:text-left">
-                            <span className="text-2xl md:text-3xl font-bold font-mono text-[var(--gold-primary)]">20+</span>
+                            <span className="text-2xl md:text-3xl font-bold font-mono text-[var(--gold-primary)]">10+</span>
                             <span className="text-[9px] md:text-[10px] font-mono uppercase tracking-widest text-foreground/50">Projects Built</span>
                         </div>
                         <div className="hidden sm:block w-[1px] h-8 bg-foreground/10" />
                         <div className="flex flex-col text-center sm:text-left">
-                            <span className="text-2xl md:text-3xl font-bold font-mono text-[var(--gold-primary)]">4+ Years</span>
+                            <span className="text-2xl md:text-3xl font-bold font-mono text-[var(--gold-primary)]">3+ Years</span>
                             <span className="text-[9px] md:text-[10px] font-mono uppercase tracking-widest text-foreground/50 text-wrap leading-tight">Building & Learning</span>
                         </div>
                     </motion.div>
                 </div>
 
                 {/* Filters */}
-                <motion.div 
+                <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.2 }}
@@ -622,7 +621,7 @@ export default function ProjectDirectory() {
             <div className="max-w-[1400px] mx-auto relative z-10 w-full">
                 <AnimatePresence mode="popLayout">
                     {featuredProjectsList.map(renderProjectRow)}
-                    
+
                     {showArchive && archiveProjectsList.map(renderProjectRow)}
                 </AnimatePresence>
 
